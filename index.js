@@ -4,7 +4,12 @@ const TelegramBot = require('node-telegram-bot-api');
 const token = '5624025318:AAEy-wbMfuPT5iF4hO2niyoHGzTo3FA_teA';
 
 // Create a bot that uses 'polling' to fetch new updates
-const bot = new TelegramBot(token, {polling: true});
+const options = {
+  polling: true,
+  port: process.env.PORT || 8080
+}
+
+const bot = new TelegramBot(token, options);
 
 // Matches "/echo [whatever]"
 bot.onText(/Занятия/, (msg, match) => {
