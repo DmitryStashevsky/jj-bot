@@ -11,7 +11,7 @@ const options = {
 
 const url = process.env.APP_URL || 'https://jj-dance-bot.herokuapp.com:443';
 const bot = new TelegramBot(TOKEN, options);
-const handler = new MessageHandler();
+const handler = new MessageHandler(bot);
 
 bot.setWebHook(`${url}/bot${TOKEN}`);
 
