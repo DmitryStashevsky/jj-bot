@@ -1,4 +1,0 @@
-class Step {
-    returnToRoot()
-    nextSteps = [];
-}

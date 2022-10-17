@@ -1,5 +1,6 @@
 class Step {
     message = '';
+    command = '';
     nextSteps = [];
     messageToJj;
 
@@ -7,7 +8,7 @@ class Step {
         let message = this.message;
         for (let childMessage of this.nextSteps) {
             console.log(childMessage);
-            message += `\n${childMessage.message}`
+            message += `\n${childMessage.command}`
         }
         return message;
     }
@@ -15,6 +16,7 @@ class Step {
     getPrivateMessage(msg) {};
 
     returnToRoot(){};
+
     next(message){
         const found = this.nextSteps.filter(e => e.message.toLocaleLowerCase() 
             === message.toLocaleLowerCase());

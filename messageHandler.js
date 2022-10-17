@@ -1,11 +1,13 @@
 const MessagesTree = require('./Steps/messagesTree.js');
 const NotificationService = require('./notificationService.js');
+const Repository = require('./repository.js');
 
 class MessageHandler {
     notificationService;
 
     constructor(bot) {
         this.notificationService = new NotificationService(bot);
+        this.repository = new Repository();
     }
 
     onText(bot) {
@@ -19,14 +21,20 @@ class MessageHandler {
     onMessage(bot) {
         bot.on('message', (msg) => {
             console.log(msg);
-            const chatId = msg.chat.id;
-            const messagesTree = new MessagesTree();
-            const currentStep = messagesTree.findCurrentStep(msg.text);
             this.notificationService.log(msg);
-            bot.sendMessage(chatId, currentStep.getMessage());
+            const chatId = msg.chat.id;
+            const messagesTree = new MessagesTree(this.repository);
+            const currentStep = messagesTree.findCurrentStep(msg.text);
+            
+            const message = currentStep.getMessage(msg);
+            if (message) {
+                bot.sendMessage(chatId, message);
 
-            const nextStep = currentStep.next(msg.text);
-            this.notificationService.notify(msg, nextStep);
+                const nextStep = currentStep.next(msg.text);
+                this.notificationService.notify(msg, nextStep);
+            } else {
+                bot.sendMessage(chatId, 'Не понимаю сообщение');
+            }
           });
     }
 }

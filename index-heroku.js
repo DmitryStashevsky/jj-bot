@@ -17,3 +17,4 @@ bot.setWebHook(`${url}/bot${TOKEN}`);
 
 handler.onText(bot);
 handler.onMessage(bot);
+bot.on("polling_error", console.log);
