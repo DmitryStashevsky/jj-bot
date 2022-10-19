@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/DmitryStashevsky/jj-bot#readme",
   "dependencies": {
+    "i18n": "^0.15.1",
     "node-telegram-bot-api": "^0.59.0"
   },
   "devDependencies": {

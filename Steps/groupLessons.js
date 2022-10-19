@@ -1,3 +1,4 @@
+const i18n = require('../i18n.config.js');
 const Step = require('./step.js');
 
 class GroupLessons extends Step {
@@ -6,8 +7,8 @@ class GroupLessons extends Step {
         this.repository = repository;
     }
 
-    message = 'Групповые занятия, чтобы записаться набери !Группа и номер группы';
-    command = 'Группы';
+    message = i18n.__('groupDesc');
+    command = i18n.__('groupCommand');
 
     getMessage() {
         let message = this.message;

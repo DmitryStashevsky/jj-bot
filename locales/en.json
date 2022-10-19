@@ -1,0 +1,14 @@
+{
+    "greeting": "Hello! I am JJ bot- you can ask me",
+    "start": "Start",
+    "lessonsDesc": "There are such lessons",
+    "lessonsCommand": "Lessons",
+    "groupDesc": "Group lessons, for attendace send !Group and group number",
+    "groupCommand": "Groups",
+    "joinGroupDesc" : "JJ received your message, he will contact you soon",
+    "joinGroupCommand" : "Group",
+    "privateLessonsDesc": "Private lessons",
+    "privateLessonsCommand": "Privates",
+    "joinPrivateLessonDesc": "JJ received your message, he will contact you soon",
+    "joinPrivateLessonCommand": "Private"
+}

@@ -1,8 +1,9 @@
+const i18n = require('../i18n.config.js');
 const Step = require('./step.js');
 
 class InitialStep extends Step {
-    message = 'Привет! Я бот JJ - у меня ты можешь спросить что хочешь';
-    command = 'Начало';
+    message = i18n.__('greeting');
+    command = i18n.__('start');
 }
 
 module.exports = InitialStep;

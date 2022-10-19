@@ -1,3 +1,4 @@
+const i18n = require('../i18n.config.js');
 const Step = require('./step.js');
 
 class JoinGroupLesson extends Step {
@@ -6,8 +7,8 @@ class JoinGroupLesson extends Step {
         this.repository = repository;
     }
 
-    message = 'JJ получил ваше сообщение, скоро с Вами свяжутся';
-    command = 'Группа'
+    message = i18n.__('joinGroupDesc');
+    command = i18n.__('joinGroupCommand');
     isNeedMessageToJj = true;
 
     getMessage(msg) {

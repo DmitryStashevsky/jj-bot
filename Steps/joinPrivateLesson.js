@@ -1,8 +1,9 @@
+const i18n = require('../i18n.config.js');
 const Step = require('./step.js');
 
 class JoinPrivateLesson extends Step {
-    message = 'JJ получил ваше сообщение, скоро с Вами свяжутся';
-    command = 'Приватное'
+    message = i18n.__('joinPrivateLessonDesc');
+    command = i18n.__('joinPrivateLessonCommand');
     isNeedMessageToJj = true;
 
     getPrivateMessage(msg) {

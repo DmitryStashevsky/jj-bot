@@ -1,0 +1,14 @@
+{
+    "greeting": "Привет! Я бот JJ - у меня ты можешь спросить",
+    "start": "Начало",
+    "lessonsDesc": "Eсть такие виды занятий",
+    "lessonsCommand": "Занятия",
+    "groupDesc": "Групповые занятия, чтобы записаться набери !Группа и номер группы",
+    "groupCommand": "Группы",
+    "joinGroupDesc" : "JJ получил ваше сообщение, скоро с Вами свяжутся",
+    "joinGroupCommand" : "Группа",
+    "privateLessonsDesc": "Индивидуальные занятия",
+    "privateLessonsCommand": "Индивидуальные",
+    "joinPrivateLessonDesc": "JJ получил ваше сообщение, скоро с Вами свяжутся",
+    "joinPrivateLessonCommand": "Индив"
+}

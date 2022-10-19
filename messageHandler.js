@@ -1,4 +1,6 @@
-const MessagesTree = require('./Steps/messagesTree.js');
+const i18n = require('./i18n.config.js');
+
+const MessagesTree = require('./steps/messagesTree.js');
 const NotificationService = require('./notificationService.js');
 const Repository = require('./repository.js');
 
@@ -21,6 +23,12 @@ class MessageHandler {
     onMessage(bot) {
         bot.on('message', (msg) => {
             console.log(msg);
+
+            i18n.setLocale(msg.from.language_code === 'ru' || msg.from.language_code === 'en'
+                ? msg.from.language_code
+                : 'en'
+            );
+
             this.notificationService.log(msg);
             const chatId = msg.chat.id;
             const messagesTree = new MessagesTree(this.repository);
