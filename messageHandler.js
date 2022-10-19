@@ -1,6 +1,6 @@
 const i18n = require('./i18n.config.js');
 
-const MessagesTree = require('./steps/messagesTree.js');
+const MessagesTree = require('./Steps/messagesTree.js');
 const NotificationService = require('./notificationService.js');
 const Repository = require('./repository.js');
 
