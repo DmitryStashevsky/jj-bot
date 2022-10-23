@@ -6,8 +6,8 @@ class JoinPrivateLesson extends Step {
     command = i18n.__('joinPrivateLessonCommand');
     isNeedMessageToJj = true;
 
-    getPrivateMessage(msg) {
-        return `Dancer ${msg.from.username} wants to attend you private class`;
+    getPrivateMessage(from, message, text) {
+        return `Dancer ${from} wants to attend you private class`;
     }
 }
 module.exports = JoinPrivateLesson;

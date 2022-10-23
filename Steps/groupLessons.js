@@ -10,13 +10,24 @@ class GroupLessons extends Step {
     message = i18n.__('groupDesc');
     command = i18n.__('groupCommand');
 
-    getMessage() {
-        let message = this.message;
+    getButtons() {
         const lessons = this.repository.getLessons();
-        for (let i = 0; i < lessons.length; i++) {
-            message += `\n${i+1} - ${lessons[i]}`;
+        if (this.nextSteps.length) {
+            const buttons = [];
+            for (let i = 0; i < lessons.length; i++) {
+                buttons.push([{
+                    text: `${i+1} - ${lessons[i]}`,
+                    callback_data: `${this.nextSteps[0].command} ${i+1}`,
+                }]);
+            }
+            return {
+                "reply_markup": {
+                    "inline_keyboard": buttons
+                }
+            }
         }
-        return message;
+
+        return null;
     }
 }
 

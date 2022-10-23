@@ -5,9 +5,9 @@ class NotificationService {
         this.bot = bot;
     }
 
-    notify(msg, currentStep) {
+    notify(from, message, text, currentStep) {
        if (currentStep.isNeedMessageToJj) {
-           this.bot.sendMessage(-748502854, currentStep.getPrivateMessage(msg));
+           this.bot.sendMessage(-748502854, currentStep.getPrivateMessage(from, message, text));
        }
     }
 

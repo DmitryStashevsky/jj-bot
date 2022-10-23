@@ -15,6 +15,11 @@ const handler = new MessageHandler(bot);
 
 bot.setWebHook(`${url}/bot${TOKEN}`);
 
-handler.onText(bot);
-handler.onMessage(bot);
+bot.on('message', (msg) => {
+  handler.onMessage(bot, msg.chat.id, msg.from.language_code, msg.text, msg.from, msg);
+});
+bot.on('callback_query', function onCallbackQuery(callback) {
+  handler.onMessage(bot, callback.message.chat.id, callback.from.language_code, callback.data, 
+      callback.from, callback.message);
+});
 bot.on("polling_error", console.log);

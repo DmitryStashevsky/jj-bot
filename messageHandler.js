@@ -20,30 +20,25 @@ class MessageHandler {
         //   });
     }
 
-    onMessage(bot) {
-        bot.on('message', (msg) => {
-            console.log(msg);
+    onMessage(bot, chatId, language, text, from, msg) {
 
-            i18n.setLocale(msg.from.language_code === 'ru' || msg.from.language_code === 'en'
-                ? msg.from.language_code
+            i18n.setLocale(language === 'ru' || language === 'en'
+                ? language
                 : 'en'
             );
 
             this.notificationService.log(msg);
-            const chatId = msg.chat.id;
             const messagesTree = new MessagesTree(this.repository);
-            const currentStep = messagesTree.findCurrentStep(msg.text);
+            const currentStep = messagesTree.findCurrentStep(text);
             
-            const message = currentStep.getMessage(msg);
-            if (message) {
-                bot.sendMessage(chatId, message);
+            if (currentStep) {
+                bot.sendMessage(chatId, currentStep.getMessage(from, msg, text), currentStep.getButtons() || {});
 
-                const nextStep = currentStep.next(msg.text);
-                this.notificationService.notify(msg, nextStep);
+                const nextStep = currentStep.next(text);
+                this.notificationService.notify(from, msg, text, nextStep);
             } else {
                 bot.sendMessage(chatId, 'Не понимаю сообщение');
             }
-          });
     }
 }
 

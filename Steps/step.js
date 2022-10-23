@@ -4,16 +4,31 @@ class Step {
     nextSteps = [];
     messageToJj;
 
-    getMessage() {
-        let message = this.message;
-        for (let childMessage of this.nextSteps) {
-            console.log(childMessage);
-            message += `\n${childMessage.command}`
-        }
-        return message;
+    getMessage(from, message, text)  {
+        return this.message;
     }
 
-    getPrivateMessage(msg) {};
+    getButtons() {
+        if (this.nextSteps.length) {
+            const buttons = [];
+            for (let step of this.nextSteps) {
+                buttons.push([{
+                    text: step.command,
+                    callback_data: step.command,
+                    }]
+                );
+            }
+            return {
+                reply_markup: {
+                    inline_keyboard: buttons
+                }
+            }
+        }
+
+        return null;
+    }
+
+    getPrivateMessage(from, message, text) {}
 
     returnToRoot(){};
 

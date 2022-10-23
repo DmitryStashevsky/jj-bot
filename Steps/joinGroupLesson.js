@@ -11,8 +11,8 @@ class JoinGroupLesson extends Step {
     command = i18n.__('joinGroupCommand');
     isNeedMessageToJj = true;
 
-    getMessage(msg) {
-        const lesson = this.getLesson(msg);
+    getMessage(from, message, text) {
+        const lesson = this.getLesson(text);
         if(lesson) {
             return this.message + `- ${lesson}`;
         }
@@ -21,13 +21,14 @@ class JoinGroupLesson extends Step {
         }
     }
 
-    getPrivateMessage(msg) {
-        const lesson = this.getLesson(msg);
-        return `Dancer ${msg.from.username} wants to attend you group class - ${lesson}`;
+    getPrivateMessage(from, message, text) {
+        const lesson = this.getLesson(text);
+        return `Dancer ${from.username} wants to attend you group class - ${lesson}`;
     }
 
-    getLesson(msg) {
-        const matches = msg.text.match(/(\d+)/);
+    getLesson(text) {
+        console.log(text);
+        const matches = text.match(/(\d+)/);
         const lessons = this.repository.getLessons();
         console.log(matches);
         if (!matches) {
