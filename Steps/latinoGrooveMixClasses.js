@@ -1,9 +1,9 @@
 const i18n = require('../i18n.config.js');
 const Step = require('./step.js');
 
-class SalsaMixClasses extends Step {
-    message = i18n.__('salsaMixClassesDesc');
-    command = i18n.__('salsaMixClassesCommand');
+class LatingoGrooveMixClasses extends Step {
+    message = i18n.__('latinoGrooveMixClassesDesc');
+    command = i18n.__('latinoGrooveMixClassesCommand');
 }
 
-module.exports = SalsaMixClasses;
+module.exports = LatingoGrooveMixClasses;

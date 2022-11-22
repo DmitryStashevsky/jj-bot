@@ -2,16 +2,15 @@ const i18n = require('../i18n.config.js');
 const Step = require('./step.js');
 
 class GroupLessons extends Step {
-    constructor(repository) {
+    constructor(message, command, getLessonsFunc) {
         super();
-        this.repository = repository;
+        this.message = i18n.__(message);
+        this.command = i18n.__(command);
+        this.getLessonsFunc = getLessonsFunc;
     }
 
-    message = i18n.__('groupDesc');
-    command = i18n.__('groupCommand');
-
     getButtons() {
-        const lessons = this.repository.getLessons();
+        const lessons = this.getLessonsFunc();
         if (this.nextSteps.length) {
             const buttons = [];
             for (let i = 0; i < lessons.length; i++) {

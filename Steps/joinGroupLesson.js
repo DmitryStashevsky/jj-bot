@@ -2,13 +2,13 @@ const i18n = require('../i18n.config.js');
 const Step = require('./step.js');
 
 class JoinGroupLesson extends Step {
-    constructor(repository) {
+    constructor(message, command, getLessonsFunc) {
         super();
-        this.repository = repository;
+        this.message = i18n.__(message);
+        this.command = i18n.__(command);
+        this.getLessonsFunc = getLessonsFunc;
     }
 
-    message = i18n.__('joinGroupDesc');
-    command = i18n.__('joinGroupCommand');
     isNeedMessageToJj = true;
 
     getMessage(from, message, text) {
@@ -28,7 +28,7 @@ class JoinGroupLesson extends Step {
 
     getLesson(text) {
         const matches = text.match(/(\d+)/);
-        const lessons = this.repository.getLessons();
+        const lessons = this.getLessonsFunc();
         if (!matches) {
             return false;
         }
