@@ -27,10 +27,8 @@ class JoinGroupLesson extends Step {
     }
 
     getLesson(text) {
-        console.log(text);
         const matches = text.match(/(\d+)/);
         const lessons = this.repository.getLessons();
-        console.log(matches);
         if (!matches) {
             return false;
         }
