@@ -11,13 +11,6 @@ const Dance = require('./dance.js');
 
 const Topic = require('./topic.js');
 
-const BachataSoloTopic = require('./bachataSoloTopic.js');
-const BachataPartnerTopic = require('./bachataPartnerTopic.js');
-const BachataMixTopic = require('./bachataMixTopic.js');
-const BachataSoloClasses = require('./bachataSoloClasses.js');
-const BachataPartnerClasses = require('./bachataPartnerClasses.js');
-const BachataMixClasses = require('./bachataMixClasses.js');
-
 const LatinoGrooveSoloTopic = require('./latinoGrooveSoloTopic.js');
 const LatinoGroovePartnerTopic = require('./latinoGroovePartnerTopic.js');
 const LatinoGrooveMixTopic = require('./latinoGrooveMixTopic.js');
@@ -88,7 +81,7 @@ class MessagesTree {
         const afroHousePartnerClasses = new AfroHousePartnerClasses();
         const afroHouseMixClasses = new AfroHouseMixClasses();
 
-        dances.nextSteps = [salsaDance, bachataDance, latinoGrooveDance, afroHouseDance];
+        dances.nextSteps = [salsaDance, bachataDance];
 
         salsaDance.nextSteps = [salsaSoloTopic, salsaPartnerTopic, salsaMixTopic];
         salsaSoloTopic.nextSteps = [salsaSoloClasses, events];
@@ -103,6 +96,10 @@ class MessagesTree {
         bachataSoloTopic.nextSteps = [bachataSoloClasses, events];
         bachataPartnerTopic.nextSteps = [bachataPartnerClasses, events];
         bachataMixTopic.nextSteps = [bachataMixClasses, events];
+
+        bachataSoloClasses.nextSteps =[joinBachataSoloClasses];
+        bachataPartnerClasses.nextSteps =[joinBachataPartnerClasses];
+        bachataMixClasses.nextSteps =[joinBachataMixClasses];
 
         latinoGrooveDance.nextSteps = [latinoGrooveSoloTopic, latinoGroovePartnerTopic, latinoGrooveMixTopic];
         latinoGrooveSoloTopic.nextSteps = [latinoGrooveSoloClasses, events];
