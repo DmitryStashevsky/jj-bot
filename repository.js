@@ -26,10 +26,10 @@ class Repository {
      };
 
 
-    extract 
     async getLessons() {
         const apiClient = await this.getApiClient();
         const values = await this.getValuesData(apiClient, 'BachataClasses!A1:B3');
+        console.log(values.values[0]);
         return values.map(x => x.values[0].formattedValue);
     }
 

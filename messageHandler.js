@@ -21,11 +21,11 @@ class MessageHandler {
         //   });
     }
 
-    onMessage(bot, chatId, language, text, from, msg) {
+    async onMessage(bot, chatId, language, text, from, msg) {
 
             i18n.setLocale(language === 'ru' || language === 'en'
                 ? language
-                : 'en'
+                : 'ru'
             );
 
             this.notificationService.log(msg);
@@ -33,7 +33,7 @@ class MessageHandler {
             const currentStep = messagesTree.findCurrentStep(text);
 
             if (currentStep) {
-                bot.sendMessage(chatId, currentStep.getMessage(from, msg, text), currentStep.getButtons() || {});
+                bot.sendMessage(chatId, currentStep.getMessage(from, msg, text), await currentStep.getButtons() || {});
 
                 const metaField = currentStep.getMetaField();
                 if (metaField) {

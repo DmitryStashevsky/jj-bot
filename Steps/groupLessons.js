@@ -9,8 +9,8 @@ class GroupLessons extends Step {
         this.getLessonsFunc = getLessonsFunc;
     }
 
-    getButtons() {
-        const lessons = this.getLessonsFunc();
+    async getButtons() {
+        const lessons = await this.getLessonsFunc();
         if (this.nextSteps.length) {
             const buttons = [];
             for (let i = 0; i < lessons.length; i++) {
