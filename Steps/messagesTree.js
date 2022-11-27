@@ -2,7 +2,7 @@
 const GroupLessons = require('./groupLessons.js');
 const PrivateLessons = require('./privateLessons.js');
 const JoinGroupLesson = require('./joinGroupLesson.js');
-const JoinPrivateLessons = require('./joinPrivateLesson.js');
+const JoinPrivateLesson = require('./joinPrivateLesson.js');
 
 const Events = require('./events.js');
 
@@ -29,9 +29,7 @@ class MessagesTree {
     initialStep;
     currentStep;
 
-    constructor(repository) {
-        const privateLessons = new PrivateLessons();
-        const joinPrivateLessons = new JoinPrivateLessons();
+    constructor(repository, metaData) {
 
         const events = new Events();
 
@@ -64,6 +62,12 @@ class MessagesTree {
         const joinBachataSoloClasses = new JoinGroupLesson('joinBachataSoloClassesDesc', 'joinBachataSoloClassesCommand', () => repository.getLessons());
         const joinBachataPartnerClasses = new JoinGroupLesson('joinBachataPartnerClassesDesc', 'joinBachataPartnerClassesCommand', () => repository.getLessons());
         const joinBachataMixClasses = new JoinGroupLesson('joinBachataMixClassesDesc', 'joinBachataMixClassesCommand', () => repository.getLessons());
+        
+        const joinPrivateBachataSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsBSoloDescCommand', 'Bachata Solo', () => repository.getFreeSlots());
+        const joinPrivateBachataPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsBPartnerDescCommand', 'Bachata Partner', () => repository.getFreeSlots());
+        const joinPrivateBachataMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsBMixDescCommand', 'Bachata Mix', () => repository.getFreeSlots());
+        
+        const joinPrivateClasses = new JoinPrivateLesson('privateLessonsDesc', 'JPL', (username, field) => metaData.getMetadata(username, field), () => repository.getFreeSlots());
 
         const latinoGrooveSoloTopic = new LatinoGrooveSoloTopic();
         const latinoGroovePartnerTopic = new LatinoGroovePartnerTopic();
@@ -93,13 +97,17 @@ class MessagesTree {
         salsaMixClasses.nextSteps =[joinSalsaMixClasses];
 
         bachataDance.nextSteps = [bachataSoloTopic, bachataPartnerTopic, bachataMixTopic];
-        bachataSoloTopic.nextSteps = [bachataSoloClasses, events];
-        bachataPartnerTopic.nextSteps = [bachataPartnerClasses, events];
-        bachataMixTopic.nextSteps = [bachataMixClasses, events];
+        bachataSoloTopic.nextSteps = [bachataSoloClasses, joinPrivateBachataSoloClasses, events];
+        bachataPartnerTopic.nextSteps = [bachataPartnerClasses, joinPrivateBachataPartnerClasses, events];
+        bachataMixTopic.nextSteps = [bachataMixClasses, joinPrivateBachataMixClasses, events];
 
         bachataSoloClasses.nextSteps =[joinBachataSoloClasses];
         bachataPartnerClasses.nextSteps =[joinBachataPartnerClasses];
         bachataMixClasses.nextSteps =[joinBachataMixClasses];
+
+        joinPrivateBachataSoloClasses.nextSteps = [joinPrivateClasses];
+        joinPrivateBachataPartnerClasses.nextSteps = [joinPrivateClasses];
+        joinPrivateBachataMixClasses.nextSteps = [joinPrivateClasses];
 
         latinoGrooveDance.nextSteps = [latinoGrooveSoloTopic, latinoGroovePartnerTopic, latinoGrooveMixTopic];
         latinoGrooveSoloTopic.nextSteps = [latinoGrooveSoloClasses, events];

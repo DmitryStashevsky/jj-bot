@@ -1,0 +1,26 @@
+const LRU = require("lru-cache");
+
+class MetaData {
+    constructor() {
+        this.cache = new LRU({max: 50});
+    }
+   
+    getMetadata(id, field) {
+        const data = this.cache.get(id);
+        return field ? data[field] : data;
+    }
+
+    setMetadata(id, data, field, value) {
+        if (data) {
+            this.cache.set(id, data);
+        } else {
+            const data = this.cache.get(id) || {};
+            data[field] = value;
+            this.cache.set(id, data);
+        }
+    }
+}
+
+const metaData = new MetaData();
+
+module.exports = metaData;

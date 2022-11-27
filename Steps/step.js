@@ -30,6 +30,14 @@ class Step {
 
     getPrivateMessage(from, message, text) {}
 
+    getMetaField() {
+        return this.metaField;
+    }
+
+    getMetaData() {
+        return this.metaData;
+    }
+
     returnToRoot(){};
 
     next(message){

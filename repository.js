@@ -1,12 +1,36 @@
+const { google } = require('googleapis');
+
+const { getAuthClient } = require('./google.config.js');
+
 class Repository {
     
-    getLessons() {
-        //TODO add db
-        return [
-            'Д43 Сальса гр.1107 (ПТ 20:00-22:00 с 22.07.2022) Елена Ромащенко и JJ места для парней и пар',
-            'Д43 Сальса (Мамбо, Нью-Йорк) гр.1076 (ВТ 20:00-22:00 с 18.01.2022) Елена Ромащенко и JJ места для парней и пар',
-            'Д43 Сальса (Мамбо, Нью-Йорк) гр.1041 (ПН СР 19:00-20:00 с 28.06.2021) Дарья Евченко и JJ места для парней и пар'
-        ];
+    getApiClient = async () => {
+        const authClient = await getAuthClient();
+        const { spreadsheets: apiClient } = google.sheets( {
+            version : 'v4',
+            auth    : authClient,
+        } );
+     
+        return apiClient;
+     };
+
+    getValuesData = async ( apiClient, range ) => {
+        const { data } = await apiClient.get( {
+            spreadsheetId : '1xUq6Ac3ypomJBxH6pZl-AADuZYnxVcq1U1-BBzsHd8o',
+            ranges: range,
+            fields: 'sheets',
+            includeGridData : true,
+        } );
+     
+        return data.sheets[0].data[0].rowData;
+     };
+
+
+    extract 
+    async getLessons() {
+        const apiClient = await this.getApiClient();
+        const values = await this.getValuesData(apiClient, 'BachataClasses!A1:B3');
+        return values.map(x => x.values[0].formattedValue);
     }
 
     getFreeSlots() {
