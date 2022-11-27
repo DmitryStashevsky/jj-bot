@@ -1,6 +1,7 @@
 const { google } = require('googleapis');
 
 const { getAuthClient } = require('./google.config.js');
+const { extractSpreedsheetData } = require('./helper.js');
 
 class Repository {
     
@@ -22,15 +23,14 @@ class Repository {
             includeGridData : true,
         } );
      
-        return data.sheets[0].data[0].rowData;
+        return extractSpreedsheetData(data);
      };
 
 
-    async getLessons() {
+    async getLessons(lessonType) {
         const apiClient = await this.getApiClient();
-        const values = await this.getValuesData(apiClient, 'BachataClasses!A1:B3');
-        console.log(values.values[0]);
-        return values.map(x => x.values[0].formattedValue);
+        const values = await this.getValuesData(apiClient, lessonType + '!A1:A5');
+        return values.map(x => x[0]);
     }
 
     getFreeSlots() {

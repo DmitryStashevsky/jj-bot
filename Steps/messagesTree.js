@@ -1,4 +1,6 @@
 
+const { Meta } = require('../cache.config.js');
+
 const GroupLessons = require('./groupLessons.js');
 const PrivateLessons = require('./privateLessons.js');
 const JoinGroupLesson = require('./joinGroupLesson.js');
@@ -30,7 +32,6 @@ class MessagesTree {
     currentStep;
 
     constructor(repository, metaData) {
-
         const events = new Events();
 
         const dances = new Dances();
@@ -43,25 +44,25 @@ class MessagesTree {
         const salsaPartnerTopic = new Topic('salsaPartnerTopicDesc', 'salsaPartnerTopicCommand');
         const salsaMixTopic = new Topic('salsaMixTopicDesc', 'salsaMixTopicCommand');
 
-        const salsaSoloClasses = new GroupLessons('salsaSoloClassesDesc', 'salsaSoloClassesCommand', () => repository.getLessons());
-        const salsaPartnerClasses = new GroupLessons('salsaPartnerClassesDesc', 'salsaPartnerClassesCommand', () => repository.getLessons());
-        const salsaMixClasses = new GroupLessons('salsaMixClassesDesc', 'salsaMixClassesCommand', () => repository.getLessons());
+        const salsaSoloClasses = new GroupLessons('salsaSoloClassesDesc', 'salsaSoloClassesCommand', async () => await repository.getLessons(Meta.SalsaSolo));
+        const salsaPartnerClasses = new GroupLessons('salsaPartnerClassesDesc', 'salsaPartnerClassesCommand', () => repository.getLessons(Meta.SalsaPartner));
+        const salsaMixClasses = new GroupLessons('salsaMixClassesDesc', 'salsaMixClassesCommand', () => repository.getLessons(Meta.SalsaMix));
 
-        const joinSalsaSoloClasses = new JoinGroupLesson('joinSalsaSoloClassesDesc', 'joinSalsaSoloClassesCommand', () => repository.getLessons());
-        const joinSalsaPartnerClasses = new JoinGroupLesson('joinSalsaPartnerClassesDesc', 'joinSalsaPartnerClassesCommand', () => repository.getLessons());
-        const joinSalsaMixClasses = new JoinGroupLesson('joinSalsaMixClassesDesc', 'joinSalsaMixClassesCommand', () => repository.getLessons());
+        const joinSalsaSoloClasses = new JoinGroupLesson('joinSalsaSoloClassesDesc', 'joinSalsaSoloClassesCommand', () => repository.getLessons(Meta.SalsaSolo));
+        const joinSalsaPartnerClasses = new JoinGroupLesson('joinSalsaPartnerClassesDesc', 'joinSalsaPartnerClassesCommand', () => repository.getLessons(Meta.SalsaPartner));
+        const joinSalsaMixClasses = new JoinGroupLesson('joinSalsaMixClassesDesc', 'joinSalsaMixClassesCommand', () => repository.getLessons(Meta.SalsaMix));
 
         const bachataSoloTopic = new Topic('bachataSoloTopicDesc', 'bachataSoloTopicCommand');
         const bachataPartnerTopic = new Topic('bachataPartnerTopicDesc', 'bachataPartnerTopicCommand');
         const bachataMixTopic = new Topic('bachataMixTopicDesc', 'bachataMixTopicCommand');
 
-        const bachataSoloClasses = new GroupLessons('bachataSoloClassesDesc', 'bachataSoloClassesCommand', () => repository.getLessons());
-        const bachataPartnerClasses = new GroupLessons('bachataPartnerClassesDesc', 'bachataPartnerClassesCommand', () => repository.getLessons());
-        const bachataMixClasses = new GroupLessons('bachataMixClassesDesc', 'bachataMixClassesCommand', () => repository.getLessons());
+        const bachataSoloClasses = new GroupLessons('bachataSoloClassesDesc', 'bachataSoloClassesCommand', () => repository.getLessons(Meta.BachataSolo));
+        const bachataPartnerClasses = new GroupLessons('bachataPartnerClassesDesc', 'bachataPartnerClassesCommand', () => repository.getLessons(Meta.BachataPartner));
+        const bachataMixClasses = new GroupLessons('bachataMixClassesDesc', 'bachataMixClassesCommand', () => repository.getLessons(Meta.BachataMix));
 
-        const joinBachataSoloClasses = new JoinGroupLesson('joinBachataSoloClassesDesc', 'joinBachataSoloClassesCommand', () => repository.getLessons());
-        const joinBachataPartnerClasses = new JoinGroupLesson('joinBachataPartnerClassesDesc', 'joinBachataPartnerClassesCommand', () => repository.getLessons());
-        const joinBachataMixClasses = new JoinGroupLesson('joinBachataMixClassesDesc', 'joinBachataMixClassesCommand', () => repository.getLessons());
+        const joinBachataSoloClasses = new JoinGroupLesson('joinBachataSoloClassesDesc', 'joinBachataSoloClassesCommand', () => repository.getLessons(Meta.BachataSolo));
+        const joinBachataPartnerClasses = new JoinGroupLesson('joinBachataPartnerClassesDesc', 'joinBachataPartnerClassesCommand', () => repository.getLessons(Meta.BachataPartner));
+        const joinBachataMixClasses = new JoinGroupLesson('joinBachataMixClassesDesc', 'joinBachataMixClassesCommand', () => repository.getLessons(Meta.BachataMix));
         
         const joinPrivateBachataSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsBSoloDescCommand', 'Bachata Solo', () => repository.getFreeSlots());
         const joinPrivateBachataPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsBPartnerDescCommand', 'Bachata Partner', () => repository.getFreeSlots());

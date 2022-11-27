@@ -1,5 +1,14 @@
 const LRU = require("lru-cache");
 
+const Meta = {
+    SalsaSolo: 'Salsa Solo',
+    SalsaPartner: 'Salsa Partner',
+    SalsaMix: 'Salsa Mix',
+    BachataSolo: 'Bachata Solo',
+    BachataPartner: 'Bachata Partner',
+    BachataMix: 'Bachata Mix',
+}
+
 class MetaData {
     constructor() {
         this.cache = new LRU({max: 50});
@@ -23,4 +32,4 @@ class MetaData {
 
 const metaData = new MetaData();
 
-module.exports = metaData;
+module.exports = {metaData, Meta}
