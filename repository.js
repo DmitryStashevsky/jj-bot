@@ -29,17 +29,14 @@ class Repository {
 
     async getLessons(lessonType) {
         const apiClient = await this.getApiClient();
-        const values = await this.getValuesData(apiClient, lessonType + '!A1:A5');
+        const values = await this.getValuesData(apiClient, lessonType + '!A1:A10');
         return values.map(x => x[0]);
     }
 
-    getFreeSlots() {
-        //TODO add db
-        return [
-            'Вторник 18 00 - 19 00',
-            'Среда 21 00 - 22 00',
-            'Суббота 14 00 - 15 00'
-        ];
+    async getFreeSlots() {
+        const apiClient = await this.getApiClient();
+        const values = await this.getValuesData(apiClient, 'Private Lessons!A1:B10');
+        return values.filter(x => !x[1]).map(x => x[0]);
     }
 }
 

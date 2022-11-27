@@ -12,8 +12,8 @@ class PrivateLessons extends Step {
 
     metaField = 'privateDance';
 
-    getButtons() {
-        const lessons = this.getFreeSlotsFunc();
+    async getButtons() {
+        const lessons = await this.getFreeSlotsFunc();
         if (this.nextSteps.length) {
             const buttons = [];
             for (let i = 0; i < lessons.length; i++) {

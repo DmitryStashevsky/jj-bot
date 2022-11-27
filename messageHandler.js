@@ -1,5 +1,5 @@
 const i18n = require('./i18n.config.js');
-const metaData  = require('./cache.config.js');
+const{ metaData }  = require('./cache.config.js');
 
 const MessagesTree = require('./Steps/messagesTree.js');
 const NotificationService = require('./notificationService.js');
@@ -33,7 +33,7 @@ class MessageHandler {
             const currentStep = messagesTree.findCurrentStep(text);
 
             if (currentStep) {
-                bot.sendMessage(chatId, currentStep.getMessage(from, msg, text), await currentStep.getButtons() || {});
+                bot.sendMessage(chatId, await currentStep.getMessage(from, msg, text), await currentStep.getButtons() || {});
 
                 const metaField = currentStep.getMetaField();
                 if (metaField) {
@@ -41,7 +41,7 @@ class MessageHandler {
                 }
 
                 const nextStep = currentStep.next(text);
-                this.notificationService.notify(from, msg, text, nextStep);
+                await this.notificationService.notify(from, msg, text, nextStep);
             } else {
                 bot.sendMessage(chatId, 'Не понимаю сообщение');
             }

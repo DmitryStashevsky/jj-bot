@@ -13,8 +13,8 @@ class JoinPrivateLesson extends Step {
     readMetaField = 'privateDance';
     isNeedMessageToJj = true;
 
-    getMessage(from, message, text) {
-        const lesson = this.getFreeSlots(text);
+    async getMessage(from, message, text) {
+        const lesson = await this.getFreeSlots(text);
         if(lesson) {
             return this.message + `- ${lesson}`;
         }
@@ -23,15 +23,15 @@ class JoinPrivateLesson extends Step {
         }
     }
 
-    getPrivateMessage(from, message, text) {
-        const lesson = this.getFreeSlots(text);
+    async getPrivateMessage(from, message, text) {
+        const lesson = await this.getFreeSlots(text);
         const meta = this.getMetaFunc(from.username, this.readMetaField);
         return `Dancer ${from.username} wants to attend you private class ${meta}- ${lesson}`;
     }
 
-    getFreeSlots(text) {
+    async getFreeSlots(text) {
         const matches = text.match(/(\d+)/);
-        const lessons = this.getFreeSlotsFunc();
+        const lessons = await this.getFreeSlotsFunc();
         if (!matches) {
             return false;
         }

@@ -11,8 +11,8 @@ class JoinGroupLesson extends Step {
 
     isNeedMessageToJj = true;
 
-    getMessage(from, message, text) {
-        const lesson = this.getLesson(text);
+    async getMessage(from, message, text) {
+        const lesson = await this.getLesson(text);
         if(lesson) {
             return this.message + `- ${lesson}`;
         }
@@ -21,14 +21,14 @@ class JoinGroupLesson extends Step {
         }
     }
 
-    getPrivateMessage(from, message, text) {
-        const lesson = this.getLesson(text);
+    async getPrivateMessage(from, message, text) {
+        const lesson = await this.getLesson(text);
         return `Dancer ${from.username} wants to attend you group class - ${lesson}`;
     }
 
-    getLesson(text) {
+    async getLesson(text) {
         const matches = text.match(/(\d+)/);
-        const lessons = this.getLessonsFunc();
+        const lessons = await this.getLessonsFunc();
         if (!matches) {
             return false;
         }
