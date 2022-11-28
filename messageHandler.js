@@ -33,15 +33,16 @@ class MessageHandler {
             const currentStep = messagesTree.findCurrentStep(text);
 
             if (currentStep) {
-                bot.sendMessage(chatId, await currentStep.getMessage(from, msg, text), await currentStep.getButtons() || {});
 
-                const metaField = currentStep.getMetaField();
-                if (metaField) {
-                    metaData.setMetadata(from.username, null, metaField, currentStep.getMetaData());
+                await currentStep.handleStep(from, msg, text);
+
+                bot.sendMessage(chatId, currentStep.message, currentStep.buttons);
+
+                if (currentStep.metaField) {
+                    metaData.setMetadata(from.username, null, currentStep.metaField, currentStep.metaData);
                 }
 
-                const nextStep = currentStep.next(text);
-                await this.notificationService.notify(from, msg, text, nextStep);
+                await this.notificationService.notify(currentStep.privateMessage);
             } else {
                 bot.sendMessage(chatId, 'Не понимаю сообщение');
             }

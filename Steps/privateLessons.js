@@ -3,28 +3,26 @@ const Step = require('./step.js');
 
 class PrivateLessons extends Step {
     constructor(message, command, metaData, getFreeSlotsFunc) {
-        super();
-        this.message = i18n.__(message);
-        this.command = i18n.__(command);
+        super(message, command);
         this.metaData = metaData
         this.getFreeSlotsFunc = getFreeSlotsFunc;
     }
 
     metaField = 'privateDance';
 
-    async getButtons() {
+    async setButtons() {
         const lessons = await this.getFreeSlotsFunc();
         if (this.nextSteps.length) {
-            const buttons = [];
+            const options = [];
             for (let i = 0; i < lessons.length; i++) {
-                buttons.push([{
-                    text: `${i+1} - ${lessons[i]}`,
-                    callback_data: `${this.nextSteps[0].command} ${i+1}`,
+                options.push([{
+                    text: `${i+1} - ${lessons[i].time}`,
+                    callback_data: `${this.nextSteps[0].command} ${lessons[i].id}`,
                 }]);
             }
-            return {
+            this.buttons =  {
                 "reply_markup": {
-                    "inline_keyboard": buttons
+                    "inline_keyboard": options
                 }
             }
         }

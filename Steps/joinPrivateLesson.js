@@ -2,41 +2,50 @@ const i18n = require('../i18n.config.js');
 const Step = require('./step.js');
 
 class JoinPrivateLesson extends Step {
-    constructor(message, command, getMetaFunc, getFreeSlotsFunc) {
-        super();
-        this.message = i18n.__(message);
-        this.command = i18n.__(command);
+    constructor(message, command, getMetaFunc, getFreeSlotsFunc, participatePrivateLessonFunc) {
+        super(message, command);
         this.getMetaFunc = getMetaFunc;
         this.getFreeSlotsFunc = getFreeSlotsFunc;
+        this.participatePrivateLessonFunc = participatePrivateLessonFunc;
     }
 
     readMetaField = 'privateDance';
-    isNeedMessageToJj = true;
 
-    async getMessage(from, message, text) {
-        const lesson = await this.getFreeSlots(text);
-        if(lesson) {
-            return this.message + `- ${lesson}`;
+    async init(from, message, text) {
+        this.freeSlot = await this.getFreeSlot(text);
+    }
+
+    async setMessage(from, message, text) {
+        if(this.freeSlot) {
+            this.message =  this.message + `- ${this.freeSlot.time}`;
         }
         else {
             return false;
         }
     }
 
-    async getPrivateMessage(from, message, text) {
-        const lesson = await this.getFreeSlots(text);
+    async setPrivateMessage(from, message, text) {
         const meta = this.getMetaFunc(from.username, this.readMetaField);
-        return `Dancer ${from.username} wants to attend you private class ${meta}- ${lesson}`;
+        this.privateMessage =  `Dancer ${from.username} wants to attend you private class ${meta}- ${this.freeSlot.time}`;
     }
 
-    async getFreeSlots(text) {
+    async finish(from, message, text) {
+        await this.participatePrivateLessonFunc(this.freeSlot.id, from.username);
+    }
+    
+    async getFreeSlot(text) {
+        const slotId = this.getSlotId(text);
+        const slots  = await this.getFreeSlotsFunc();
+        const slot = slots.filter(x => x.id === slotId)[0];
+        return slot;
+    }
+
+    getSlotId(text) {
         const matches = text.match(/(\d+)/);
-        const lessons = await this.getFreeSlotsFunc();
         if (!matches) {
-            return false;
+            return null;
         }
-        const lesson = lessons[matches[0]-1];
-        return lesson;
+        return matches[0];
     }
 }
 module.exports = JoinPrivateLesson;

@@ -32,9 +32,9 @@ class MessagesTree {
     currentStep;
 
     constructor(repository, metaData) {
-        const events = new Events();
+        const events = new Events('eventsDesc', 'eventsCommand');
 
-        const dances = new Dances();
+        const dances = new Dances('dancesDesc', 'dancesCommand');
         const salsaDance = new Dance('salsaDesc', 'salsaCommand');
         const bachataDance = new Dance('bachataDesc', 'bachataCommand');
         const latinoGrooveDance = new Dance('latinoGrooveDesc', 'latinoGrooveCommand');
@@ -64,11 +64,11 @@ class MessagesTree {
         const joinBachataPartnerClasses = new JoinGroupLesson('joinBachataPartnerClassesDesc', 'joinBachataPartnerClassesCommand', async () => await repository.getLessons(Meta.BachataPartner));
         const joinBachataMixClasses = new JoinGroupLesson('joinBachataMixClassesDesc', 'joinBachataMixClassesCommand', async () => await repository.getLessons(Meta.BachataMix));
         
-        const joinPrivateBachataSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsBSoloDescCommand', 'Bachata Solo', () => repository.getFreeSlots());
-        const joinPrivateBachataPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsBPartnerDescCommand', 'Bachata Partner', () => repository.getFreeSlots());
-        const joinPrivateBachataMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsBMixDescCommand', 'Bachata Mix', () => repository.getFreeSlots());
+        const joinPrivateBachataSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', 'Bachata Solo', async () => await repository.getPrivateLessons());
+        const joinPrivateBachataPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', 'Bachata Partner', async () => await repository.getPrivateLessons());
+        const joinPrivateBachataMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', 'Bachata Mix', async () => await repository.getPrivateLessons());
         
-        const joinPrivateClasses = new JoinPrivateLesson('privateLessonsDesc', 'JPL', (username, field) => metaData.getMetadata(username, field), () => repository.getFreeSlots());
+        const joinPrivateClasses = new JoinPrivateLesson('privateLessonsDesc', 'JPL', (username, field) => metaData.getMetadata(username, field), async () => await repository.getPrivateLessons(), async (lessonId, username) => await repository.participatePrivateLesson(lessonId, username));
 
         const latinoGrooveSoloTopic = new LatinoGrooveSoloTopic();
         const latinoGroovePartnerTopic = new LatinoGroovePartnerTopic();

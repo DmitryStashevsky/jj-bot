@@ -11,7 +11,15 @@ extractSpreedsheetData = (data) => {
     return result;
 }
 
+extractFreeSlotsForPrivateLessons = (slots) => {
+    return slots.filter(x => !x[2]).map(x => ({
+        id: x[0],
+        time: x[1]
+    }));
+}
+
 
 module.exports = {
-    extractSpreedsheetData
+    extractSpreedsheetData,
+    extractFreeSlotsForPrivateLessons
 }

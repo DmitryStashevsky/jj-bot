@@ -3,9 +3,7 @@ const Step = require('./step.js');
 
 class Topic extends Step {
     constructor(message, command) {
-        super();
-        this.message = i18n.__(message);
-        this.command = i18n.__(command);
+        super(message, command);
     }
 }
 

@@ -80,5 +80,6 @@
 	"privateLessonsBSoloDescCommand": "privateLessonsBSoloDescCommand",
 	"privateLessonsBPartnerDescCommand": "privateLessonsBPartnerDescCommand",
 	"privateLessonsBMixDescCommand": "privateLessonsBMixDescCommand",
-	"JPL": "JPL"
+	"JPL": "JPL",
+	"eventsDesc, eventsCommand": "eventsDesc, eventsCommand"
 }

@@ -3,27 +3,25 @@ const Step = require('./step.js');
 
 class JoinGroupLesson extends Step {
     constructor(message, command, getLessonsFunc) {
-        super();
-        this.message = i18n.__(message);
-        this.command = i18n.__(command);
+        super(message, command);
         this.getLessonsFunc = getLessonsFunc;
     }
 
-    isNeedMessageToJj = true;
+    async init(from, message, text) {
+        this.lesson = await this.getLesson(text);
+    }
 
-    async getMessage(from, message, text) {
-        const lesson = await this.getLesson(text);
-        if(lesson) {
-            return this.message + `- ${lesson}`;
+    async setMessage(from, message, text) {
+        if(this.lesson) {
+            this.message = this.message + `- ${this.lesson}`;
         }
         else {
-            return false;
+            this.message = null;
         }
     }
 
-    async getPrivateMessage(from, message, text) {
-        const lesson = await this.getLesson(text);
-        return `Dancer ${from.username} wants to attend you group class - ${lesson}`;
+    async setPrivateMessage(from, message, text) {
+        this.privateMessage = `Dancer ${from.username} wants to attend you group class - ${this.lesson}`;
     }
 
     async getLesson(text) {

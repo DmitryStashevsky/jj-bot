@@ -1,26 +1,47 @@
+const i18n = require('../i18n.config.js');
+
 class Step {
+    constructor(message, command) {
+        this.message = i18n.__(message);
+        this.command = i18n.__(command);
+    }
+
     message = '';
+    buttons = {};
+    privateMessage;
+    metaDatMessage
     command = '';
     nextSteps = [];
     messageToJj;
 
-    getMessage(from, message, text)  {
-        return this.message;
+    async handleStep(from, message, text) {
+        await this.init(from, message, text);
+        await this.setMessage(from, message, text);
+        await this.setButtons(from, message, text);
+        await this.setMetaMessage(from, message, text);
+        await this.setPrivateMessage(from, message, text);
+        await this.finish(from, message, text)
     }
 
-    getButtons() {
+    init(from, message, text) {
+    }
+
+    setMessage(from, message, text)  {
+    }
+
+    setButtons(from, message, text) {
         if (this.nextSteps.length) {
-            const buttons = [];
+            const options = [];
             for (let step of this.nextSteps) {
-                buttons.push([{
+                options.push([{
                     text: step.command,
                     callback_data: step.command,
                     }]
                 );
             }
-            return {
+            this.buttons = {
                 reply_markup: {
-                    inline_keyboard: buttons
+                    inline_keyboard: options
                 }
             }
         }
@@ -28,17 +49,13 @@ class Step {
         return null;
     }
 
-    getPrivateMessage(from, message, text) {}
-
-    getMetaField() {
+    setMetaMessage(from, message, text) {
         return this.metaField;
     }
 
-    getMetaData() {
-        return this.metaData;
-    }
+    setPrivateMessage(from, message, text) {}
 
-    returnToRoot(){};
+    finish(from, message, text) {};
 
     next(message){
         const found = this.nextSteps.filter(e => e.message.toLocaleLowerCase() 
