@@ -7,6 +7,8 @@ const JoinGroupLesson = require('./joinGroupLesson.js');
 const JoinPrivateLesson = require('./joinPrivateLesson.js');
 
 const Events = require('./events.js');
+const Event = require('./event.js');
+const JoinEvent = require('./joinEvent.js');
 
 const Dances = require('./dances.js');
 const Dance = require('./dance.js');
@@ -34,6 +36,13 @@ class MessagesTree {
     constructor(repository, metaData) {
         const events = new Events('eventsDesc', 'eventsCommand');
 
+        const masterClasses = new Event('masterClassesDesc', 'masterClassesCommand', Meta.MasterClass, async () => await repository.getEvents(Meta.MasterClass));
+        const festivalsClasses = new Event('festivalsDesc', 'festivalsCommand', Meta.Festival, async () => await repository.getEvents(Meta.Festival));
+        const showsClasses = new Event('showsDesc', 'showsCommand', Meta.Show, async () => await repository.getEvents(Meta.Show));
+
+        const joinEvent = new JoinEvent('joinEventDesc', 'joinEventCommand', (username, field) => metaData.getMetadata(username, field), async (eventType) => await repository.getEvents(eventType), 
+        async (eventType) => await repository.getEventsParticipants(eventType), async (eventType, rowNumber, eventId, eventName, username) => await repository.participateEvent(eventType, rowNumber, eventId, eventName, username));
+
         const dances = new Dances('dancesDesc', 'dancesCommand');
         const salsaDance = new Dance('salsaDesc', 'salsaCommand');
         const bachataDance = new Dance('bachataDesc', 'bachataCommand');
@@ -52,6 +61,10 @@ class MessagesTree {
         const joinSalsaPartnerClasses = new JoinGroupLesson('joinSalsaPartnerClassesDesc', 'joinSalsaPartnerClassesCommand', async () => await repository.getLessons(Meta.SalsaPartner));
         const joinSalsaMixClasses = new JoinGroupLesson('joinSalsaMixClassesDesc', 'joinSalsaMixClassesCommand', async () => await repository.getLessons(Meta.SalsaMix));
 
+        const joinPrivateSalsaSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.SalsaSolo, async () => await repository.getPrivateLessons());
+        const joinPrivateSalsaPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.SalsaPartner, async () => await repository.getPrivateLessons());
+        const joinPrivateSalsaMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.SalsaMix, async () => await repository.getPrivateLessons());
+
         const bachataSoloTopic = new Topic('bachataSoloTopicDesc', 'bachataSoloTopicCommand');
         const bachataPartnerTopic = new Topic('bachataPartnerTopicDesc', 'bachataPartnerTopicCommand');
         const bachataMixTopic = new Topic('bachataMixTopicDesc', 'bachataMixTopicCommand');
@@ -64,9 +77,9 @@ class MessagesTree {
         const joinBachataPartnerClasses = new JoinGroupLesson('joinBachataPartnerClassesDesc', 'joinBachataPartnerClassesCommand', async () => await repository.getLessons(Meta.BachataPartner));
         const joinBachataMixClasses = new JoinGroupLesson('joinBachataMixClassesDesc', 'joinBachataMixClassesCommand', async () => await repository.getLessons(Meta.BachataMix));
         
-        const joinPrivateBachataSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', 'Bachata Solo', async () => await repository.getPrivateLessons());
-        const joinPrivateBachataPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', 'Bachata Partner', async () => await repository.getPrivateLessons());
-        const joinPrivateBachataMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', 'Bachata Mix', async () => await repository.getPrivateLessons());
+        const joinPrivateBachataSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataSolo, async () => await repository.getPrivateLessons());
+        const joinPrivateBachataPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataPartner, async () => await repository.getPrivateLessons());
+        const joinPrivateBachataMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataMix, async () => await repository.getPrivateLessons());
         
         const joinPrivateClasses = new JoinPrivateLesson('privateLessonsDesc', 'JPL', (username, field) => metaData.getMetadata(username, field), async () => await repository.getPrivateLessons(), async (lessonId, username) => await repository.participatePrivateLesson(lessonId, username));
 
@@ -86,16 +99,26 @@ class MessagesTree {
         const afroHousePartnerClasses = new AfroHousePartnerClasses();
         const afroHouseMixClasses = new AfroHouseMixClasses();
 
+        events.nextSteps = [masterClasses, festivalsClasses, showsClasses];
+
+        masterClasses.nextSteps = [joinEvent];
+        festivalsClasses.nextSteps = [joinEvent];
+        showsClasses.nextSteps = [joinEvent];
+
         dances.nextSteps = [salsaDance, bachataDance];
 
         salsaDance.nextSteps = [salsaSoloTopic, salsaPartnerTopic, salsaMixTopic];
-        salsaSoloTopic.nextSteps = [salsaSoloClasses, events];
-        salsaPartnerTopic.nextSteps = [salsaPartnerClasses, events];
-        salsaMixTopic.nextSteps = [salsaMixClasses, events];
+        salsaSoloTopic.nextSteps = [salsaSoloClasses, joinPrivateSalsaSoloClasses, events];
+        salsaPartnerTopic.nextSteps = [salsaPartnerClasses, joinPrivateSalsaPartnerClasses, events];
+        salsaMixTopic.nextSteps = [salsaMixClasses, joinPrivateSalsaMixClasses, events];
         
         salsaSoloClasses.nextSteps =[joinSalsaSoloClasses];
         salsaPartnerClasses.nextSteps =[joinSalsaPartnerClasses];
         salsaMixClasses.nextSteps =[joinSalsaMixClasses];
+
+        joinPrivateSalsaSoloClasses.nextSteps = [joinPrivateClasses];
+        joinPrivateSalsaPartnerClasses.nextSteps = [joinPrivateClasses];
+        joinPrivateSalsaMixClasses.nextSteps = [joinPrivateClasses];
 
         bachataDance.nextSteps = [bachataSoloTopic, bachataPartnerTopic, bachataMixTopic];
         bachataSoloTopic.nextSteps = [bachataSoloClasses, joinPrivateBachataSoloClasses, events];

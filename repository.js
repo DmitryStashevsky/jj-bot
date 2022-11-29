@@ -1,7 +1,10 @@
 const { google } = require('googleapis');
 
 const { getAuthClient } = require('./google.config.js');
-const { extractSpreedsheetData, extractFreeSlotsForPrivateLessons } = require('./helper.js');
+const { extractSpreedsheetData, extractFreeSlotsForPrivateLessons, extractEvents,
+    extractEventsParticipants} = require('./helper.js');
+
+const countOfHeaders = 1;
 
 class Repository {
     
@@ -15,7 +18,7 @@ class Repository {
         return apiClient;
      };
 
-    getValuesData = async ( apiClient, range ) => {
+    getValuesData = async (apiClient, range) => {
         const { data } = await apiClient.get( {
             spreadsheetId : '1xUq6Ac3ypomJBxH6pZl-AADuZYnxVcq1U1-BBzsHd8o',
             ranges: range,
@@ -26,8 +29,9 @@ class Repository {
         return extractSpreedsheetData(data);
      };
 
-     setValuesData = async ( apiClient, range, value) => {
-        let values = [
+     setValuesData = async (apiClient, range, value) => {
+        let values = value instanceof Array ? 
+            [value] : [
             [
               value
             ]
@@ -49,6 +53,23 @@ class Repository {
         const apiClient = await this.getApiClient();
         const values = await this.getValuesData(apiClient, lessonType + '!A1:A10');
         return values.map(x => x[0]);
+    }
+
+    async getEvents(eventType) {
+        const apiClient = await this.getApiClient();
+        const values = await this.getValuesData(apiClient, eventType + '!A2:B11');
+        return extractEvents(values);
+    }
+
+    async getEventsParticipants(eventType) {
+        const apiClient = await this.getApiClient();
+        const values = await this.getValuesData(apiClient, eventType + '!D2:H41');
+        return extractEventsParticipantsList(values);
+    }
+
+    async participateEvent(eventType, rowNumber, eventId, eventName, username) {
+        const apiClient = await this.getApiClient();
+        await this.setValuesData(apiClient, `${eventType}!E${new Number(rowNumber) + countOfHeaders}:H${new Number(rowNumber) + countOfHeaders}`, [eventId, eventName, username, new Date(Date.now()).toUTCString()]);
     }
 
     async getPrivateLessons() {

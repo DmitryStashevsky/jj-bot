@@ -34,7 +34,12 @@ class MessageHandler {
 
             if (currentStep) {
 
-                await currentStep.handleStep(from, msg, text);
+                try {
+                    await currentStep.handleStep(from, msg, text);
+                } catch (e){
+                    console.log(e);
+                }
+                
 
                 bot.sendMessage(chatId, currentStep.message, currentStep.buttons);
 

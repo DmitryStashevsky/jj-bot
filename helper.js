@@ -18,8 +18,36 @@ extractFreeSlotsForPrivateLessons = (slots) => {
     }));
 }
 
+extractEvents = (events) => {
+    return events.filter(x => x[0]).map(x => ({
+        id: x[0],
+        name: x[1]
+    }));
+}
+
+extractEventsParticipants = (participants) => {
+    return participants.map(x => ({
+        id: x[0],
+        eventId: x[1],
+        eventName: x[2],
+        dancerName: x[3],
+        data: x[4]
+    }));
+}
+
+extractEventsParticipantsList = (participants) => {
+    return participants.filter(x => x[0]).map(x => ({
+        id: x[0],
+        eventId: x[1],
+        eventName: x[2],
+        dancerName: x[3],
+        data: x[4]
+    }));
+}
 
 module.exports = {
     extractSpreedsheetData,
-    extractFreeSlotsForPrivateLessons
+    extractFreeSlotsForPrivateLessons,
+    extractEvents,
+    extractEventsParticipants
 }

@@ -7,6 +7,9 @@ const Meta = {
     BachataSolo: 'Bachata Solo',
     BachataPartner: 'Bachata Partner',
     BachataMix: 'Bachata Mix',
+    MasterClass: 'Master Class',
+    Show: 'Show',
+    Festival: 'Festival'
 }
 
 class MetaData {
