@@ -13,8 +13,8 @@ class GroupLessons extends Step {
             const options = [];
             for (let i = 0; i < lessons.length; i++) {
                 options.push([{
-                    text: `${i+1} - ${lessons[i]}`,
-                    callback_data: `${this.nextSteps[0].command} ${i+1}`,
+                    text: `${i+1} - ${lessons[i].name} - ${lessons[i].time} -${lessons[i].place}`,
+                    callback_data: `${this.nextSteps[0].command} ${lessons[i].id}`,
                 }]);
             }
             this.buttons = {

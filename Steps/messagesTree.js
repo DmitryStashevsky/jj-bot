@@ -40,8 +40,10 @@ class MessagesTree {
         const festivalsClasses = new Event('festivalsDesc', 'festivalsCommand', Meta.Festival, async () => await repository.getEvents(Meta.Festival));
         const showsClasses = new Event('showsDesc', 'showsCommand', Meta.Show, async () => await repository.getEvents(Meta.Show));
 
-        const joinEvent = new JoinEvent('joinEventDesc', 'joinEventCommand', (username, field) => metaData.getMetadata(username, field), async (eventType) => await repository.getEvents(eventType), 
-        async (eventType) => await repository.getEventsParticipants(eventType), async (eventType, rowNumber, eventId, eventName, username) => await repository.participateEvent(eventType, rowNumber, eventId, eventName, username));
+        const joinEvent = new JoinEvent('joinEventDesc', 'joinEventCommand', (username, field) => metaData.getMetadata(username, field), 
+            async (eventType) => await repository.getEvents(eventType), 
+            async (eventType) => await repository.getEventsParticipants(eventType), 
+            async (eventType, rowNumber, eventId, eventName, username) => await repository.participateEvent(eventType, rowNumber, eventId, eventName, username));
 
         const dances = new Dances('dancesDesc', 'dancesCommand');
         const salsaDance = new Dance('salsaDesc', 'salsaCommand');
@@ -53,13 +55,21 @@ class MessagesTree {
         const salsaPartnerTopic = new Topic('salsaPartnerTopicDesc', 'salsaPartnerTopicCommand');
         const salsaMixTopic = new Topic('salsaMixTopicDesc', 'salsaMixTopicCommand');
 
-        const salsaSoloClasses = new GroupLessons('salsaSoloClassesDesc', 'salsaSoloClassesCommand', async () => await repository.getLessons(Meta.SalsaSolo));
-        const salsaPartnerClasses = new GroupLessons('salsaPartnerClassesDesc', 'salsaPartnerClassesCommand', async () => await repository.getLessons(Meta.SalsaPartner));
-        const salsaMixClasses = new GroupLessons('salsaMixClassesDesc', 'salsaMixClassesCommand', async () => await repository.getLessons(Meta.SalsaMix));
+        const salsaSoloClasses = new GroupLessons('salsaSoloClassesDesc', 'salsaSoloClassesCommand', async () => await repository.getClasses(Meta.SalsaSolo));
+        const salsaPartnerClasses = new GroupLessons('salsaPartnerClassesDesc', 'salsaPartnerClassesCommand', async () => await repository.getClasses(Meta.SalsaPartner));
+        const salsaMixClasses = new GroupLessons('salsaMixClassesDesc', 'salsaMixClassesCommand', async () => await repository.getClasses(Meta.SalsaMix));
 
-        const joinSalsaSoloClasses = new JoinGroupLesson('joinSalsaSoloClassesDesc', 'joinSalsaSoloClassesCommand', async () => await repository.getLessons(Meta.SalsaSolo));
-        const joinSalsaPartnerClasses = new JoinGroupLesson('joinSalsaPartnerClassesDesc', 'joinSalsaPartnerClassesCommand', async () => await repository.getLessons(Meta.SalsaPartner));
-        const joinSalsaMixClasses = new JoinGroupLesson('joinSalsaMixClassesDesc', 'joinSalsaMixClassesCommand', async () => await repository.getLessons(Meta.SalsaMix));
+        const joinSalsaSoloClasses = new JoinGroupLesson('joinSalsaSoloClassesDesc', 'joinSalsaSoloClassesCommand', async () => await repository.getClasses(Meta.SalsaSolo),
+            async () => await repository.getClassesParticipants(Meta.SalsaSolo), 
+            async (rowNumber, classId, className, username) => await repository.participateClass(Meta.SalsaSolo, rowNumber, classId, className, username));
+
+        const joinSalsaPartnerClasses = new JoinGroupLesson('joinSalsaPartnerClassesDesc', 'joinSalsaPartnerClassesCommand', async () => await repository.getClasses(Meta.SalsaPartner),
+            async () => await repository.getClassesParticipants(Meta.SalsaPartner), 
+            async (rowNumber, classId, className, username) => await repository.participateClass(Meta.SalsaPartner, rowNumber, classId, className, username));
+        
+        const joinSalsaMixClasses = new JoinGroupLesson('joinSalsaMixClassesDesc', 'joinSalsaMixClassesCommand', async () => await repository.getClasses(Meta.SalsaMix),
+            async () => await repository.getClassesParticipants(Meta.SalsaMix), 
+            async (rowNumber, classId, className, username) => await repository.participateClass(Meta.SalsaMix, rowNumber, classId, className, username));
 
         const joinPrivateSalsaSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.SalsaSolo, async () => await repository.getPrivateLessons());
         const joinPrivateSalsaPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.SalsaPartner, async () => await repository.getPrivateLessons());
@@ -69,13 +79,21 @@ class MessagesTree {
         const bachataPartnerTopic = new Topic('bachataPartnerTopicDesc', 'bachataPartnerTopicCommand');
         const bachataMixTopic = new Topic('bachataMixTopicDesc', 'bachataMixTopicCommand');
 
-        const bachataSoloClasses = new GroupLessons('bachataSoloClassesDesc', 'bachataSoloClassesCommand', async () => await repository.getLessons(Meta.BachataSolo));
-        const bachataPartnerClasses = new GroupLessons('bachataPartnerClassesDesc', 'bachataPartnerClassesCommand',  async () => await repository.getLessons(Meta.BachataPartner));
-        const bachataMixClasses = new GroupLessons('bachataMixClassesDesc', 'bachataMixClassesCommand', async () => await repository.getLessons(Meta.BachataMix));
+        const bachataSoloClasses = new GroupLessons('bachataSoloClassesDesc', 'bachataSoloClassesCommand', async () => await repository.getClasses(Meta.BachataSolo));
+        const bachataPartnerClasses = new GroupLessons('bachataPartnerClassesDesc', 'bachataPartnerClassesCommand',  async () => await repository.getClasses(Meta.BachataPartner));
+        const bachataMixClasses = new GroupLessons('bachataMixClassesDesc', 'bachataMixClassesCommand', async () => await repository.getClasses(Meta.BachataMix));
 
-        const joinBachataSoloClasses = new JoinGroupLesson('joinBachataSoloClassesDesc', 'joinBachataSoloClassesCommand', async () => await repository.getLessons(Meta.BachataSolo));
-        const joinBachataPartnerClasses = new JoinGroupLesson('joinBachataPartnerClassesDesc', 'joinBachataPartnerClassesCommand', async () => await repository.getLessons(Meta.BachataPartner));
-        const joinBachataMixClasses = new JoinGroupLesson('joinBachataMixClassesDesc', 'joinBachataMixClassesCommand', async () => await repository.getLessons(Meta.BachataMix));
+        const joinBachataSoloClasses = new JoinGroupLesson('joinBachataSoloClassesDesc', 'joinBachataSoloClassesCommand', async () => await repository.getClasses(Meta.BachataSolo),
+            async () => await repository.getClassesParticipants(Meta.BachataSolo), 
+            async (rowNumber, classId, className, username) => await repository.participateClass(Meta.BachataSolo, rowNumber, classId, className, username));
+        
+        const joinBachataPartnerClasses = new JoinGroupLesson('joinBachataPartnerClassesDesc', 'joinBachataPartnerClassesCommand', async () => await repository.getClasses(Meta.BachataPartner),
+            async () => await repository.getClassesParticipants(Meta.BachataPartner), 
+            async (rowNumber, classId, className, username) => await repository.participateClass(Meta.BachataPartner, rowNumber, classId, className, username));
+
+        const joinBachataMixClasses = new JoinGroupLesson('joinBachataMixClassesDesc', 'joinBachataMixClassesCommand', async () => await repository.getClasses(Meta.BachataMix),
+            async () => await repository.getClassesParticipants(Meta.BachataMix), 
+            async (rowNumber, classId, className, username) => await repository.participateClass(Meta.BachataMix, rowNumber, classId, className, username));
         
         const joinPrivateBachataSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataSolo, async () => await repository.getPrivateLessons());
         const joinPrivateBachataPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataPartner, async () => await repository.getPrivateLessons());

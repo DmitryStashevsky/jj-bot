@@ -11,6 +11,25 @@ extractSpreedsheetData = (data) => {
     return result;
 }
 
+extractClasses = (classes) => {
+    return classes.filter(x => x[0]).map(x => ({
+        id: x[0],
+        name: x[1],
+        time: x[2],
+        place: x[3],
+    }));
+}
+
+extractFreeSlotsClassesParticipants = (classes) => {
+    return classes.map(x => ({
+        id: x[0],
+        classId: x[1],
+        className: x[2],
+        username: x[3],
+        date: x[4],
+    }));
+}
+
 extractFreeSlotsForPrivateLessons = (slots) => {
     return slots.filter(x => !x[2]).map(x => ({
         id: x[0],
@@ -26,6 +45,16 @@ extractEvents = (events) => {
 }
 
 extractEventsParticipants = (participants) => {
+    return participants.filter(x => x[1]).map(x => ({
+        id: x[0],
+        eventId: x[1],
+        eventName: x[2],
+        dancerName: x[3],
+        date: x[4]
+    }));
+}
+
+extractEventsParticipantsList = (participants) => {
     return participants.map(x => ({
         id: x[0],
         eventId: x[1],
@@ -35,17 +64,9 @@ extractEventsParticipants = (participants) => {
     }));
 }
 
-extractEventsParticipantsList = (participants) => {
-    return participants.filter(x => x[0]).map(x => ({
-        id: x[0],
-        eventId: x[1],
-        eventName: x[2],
-        dancerName: x[3],
-        data: x[4]
-    }));
-}
-
 module.exports = {
+    extractClasses,
+    extractFreeSlotsClassesParticipants,
     extractSpreedsheetData,
     extractFreeSlotsForPrivateLessons,
     extractEvents,

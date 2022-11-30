@@ -2,7 +2,8 @@ const { google } = require('googleapis');
 
 const { getAuthClient } = require('./google.config.js');
 const { extractSpreedsheetData, extractFreeSlotsForPrivateLessons, extractEvents,
-    extractEventsParticipants} = require('./helper.js');
+    extractEventsParticipants, extractClasses,
+    extractFreeSlotsClassesParticipants,} = require('./helper.js');
 
 const countOfHeaders = 1;
 
@@ -49,10 +50,21 @@ class Repository {
      };
 
 
-    async getLessons(lessonType) {
+    async getClasses(lessonType) {
         const apiClient = await this.getApiClient();
-        const values = await this.getValuesData(apiClient, lessonType + '!A1:A10');
-        return values.map(x => x[0]);
+        const values = await this.getValuesData(apiClient, lessonType + '!A2:D11');
+        return extractClasses(values);
+    }
+
+    async getClassesParticipants(lessonType) {
+        const apiClient = await this.getApiClient();
+        const values = await this.getValuesData(apiClient, lessonType + '!F2:G41');
+        return extractFreeSlotsClassesParticipants(values);
+    }
+
+    async participateClass(lessonType, rowNumber, classId, className, username) {
+        const apiClient = await this.getApiClient();
+        await this.setValuesData(apiClient, `${lessonType}!G${new Number(rowNumber) + countOfHeaders}:J${new Number(rowNumber) + countOfHeaders}`, [classId, className, username, new Date(Date.now()).toUTCString()]);
     }
 
     async getEvents(eventType) {

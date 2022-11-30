@@ -23,10 +23,7 @@ class MessageHandler {
 
     async onMessage(bot, chatId, language, text, from, msg) {
 
-            i18n.setLocale(language === 'ru' || language === 'en'
-                ? language
-                : 'ru'
-            );
+            i18n.init(language);
 
             this.notificationService.log(msg);
             const messagesTree = new MessagesTree(this.repository, metaData);
@@ -40,8 +37,7 @@ class MessageHandler {
                     console.log(e);
                 }
                 
-
-                bot.sendMessage(chatId, currentStep.message, currentStep.buttons);
+                await bot.sendMessage(chatId, currentStep.message, currentStep.buttons);
 
                 if (currentStep.metaField) {
                     metaData.setMetadata(from.username, null, currentStep.metaField, currentStep.metaData);

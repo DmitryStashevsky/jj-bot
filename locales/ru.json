@@ -40,7 +40,7 @@
 	"joinSalsaSoloClassesDesc": "JJ получил ваше сообщение, скоро с Вами свяжутся",
 	"joinSalsaSoloClassesCommand": "JoinSlsSolo",
 	"joinSalsaPartnerClassesDesc": "JJ получил ваше сообщение, скоро с Вами свяжутся",
-	"joinSalsaPartnerClassesCommand": "JoinSlsMix",
+	"joinSalsaPartnerClassesCommand": "JoinSlsPartner",
 	"joinSalsaMixClassesDesc": "JJ получил ваше сообщение, скоро с Вами свяжутся",
 	"joinSalsaMixClassesCommand": "JoinSlsMix",
 	"bachataSoloTopicDesc": "Бачата Соло",
