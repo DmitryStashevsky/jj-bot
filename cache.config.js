@@ -7,6 +7,12 @@ const Meta = {
     BachataSolo: 'Bachata Solo',
     BachataPartner: 'Bachata Partner',
     BachataMix: 'Bachata Mix',
+    AfroHouseSolo: 'AH Solo',
+    AfroHousePartner: 'AH Partner',
+    AfroHouseMix: 'AH Mix',
+    LatinoGrooveSolo: 'LG Solo',
+    LatinoGroovePartner: 'LG Partner',
+    LatinoGrooveMix: 'LG Mix',
     MasterClass: 'Master Class',
     Show: 'Show',
     Festival: 'Festival'
