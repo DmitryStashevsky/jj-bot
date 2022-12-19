@@ -28,7 +28,8 @@ class JoinPrivateLesson extends Step {
     }
 
     async finish(from, message, text) {
-        await this.participatePrivateLessonFunc(this.freeSlot.id, from.username);
+        const meta = this.getMetaFunc(from.username, this.readMetaField);
+        await this.participatePrivateLessonFunc(this.freeSlot.id, meta, from.username);
     }
     
     async getFreeSlot(text) {

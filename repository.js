@@ -93,9 +93,9 @@ class Repository {
         return extractFreeSlotsForPrivateLessons(values);
     }
 
-    async participatePrivateLesson(lessonId, username) {
+    async participatePrivateLesson(lessonId, dance, username) {
         const apiClient = await this.getApiClient();
-        await this.setValuesData(apiClient, 'Private Lessons!C' + lessonId, username);
+        await this.setValuesData(apiClient, `Private Lessons!C${new Number(lessonId) + countOfHeaders}:E${new Number(lessonId) + countOfHeaders}`, [dance, username, new Date(Date.now()).toUTCString()]);
     }
 }
 
