@@ -1,5 +1,8 @@
 const { google } = require('googleapis');
 
+const config = require('config');
+const spreadsheetId = config.get('GoogleSpreadSheetId');
+
 const { getAuthClient } = require('./google.config.js');
 const { extractSpreedsheetData, extractFreeSlotsForPrivateLessons, extractEvents,
     extractEventsParticipants, extractClasses,
@@ -21,7 +24,7 @@ class Repository {
 
     getValuesData = async (apiClient, range) => {
         const { data } = await apiClient.get( {
-            spreadsheetId : '1xUq6Ac3ypomJBxH6pZl-AADuZYnxVcq1U1-BBzsHd8o',
+            spreadsheetId : spreadsheetId,
             ranges: range,
             fields: 'sheets',
             includeGridData : true,
@@ -42,7 +45,7 @@ class Repository {
           };
 
         await apiClient.values.update( {
-            spreadsheetId : '1xUq6Ac3ypomJBxH6pZl-AADuZYnxVcq1U1-BBzsHd8o',
+            spreadsheetId : spreadsheetId,
             range: range,
             valueInputOption: 'RAW',
             resource: resource

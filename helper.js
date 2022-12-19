@@ -31,7 +31,7 @@ extractFreeSlotsClassesParticipants = (classes) => {
 }
 
 extractFreeSlotsForPrivateLessons = (slots) => {
-    return slots.filter(x => !x[2]).map(x => ({
+    return slots.filter(x => !x[2] && x[0]).map(x => ({
         id: x[0],
         time: x[1]
     }));
