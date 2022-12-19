@@ -1,7 +1,8 @@
 const TelegramBot = require('node-telegram-bot-api');
 const MessageHandler = require('./messageHandler.js');
 
-const TOKEN = process.env.TELEGRAM_TOKEN || '5624025318:AAEy-wbMfuPT5iF4hO2niyoHGzTo3FA_teA';
+const config = require('config');
+const token = config.get('TelegramToken');
 
 const options = {
   webHook: {
@@ -10,10 +11,10 @@ const options = {
 };
 
 const url = process.env.APP_URL || 'https://jj-dance-bot.herokuapp.com:443';
-const bot = new TelegramBot(TOKEN, options);
+const bot = new TelegramBot(token, options);
 const handler = new MessageHandler(bot);
 
-bot.setWebHook(`${url}/bot${TOKEN}`);
+bot.setWebHook(`${url}/bot${token}`);
 
 bot.on('message', (msg) => {
   handler.onMessage(bot, msg.chat.id, msg.from.language_code, msg.text, msg.from, msg);

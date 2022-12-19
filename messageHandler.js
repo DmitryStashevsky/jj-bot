@@ -11,16 +11,7 @@ class MessageHandler {
         this.repository = new Repository();
     }
 
-    onText(bot) {
-        // bot.onText(/Занятия/, (msg, match) => {          
-        //     const chatId = msg.chat.id;
-        //     const resp = "Понедельник/Среда/Пятница 19 00";
-        //     bot.sendMessage(chatId, resp);
-        //   });
-    }
-
     async onMessage(bot, chatId, language, text, from, msg) {
-
             i18n.init(language);
 
             this.notificationService.log(msg);

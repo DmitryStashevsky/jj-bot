@@ -1,3 +1,7 @@
+const config = require('config');
+const notificationChatId = config.get('NotificationChatId');
+const logChatId = config.get('LogsChatId');
+
 class NotificationService {
 
     constructor(bot) {
@@ -6,12 +10,12 @@ class NotificationService {
 
     async notify(message) {
        if (message) {
-           this.bot.sendMessage(-748502854, message);
+           this.bot.sendMessage(notificationChatId, message);
        }
     }
 
     log(msg) {
-        this.bot.sendMessage(-600304726, `User - ${msg.from.username}, say - ${msg.text}`);
+        this.bot.sendMessage(logChatId, `User - ${msg.from.username}, say - ${msg.text}`);
      }
 }
 

@@ -6,7 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-
+config/
 jj-bot-365714-862a4c223e60.json
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
