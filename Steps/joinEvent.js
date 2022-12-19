@@ -7,9 +7,8 @@ class JoinEvent extends Step {
         this.getEventsFunc = getEventsFunc;
         this.getEventsParticipantsFunc = getEventsParticipantsFunc;
         this.participateEventFunc = participateEventFunc;
+        this.readMetaField = 'event';
     }
-
-    readMetaField = 'event';
 
     async init(from, message, text) {
         this.meta = this.getMetaFunc(from.username, this.readMetaField);

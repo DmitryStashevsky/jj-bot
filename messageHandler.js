@@ -6,8 +6,6 @@ const NotificationService = require('./notificationService.js');
 const Repository = require('./repository.js');
 
 class MessageHandler {
-    notificationService;
-
     constructor(bot) {
         this.notificationService = new NotificationService(bot);
         this.repository = new Repository();

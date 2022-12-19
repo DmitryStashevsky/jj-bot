@@ -6,9 +6,8 @@ class JoinPrivateLesson extends Step {
         this.getMetaFunc = getMetaFunc;
         this.getFreeSlotsFunc = getFreeSlotsFunc;
         this.participatePrivateLessonFunc = participatePrivateLessonFunc;
+        this.readMetaField = 'privateDance';
     }
-
-    readMetaField = 'privateDance';
 
     async init(from, message, text) {
         this.freeSlot = await this.getFreeSlot(text);

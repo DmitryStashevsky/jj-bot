@@ -1,5 +1,4 @@
 class NotificationService {
-    bot;
 
     constructor(bot) {
         this.bot = bot;

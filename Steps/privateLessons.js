@@ -6,9 +6,8 @@ class PrivateLessons extends Step {
         super(message, command);
         this.metaData = metaData
         this.getFreeSlotsFunc = getFreeSlotsFunc;
+        this.metaField = 'privateDance';
     }
-
-    metaField = 'privateDance';
 
     async setButtons() {
         const lessons = await this.getFreeSlotsFunc();

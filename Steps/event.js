@@ -5,9 +5,8 @@ class Event extends Step {
         super(message, command);
         this.metaData = metaData;
         this.getEventsFunc = getEventsFunc;
+        this.metaField = 'event';
     }
-
-    metaField = 'event';
 
     async init () {
         this.events = await this.getEventsFunc();

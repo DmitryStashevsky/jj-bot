@@ -15,23 +15,7 @@ const Dance = require('./dance.js');
 
 const Topic = require('./topic.js');
 
-const LatinoGrooveSoloTopic = require('./latinoGrooveSoloTopic.js');
-const LatinoGroovePartnerTopic = require('./latinoGroovePartnerTopic.js');
-const LatinoGrooveMixTopic = require('./latinoGrooveMixTopic.js');
-const LatinoGrooveSoloClasses = require('./latinoGrooveSoloClasses.js');
-const LatinoGroovePartnerClasses = require('./latinoGroovePartnerClasses.js');
-const LatinoGrooveMixClasses = require('./latinoGrooveMixClasses.js');
-
-const AfroHouseSoloTopic = require('./afroHouseSoloTopic.js');
-const AfroHousePartnerTopic = require('./afroHousePartnerTopic.js');
-const AfroHouseMixTopic = require('./afroHouseMixTopic.js');
-const AfroHouseSoloClasses = require('./afroHouseSoloClasses.js');
-const AfroHousePartnerClasses = require('./afroHousePartnerClasses.js');
-const AfroHouseMixClasses = require('./afroHouseMixClasses.js');
-
 class MessagesTree {
-    initialStep;
-    currentStep;
 
     constructor(repository, metaData) {
         const events = new Events('eventsDesc', 'eventsCommand');
@@ -100,23 +84,7 @@ class MessagesTree {
         const joinPrivateBachataMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataMix, async () => await repository.getPrivateLessons());
         
         const joinPrivateClasses = new JoinPrivateLesson('privateLessonsDesc', 'JPL', (username, field) => metaData.getMetadata(username, field), async () => await repository.getPrivateLessons(), async (lessonId, username) => await repository.participatePrivateLesson(lessonId, username));
-
-        const latinoGrooveSoloTopic = new LatinoGrooveSoloTopic();
-        const latinoGroovePartnerTopic = new LatinoGroovePartnerTopic();
-        const latinoGrooveMixTopic = new LatinoGrooveMixTopic();
-
-        const latinoGrooveSoloClasses = new LatinoGrooveSoloClasses();
-        const latinoGroovePartnerClasses = new LatinoGroovePartnerClasses();
-        const latinoGrooveMixClasses = new LatinoGrooveMixClasses();
-
-        const afroHouseSoloTopic = new AfroHouseSoloTopic();
-        const afroHousePartnerTopic = new AfroHousePartnerTopic();
-        const afroHouseMixTopic = new AfroHouseMixTopic();
-
-        const afroHouseSoloClasses = new AfroHouseSoloClasses();
-        const afroHousePartnerClasses = new AfroHousePartnerClasses();
-        const afroHouseMixClasses = new AfroHouseMixClasses();
-
+        
         events.nextSteps = [masterClasses, festivalsClasses, showsClasses];
 
         masterClasses.nextSteps = [joinEvent];
@@ -150,16 +118,6 @@ class MessagesTree {
         joinPrivateBachataSoloClasses.nextSteps = [joinPrivateClasses];
         joinPrivateBachataPartnerClasses.nextSteps = [joinPrivateClasses];
         joinPrivateBachataMixClasses.nextSteps = [joinPrivateClasses];
-
-        latinoGrooveDance.nextSteps = [latinoGrooveSoloTopic, latinoGroovePartnerTopic, latinoGrooveMixTopic];
-        latinoGrooveSoloTopic.nextSteps = [latinoGrooveSoloClasses, events];
-        latinoGroovePartnerTopic.nextSteps = [latinoGroovePartnerClasses, events];
-        latinoGrooveMixTopic.nextSteps = [latinoGrooveMixClasses, events];
-
-        afroHouseDance.nextSteps = [afroHouseSoloTopic, afroHousePartnerTopic, afroHouseMixTopic];
-        afroHouseSoloTopic.nextSteps = [afroHouseSoloClasses, events];
-        afroHousePartnerTopic.nextSteps = [afroHousePartnerClasses, events];
-        afroHouseMixTopic.nextSteps = [afroHouseMixClasses, events];
 
         this.initialStep = dances;
     }

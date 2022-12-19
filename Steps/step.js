@@ -4,15 +4,12 @@ class Step {
     constructor(message, command) {
         this.message = i18n.__(message);
         this.command = i18n.__(command);
+        this.buttons = {};
+        this.privateMessage;
+        this.metaDatMessage
+        this.nextSteps = [];
+        this.messageToJj;
     }
-
-    message = '';
-    buttons = {};
-    privateMessage;
-    metaDatMessage
-    command = '';
-    nextSteps = [];
-    messageToJj;
 
     async handleStep(from, message, text) {
         await this.init(from, message, text);
