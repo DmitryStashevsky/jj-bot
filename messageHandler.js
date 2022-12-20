@@ -21,7 +21,8 @@ class MessageHandler {
             if (currentStep) {
 
                 try {
-                    await currentStep.handleStep(from, msg, text);
+                    const context = { from: from, message: msg, text: text };
+                    await currentStep.handleStep(context);
                 } catch (e){
                     console.log(e);
                 }

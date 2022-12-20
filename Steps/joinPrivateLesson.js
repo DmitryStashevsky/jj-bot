@@ -9,11 +9,11 @@ class JoinPrivateLesson extends Step {
         this.readMetaField = 'privateDance';
     }
 
-    async init(from, message, text) {
-        this.freeSlot = await this.getFreeSlot(text);
+    async init() {
+        this.freeSlot = await this.getFreeSlot(this.context.text);
     }
 
-    async setMessage(from, message, text) {
+    async setMessage() {
         if(this.freeSlot) {
             this.message =  this.message + `- ${this.freeSlot.time}`;
         }
@@ -22,14 +22,14 @@ class JoinPrivateLesson extends Step {
         }
     }
 
-    async setPrivateMessage(from, message, text) {
-        const meta = this.getMetaFunc(from.username, this.readMetaField);
-        this.privateMessage =  `Dancer ${from.username} wants to attend you private class ${meta}- ${this.freeSlot.time}`;
+    async setPrivateMessage() {
+        const meta = this.getMetaFunc(this.context.from.username, this.readMetaField);
+        this.privateMessage =  `Dancer ${this.context.from.username} wants to attend you private class ${meta}- ${this.freeSlot.time}`;
     }
 
-    async finish(from, message, text) {
-        const meta = this.getMetaFunc(from.username, this.readMetaField);
-        await this.participatePrivateLessonFunc(this.freeSlot.id, meta, from.username);
+    async finish() {
+        const meta = this.getMetaFunc(this.context.from.username, this.readMetaField);
+        await this.participatePrivateLessonFunc(this.freeSlot.id, meta, this.context.from.username);
     }
     
     async getFreeSlot(text) {

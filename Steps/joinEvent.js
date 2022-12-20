@@ -10,14 +10,14 @@ class JoinEvent extends Step {
         this.readMetaField = 'event';
     }
 
-    async init(from, message, text) {
-        this.meta = this.getMetaFunc(from.username, this.readMetaField);
+    async init() {
+        this.meta = this.getMetaFunc(this.context.from.username, this.readMetaField);
         this.events  = await this.getEventsFunc(this.meta);
-        this.event = await this.getEvent(text);
+        this.event = await this.getEvent(this.context.text);
         this.participants = await this.getEventsParticipantsFunc(this.meta);
     }
 
-    async setMessage(from, message, text) {
+    async setMessage() {
         if(this.event) {
             this.message =  this.message + `- ${this.event.name}`;
         }
@@ -26,13 +26,13 @@ class JoinEvent extends Step {
         }
     }
 
-    async setPrivateMessage(from, message, text) {
-        this.privateMessage =  `Dancer ${from.username} wants to attend you event - ${this.meta}- ${this.event.name}`;
+    async setPrivateMessage() {
+        this.privateMessage =  `Dancer ${this.context.from.username} wants to attend you event - ${this.meta}- ${this.event.name}`;
     }
 
-    async finish(from, message, text) {
+    async finish() {
         const rowNumber = this.participants.filter(x => !x.eventId)[0].id
-        await this.participateEventFunc(this.meta, rowNumber, this.event.id, this.event.name, from.username);
+        await this.participateEventFunc(this.meta, rowNumber, this.event.id, this.event.name, this.context.from.username);
     }
     
     async getEvent(text) {

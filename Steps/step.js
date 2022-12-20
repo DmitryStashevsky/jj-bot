@@ -11,22 +11,23 @@ class Step {
         this.messageToJj;
     }
 
-    async handleStep(from, message, text) {
-        await this.init(from, message, text);
-        await this.setMessage(from, message, text);
-        await this.setButtons(from, message, text);
-        await this.setMetaMessage(from, message, text);
-        await this.setPrivateMessage(from, message, text);
-        await this.finish(from, message, text)
+    async handleStep(context) {
+        this.context = context;
+        await this.init();
+        await this.setMessage();
+        await this.setButtons();
+        await this.setMetaMessage();
+        await this.setPrivateMessage();
+        await this.finish()
     }
 
-    init(from, message, text) {
+    init() {
     }
 
-    setMessage(from, message, text)  {
+    setMessage()  {
     }
 
-    setButtons(from, message, text) {
+    setButtons() {
         if (this.nextSteps.length) {
             const options = [];
             for (let step of this.nextSteps) {
@@ -46,24 +47,15 @@ class Step {
         return null;
     }
 
-    setMetaMessage(from, message, text) {
+    setMetaMessage() {
         return this.metaField;
     }
 
-    setPrivateMessage(from, message, text) {}
+    setPrivateMessage() {
+    }
 
-    finish(from, message, text) {};
-
-    next(message){
-        const found = this.nextSteps.filter(e => e.message.toLocaleLowerCase() 
-            === message.toLocaleLowerCase());
-        if (found.length > 0) {
-            return found[0];
-        } else {
-            return this;
-        }
+    finish() {
     };
-    previos(){};
 }
 
 module.exports = Step;
