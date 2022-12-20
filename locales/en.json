@@ -1,6 +1,7 @@
 {
 	"greeting": "Hello! I am JJ bot- you can ask me",
 	"start": "Start",
+	"wrongCommand": "Message error",
 	"privateLessonsDesc": "Private lessons",
 	"privateLessonsCommand": "Privates",
 	"joinPrivateLessonDesc": "JJ received your message, he will contact you soon",

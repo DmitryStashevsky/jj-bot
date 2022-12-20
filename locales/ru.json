@@ -1,6 +1,7 @@
 {
 	"greeting": "Привет! Я бот JJ - у меня ты можешь спросить",
 	"start": "Начало",
+	"wrongCommand": "Ошибка в сообщении",
 	"privateLessonsDesc": "Индивидуальные занятия",
 	"privateLessonsCommand": "Индивидуальные",
 	"joinPrivateLessonDesc": "Вы записались на индивидуальный урок",

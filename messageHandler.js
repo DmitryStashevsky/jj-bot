@@ -14,28 +14,30 @@ class MessageHandler {
     async onMessage(bot, chatId, language, text, from, msg) {
             i18n.init(language);
 
-            this.notificationService.log(msg);
+            await this.notificationService.log(msg);
+            
             const messagesTree = new MessagesTree(this.repository, metaData);
             const currentStep = messagesTree.findCurrentStep(text);
 
             if (currentStep) {
-
                 try {
                     const context = { from: from, message: msg, text: text };
                     await currentStep.handleStep(context);
-                } catch (e){
-                    console.log(e);
-                }
                 
-                await bot.sendMessage(chatId, currentStep.message, currentStep.buttons);
+                    await bot.sendMessage(chatId, currentStep.message, currentStep.buttons);
 
-                if (currentStep.metaField) {
-                    metaData.setMetadata(from.username, null, currentStep.metaField, currentStep.metaData);
+                    if (currentStep.metaField) {
+                        metaData.setMetadata(from.username, null, currentStep.metaField, currentStep.metaData);
+                    }
+
+                    await this.notificationService.notifyOwner(currentStep.privateMessage);
+
+                } catch (e){
+                    await this.notificationService.error(msg, e);
+                    await bot.sendMessage(chatId, i18n.__('wrongCommand'));
                 }
-
-                await this.notificationService.notify(currentStep.privateMessage);
             } else {
-                bot.sendMessage(chatId, 'Не понимаю сообщение');
+                await bot.sendMessage(chatId, i18n.__('wrongCommand'));
             }
     }
 }

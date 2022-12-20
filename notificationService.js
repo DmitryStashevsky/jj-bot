@@ -1,6 +1,7 @@
 const config = require('config');
 const notificationChatId = config.get('NotificationChatId');
 const logChatId = config.get('LogsChatId');
+const isFullLogging = config.get('FullLogging');
 
 class NotificationService {
 
@@ -8,15 +9,22 @@ class NotificationService {
         this.bot = bot;
     }
 
-    async notify(message) {
+    async notifyOwner(message) {
        if (message) {
-           this.bot.sendMessage(notificationChatId, message);
+           await this.bot.sendMessage(notificationChatId, message);
        }
     }
 
-    log(msg) {
-        this.bot.sendMessage(logChatId, `User - ${msg.from.username}, say - ${msg.text}`);
-     }
+    async log(msg) {
+        if (isFullLogging) {
+            await this.bot.sendMessage(logChatId, `Log: User - ${msg.from.is_bot ? msg.chat.username : msg.from.username}, Message - ${msg.text}`);
+        }
+    }
+
+    async error(msg, error) {
+        console.log(msg, error);
+        await this.bot.sendMessage(logChatId, `Exception: User - ${msg.from.is_bot ? msg.chat.username : msg.from.username}, Message - ${msg.text}, Error - ${error}`);
+    }
 }
 
 module.exports = NotificationService;
