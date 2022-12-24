@@ -13,7 +13,7 @@ class GroupLessons extends Step {
 
     setAdditionalMessage()  {
         if (this.lessons.length == 0) {
-            this.additionalMessage = i18n.__('noClassesCommand');
+            this.additionalMessage = i18n.__('noClassesDesc');
         }
     }
 
@@ -33,8 +33,6 @@ class GroupLessons extends Step {
                 }
             }
         }
-
-        return null;
     }
 }
 

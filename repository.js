@@ -67,7 +67,8 @@ class Repository {
 
     async participateClass(lessonType, rowNumber, classId, className, username) {
         const apiClient = await this.getApiClient();
-        await this.setValuesData(apiClient, `${lessonType}!G${new Number(rowNumber) + countOfHeaders}:J${new Number(rowNumber) + countOfHeaders}`, [classId, className, username, new Date(Date.now()).toUTCString()]);
+        const cell = new Number(rowNumber) + countOfHeaders;
+        await this.setValuesData(apiClient, `${lessonType}!G${cell}:J${cell}`, [classId, className, username, new Date(Date.now()).toUTCString()]);
     }
 
     async getEvents(eventType) {
@@ -84,18 +85,33 @@ class Repository {
 
     async participateEvent(eventType, rowNumber, eventId, eventName, username) {
         const apiClient = await this.getApiClient();
-        await this.setValuesData(apiClient, `${eventType}!E${new Number(rowNumber) + countOfHeaders}:H${new Number(rowNumber) + countOfHeaders}`, [eventId, eventName, username, new Date(Date.now()).toUTCString()]);
+        const cell = new Number(rowNumber) + countOfHeaders;
+        await this.setValuesData(apiClient, `${eventType}!E${cell}:H${cell}`, [eventId, eventName, username, new Date(Date.now()).toUTCString()]);
     }
 
     async getPrivateLessons() {
         const apiClient = await this.getApiClient();
-        const values = await this.getValuesData(apiClient, 'Private Lessons!A1:C10');
+        const values = await this.getValuesData(apiClient, 'Private Lessons!A2:C11');
         return extractFreeSlotsForPrivateLessons(values);
+    }
+
+    async getOwnerPrivateLessons() {
+        const apiClient = await this.getApiClient();
+        const values = await this.getValuesData(apiClient, 'Private Lessons!A2:E11');
+        return extractOwnerPrivateLessons(values);
+    }
+
+    async getPrivateLesson(id) {
+        const apiClient = await this.getApiClient();
+        const cell = new Number(id) + countOfHeaders;
+        const values = await this.getValuesData(apiClient, `Private Lessons!A${cell}:E${cell}`);
+        return extractOwnerPrivateLesson(values);
     }
 
     async participatePrivateLesson(lessonId, dance, username) {
         const apiClient = await this.getApiClient();
-        await this.setValuesData(apiClient, `Private Lessons!C${new Number(lessonId) + countOfHeaders}:E${new Number(lessonId) + countOfHeaders}`, [dance, username, new Date(Date.now()).toUTCString()]);
+        const cell = new Number(lessonId) + countOfHeaders;
+        await this.setValuesData(apiClient, `Private Lessons!C${cell}:E${cell}`, [dance, username, new Date(Date.now()).toUTCString()]);
     }
 }
 

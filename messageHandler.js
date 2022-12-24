@@ -17,7 +17,7 @@ class MessageHandler {
             await this.notificationService.log(msg);
 
             const messagesTree = new MessagesTree(this.repository, metaData);
-            const currentStep = messagesTree.findCurrentStep(text);
+            const currentStep = messagesTree.findCurrentStep(text, from.username);
 
             if (currentStep) {
                 try {

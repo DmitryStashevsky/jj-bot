@@ -33,8 +33,21 @@ extractFreeSlotsClassesParticipants = (classes) => {
 extractFreeSlotsForPrivateLessons = (slots) => {
     return slots.filter(x => !x[2] && x[0]).map(x => ({
         id: x[0],
-        time: x[1]
+        time: x[1],
     }));
+}
+
+extractOwnerPrivateLessons = (lessons) => {
+    return lessons.filter(x => x[2] && x[0]).map(x => ({
+        id: x[0],
+        time: x[1],
+        dance: x[2],
+        username: x[3]
+    }));
+}
+
+extractOwnerPrivateLesson = (lessons) => {
+    return extractOwnerPrivateLessons(lessons)[0];
 }
 
 extractEvents = (events) => {

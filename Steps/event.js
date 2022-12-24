@@ -14,7 +14,7 @@ class Event extends Step {
 
     setAdditionalMessage()  {
         if (this.events.length == 0) {
-            this.additionalMessage = i18n.__('noEventsCommand');
+            this.additionalMessage = i18n.__('noEventsDesc');
         }
     }
 
@@ -33,8 +33,6 @@ class Event extends Step {
                 }
             }
         }
-
-        return null;
     }
 }
 

@@ -8,14 +8,24 @@ class PrivateLessons extends Step {
         this.metaField = 'privateDance';
     }
 
+    async init() {
+        this.lessons = await this.getFreeSlotsFunc();
+    }
+
+    setAdditionalMessage()  {
+        if (this.lessons.length == 0) {
+            this.additionalMessage = i18n.__('noFreeSlotsDesc');
+        }
+    }
+
     async setButtons() {
-        const lessons = await this.getFreeSlotsFunc();
         if (this.nextSteps.length) {
             const options = [];
-            for (let i = 0; i < lessons.length; i++) {
+            for (let i = 0; i < this.lessons.length; i++) {
+                const lesson = this.lessons[i];
                 options.push([{
-                    text: `${i+1} - ${lessons[i].time}`,
-                    callback_data: `${this.nextSteps[0].command} ${lessons[i].id}`,
+                    text: `${i+1} - ${lesson.time}`,
+                    callback_data: `${this.nextSteps[0].command} ${lesson.id}`,
                 }]);
             }
             this.buttons =  {
@@ -24,8 +34,6 @@ class PrivateLessons extends Step {
                 }
             }
         }
-
-        return null;
     }
 }
 

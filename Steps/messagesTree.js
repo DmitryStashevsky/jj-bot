@@ -1,5 +1,8 @@
 const { Meta } = require('../cache.config.js');
 
+const config = require('config');
+const adminWhiteList = config.get('AdminWhiteList');
+
 const GroupLessons = require('./groupLessons.js');
 const PrivateLessons = require('./privateLessons.js');
 const JoinGroupLesson = require('./joinGroupLesson.js');
@@ -13,6 +16,10 @@ const Dances = require('./dances.js');
 const Dance = require('./dance.js');
 
 const Topic = require('./topic.js');
+
+const Admin = require('./admin.js');
+const AdminPrivateLessons = require('./adminPrivateLessons.js');
+const AdminPrivateLesson = require('./adminPrivateLesson.js');
 
 class MessagesTree {
 
@@ -192,18 +199,25 @@ class MessagesTree {
         joinPrivateLatinoGroovePartnerClasses.nextSteps = [joinPrivateClasses];
         joinPrivateLatinoGrooveMixClasses.nextSteps = [joinPrivateClasses];
 
+        const admin = new Admin('adminDesc', 'adminCommand');
+        const adminPrivateLessons = new AdminPrivateLessons('adminPrivateLessonsDesc', 'adminPrivateLessonsCommand', async () => await repository.getOwnerPrivateLessons());
+        const adminPrivateLesson = new AdminPrivateLesson('adminPrivateLessonDesc', 'adminPrivateLessonCommand', async (id) => await repository.getPrivateLesson(id));
+
+        admin.nextSteps = [adminPrivateLessons];
+        adminPrivateLessons.nextSteps = [adminPrivateLesson];
+
+        this.adminStep = admin;
         this.initialStep = dances;
     }
 
-    findCurrentStep(message) {
-        console.log(message.toLocaleLowerCase());
+    findCurrentStep(message, username) {
         const matches = message.match(/(\d+)/);
-        const found = this.findStep(this.initialStep, message, !matches);
-        if (found) {
-            this.currentStep = found;
-        } else {
-            this.currentStep = this.initialStep;
-        }
+        let found = this.findStep(this.initialStep, message, !matches);
+        if (!found && adminWhiteList.includes(username)) {
+            found = this.findStep(this.adminStep, message, !matches);
+        } 
+                 
+        this.currentStep = found || this.initialStep;
         return this.currentStep;
     }
 
@@ -212,18 +226,18 @@ class MessagesTree {
         queue.push(top);
         while(queue.length > 0) {
             let step = queue.shift();
+            if (equals) {
+                if (message.toLocaleLowerCase() === step.command.toLocaleLowerCase()) {
+                    return step;
+                }
+            }
+            else {
+                if (message.toLocaleLowerCase().includes(step.command.toLocaleLowerCase())) {
+                    return step;
+                }
+            }
             for(let nextStep of step.nextSteps) {
                 queue.push(nextStep);
-                if (equals) {
-                    if (message.toLocaleLowerCase() === nextStep.command.toLocaleLowerCase()) {
-                        return nextStep;
-                    }
-                }
-                else {
-                    if (message.toLocaleLowerCase().includes(nextStep.command.toLocaleLowerCase())) {
-                        return nextStep;
-                    }
-                }
             }
         } 
         return null;

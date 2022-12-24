@@ -102,6 +102,13 @@
 	"joinLatinoGroovePartnerClassesCommand": "JoinLGPartner",
 	"joinLatinoGrooveMixClassesDesc": "JJ получил ваше сообщение, скоро с Вами свяжутся",
 	"joinLatinoGrooveMixClassesCommand": "JoinLGMix",
-	"noClassesCommand": "Нет классов для выбранного направления",
-	"noEventsCommand": "Нет выбранных событий"
+	"noClassesDesc": "Нет классов для выбранного направления",
+	"noEventsDesc": "Нет выбранных событий",
+	"noFreeSlotsDesc": "Нет свободных мест",
+	"adminDesc": "Админка",
+	"adminCommand": "admin",
+	"adminPrivateLessonsDesc": "У вас есть такие приватные уроки",
+	"adminPrivateLessonsCommand": "Приватные уроки",
+	"adminPrivateLessonDesc": "Уроки:",
+	"adminPrivateLessonCommand": "aPrivateLesson"
 }

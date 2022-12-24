@@ -102,6 +102,13 @@
 	"joinLatinoGroovePartnerClassesCommand": "JoinLGPartner",
 	"joinLatinoGrooveMixClassesDesc": "JJ received your message, he will contact you soon",
 	"joinLatinoGrooveMixClassesCommand": "JoinLGMix",
-	"noClassesCommand": "There are no classes",
-	"noEventsCommand": "There are no events"
+	"noClassesDesc": "There are no classes",
+	"noEventsDesc": "There are no events",
+	"noFreeSlotsDesc": "There are no free slots for private lessons",
+	"adminDesc": "Admin functionality",
+	"adminCommand": "admin",
+	"adminPrivateLessonsDesc": "You have that private lessons",
+	"adminPrivateLessonsCommand": "Show private lessons",
+	"adminPrivateLessonDesc": "Lesson:",
+	"adminPrivateLessonCommand": "aPrivateLesson"
 }
