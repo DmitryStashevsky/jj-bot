@@ -4,6 +4,7 @@ class Step {
     constructor(message, command) {
         this.message = i18n.__(message);
         this.command = i18n.__(command);
+        this.additionalMessage = '';
         this.buttons = {};
         this.privateMessage;
         this.metaDatMessage
@@ -15,6 +16,7 @@ class Step {
         this.context = context;
         await this.init();
         await this.setMessage();
+        await this.setAdditionalMessage();
         await this.setButtons();
         await this.setMetaMessage();
         await this.setPrivateMessage();
@@ -25,6 +27,9 @@ class Step {
     }
 
     setMessage()  {
+    }
+
+    setAdditionalMessage()  {
     }
 
     setButtons() {

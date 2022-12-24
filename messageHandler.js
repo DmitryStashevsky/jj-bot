@@ -15,7 +15,7 @@ class MessageHandler {
             i18n.init(language);
 
             await this.notificationService.log(msg);
-            
+
             const messagesTree = new MessagesTree(this.repository, metaData);
             const currentStep = messagesTree.findCurrentStep(text);
 
@@ -25,6 +25,10 @@ class MessageHandler {
                     await currentStep.handleStep(context);
                 
                     await bot.sendMessage(chatId, currentStep.message, currentStep.buttons);
+
+                    if (currentStep.additionalMessage) {
+                        await bot.sendMessage(chatId, currentStep.additionalMessage);
+                    }
 
                     if (currentStep.metaField) {
                         metaData.setMetadata(from.username, null, currentStep.metaField, currentStep.metaData);

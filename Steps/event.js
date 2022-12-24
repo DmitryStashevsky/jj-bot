@@ -12,6 +12,12 @@ class Event extends Step {
         this.events = await this.getEventsFunc();
     }
 
+    setAdditionalMessage()  {
+        if (this.events.length == 0) {
+            this.additionalMessage = i18n.__('noEventsCommand');
+        }
+    }
+
     async setButtons() {
         if (this.events.length) {
             const options = [];

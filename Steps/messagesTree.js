@@ -216,7 +216,6 @@ class MessagesTree {
                 queue.push(nextStep);
                 if (equals) {
                     if (message.toLocaleLowerCase() === nextStep.command.toLocaleLowerCase()) {
-                        queue = [];
                         return nextStep;
                     }
                 }

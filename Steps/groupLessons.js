@@ -1,4 +1,5 @@
 const Step = require('./step.js');
+const i18n = require('../i18n.config.js');
 
 class GroupLessons extends Step {
     constructor(message, command, getLessonsFunc) {
@@ -6,14 +7,24 @@ class GroupLessons extends Step {
         this.getLessonsFunc = getLessonsFunc;
     }
 
+    async init () {
+        this.lessons = await this.getLessonsFunc();
+    }
+
+    setAdditionalMessage()  {
+        if (this.lessons.length == 0) {
+            this.additionalMessage = i18n.__('noClassesCommand');
+        }
+    }
+
     async setButtons() {
-        const lessons = await this.getLessonsFunc();
         if (this.nextSteps.length) {
             const options = [];
-            for (let i = 0; i < lessons.length; i++) {
+            for (let i = 0; i < this.lessons.length; i++) {
+                const lesson = this.lessons[i];
                 options.push([{
-                    text: `${i+1} - ${lessons[i].name} - ${lessons[i].time} -${lessons[i].place}`,
-                    callback_data: `${this.nextSteps[0].command} ${lessons[i].id}`,
+                    text: `${i+1} - ${lesson.name} - ${lesson.time} -${lesson.place}`,
+                    callback_data: `${this.nextSteps[0].command} ${lesson.id}`,
                 }]);
             }
             this.buttons = {
