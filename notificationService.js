@@ -5,9 +5,15 @@ const isFullLogging = config.get('FullLogging');
 
 class NotificationService {
 
-    constructor(bot) {
+    init(bot) {
         this.bot = bot;
     }
+
+    async notifyUser(chatId, message) {
+        if (message) {
+            await this.bot.sendMessage(chatId, message);
+        }
+     }
 
     async notifyOwner(message) {
        if (message) {
@@ -27,4 +33,6 @@ class NotificationService {
     }
 }
 
-module.exports = NotificationService;
+const notificationService = new NotificationService();
+
+module.exports = notificationService;

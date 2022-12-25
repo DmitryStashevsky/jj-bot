@@ -7,6 +7,7 @@ class Step {
         this.additionalMessage = '';
         this.buttons = {};
         this.privateMessage;
+        this.userMessage;
         this.metaDatMessage
         this.nextSteps = [];
         this.messageToJj;
@@ -20,6 +21,7 @@ class Step {
         await this.setButtons();
         await this.setMetaMessage();
         await this.setPrivateMessage();
+        await this.setUserMessage();
         await this.finish()
     }
 
@@ -57,6 +59,9 @@ class Step {
     }
 
     setPrivateMessage() {
+    }
+
+    setUserMessage() {
     }
 
     finish() {

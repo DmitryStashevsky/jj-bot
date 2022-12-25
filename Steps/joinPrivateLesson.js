@@ -1,4 +1,5 @@
 const Step = require('./step.js');
+const { PrivateLessonStatus } = require('../enums.js');
 
 class JoinPrivateLesson extends Step {
     constructor(message, command, getMetaFunc, getFreeSlotsFunc, participatePrivateLessonFunc) {
@@ -29,7 +30,7 @@ class JoinPrivateLesson extends Step {
 
     async finish() {
         const meta = this.getMetaFunc(this.context.from.username, this.readMetaField);
-        await this.participatePrivateLessonFunc(this.freeSlot.id, meta, this.context.from.username);
+        await this.participatePrivateLessonFunc(this.freeSlot.id, meta, this.context.from.username, this.context.chatId, PrivateLessonStatus.Pending);
     }
     
     async getFreeSlot(text) {

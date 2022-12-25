@@ -1,3 +1,4 @@
+const { PrivateLessonStatus } = require('./enums.js');
 
 extractSpreedsheetData = (data) => {
     const result = []
@@ -38,11 +39,13 @@ extractFreeSlotsForPrivateLessons = (slots) => {
 }
 
 extractOwnerPrivateLessons = (lessons) => {
-    return lessons.filter(x => x[2] && x[0]).map(x => ({
+    return lessons.filter(x => x[2] && x[0] && x[6] !== PrivateLessonStatus.Declined).map(x => ({
         id: x[0],
         time: x[1],
         dance: x[2],
-        username: x[3]
+        username: x[3],
+        chatId: x[5],
+        status: x[6]
     }));
 }
 

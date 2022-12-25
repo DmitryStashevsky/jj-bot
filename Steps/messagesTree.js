@@ -1,7 +1,9 @@
 const { Meta } = require('../cache.config.js');
+const notificationService = require('../notificationService.js');
 
 const config = require('config');
 const adminWhiteList = config.get('AdminWhiteList');
+const { PrivateLessonStatus } = require('../enums.js');
 
 const GroupLessons = require('./groupLessons.js');
 const PrivateLessons = require('./privateLessons.js');
@@ -20,6 +22,7 @@ const Topic = require('./topic.js');
 const Admin = require('./admin.js');
 const AdminPrivateLessons = require('./adminPrivateLessons.js');
 const AdminPrivateLesson = require('./adminPrivateLesson.js');
+const AdminPrivateLessonAction = require('./adminPrivateLessonAction.js');
 
 class MessagesTree {
 
@@ -137,7 +140,8 @@ class MessagesTree {
         const joinPrivateLatinoGroovePartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.LatinoGroovePartner, async () => await repository.getPrivateLessons());
         const joinPrivateLatinoGrooveMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.LatinoGrooveMix, async () => await repository.getPrivateLessons());
 
-        const joinPrivateClasses = new JoinPrivateLesson('privateLessonsDesc', 'JPL', (username, field) => metaData.getMetadata(username, field), async () => await repository.getPrivateLessons(), async (lessonId, dance, username) => await repository.participatePrivateLesson(lessonId, dance, username));
+        const joinPrivateClasses = new JoinPrivateLesson('joinPrivateLessonDesc', 'JPL', (username, field) => metaData.getMetadata(username, field), async () => await repository.getPrivateLessons(),
+         async (lessonId, dance, username, chatId, status) => await repository.participatePrivateLesson(lessonId, dance, username, chatId, status));
         
         events.nextSteps = [masterClasses, festivalsClasses, showsClasses];
 
@@ -202,9 +206,16 @@ class MessagesTree {
         const admin = new Admin('adminDesc', 'adminCommand');
         const adminPrivateLessons = new AdminPrivateLessons('adminPrivateLessonsDesc', 'adminPrivateLessonsCommand', async () => await repository.getOwnerPrivateLessons());
         const adminPrivateLesson = new AdminPrivateLesson('adminPrivateLessonDesc', 'adminPrivateLessonCommand', async (id) => await repository.getPrivateLesson(id));
+        const adminPrivateLessonApprove = new AdminPrivateLessonAction('adminPrivateLessonActionApproveDesc', 'adminPrivateLessonActionApproveCommand', 'adminPrivateLessonActionApproveUserDesc',
+            async (id) => await repository.getPrivateLesson(id), async (id) => await repository.updatePrivateLesson(id, PrivateLessonStatus.Approved),
+            async (chatId, message) => await notificationService.notifyUser(chatId, message));
+        const adminPrivateLessonDecline = new AdminPrivateLessonAction('adminPrivateLessonActionDeclineDesc', 'adminPrivateLessonActionDeclineCommand', 'adminPrivateLessonActionDeclineUserDesc',
+            async (id) => await repository.getPrivateLesson(id), async (id) => await repository.updatePrivateLesson(id, PrivateLessonStatus.Declined), 
+            async (chatId, message) => await notificationService.notifyUser(chatId, message));
 
         admin.nextSteps = [adminPrivateLessons];
         adminPrivateLessons.nextSteps = [adminPrivateLesson];
+        adminPrivateLesson.nextSteps = [adminPrivateLessonApprove, adminPrivateLessonDecline];
 
         this.adminStep = admin;
         this.initialStep = dances;
