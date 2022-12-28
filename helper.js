@@ -1,4 +1,4 @@
-const { PrivateLessonStatus } = require('./enums.js');
+const { Status: PrivateLessonStatus } = require('./enums.js');
 
 extractSpreedsheetData = (data) => {
     const result = []
@@ -56,7 +56,9 @@ extractOwnerPrivateLesson = (lessons) => {
 extractEvents = (events) => {
     return events.filter(x => x[0]).map(x => ({
         id: x[0],
-        name: x[1]
+        name: x[1],
+        time: x[2],
+        place: x[3],
     }));
 }
 
@@ -66,7 +68,9 @@ extractEventsParticipants = (participants) => {
         eventId: x[1],
         eventName: x[2],
         dancerName: x[3],
-        date: x[4]
+        date: x[4],
+        chatId: x[5],
+        status: x[6],
     }));
 }
 

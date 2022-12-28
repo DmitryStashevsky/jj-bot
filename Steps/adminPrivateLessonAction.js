@@ -12,7 +12,7 @@ class AdminPrivateLessonAction extends Step {
 
     async init () {
         const matches = this.context.text.match(/(\d+)/);
-        this.privateLesson  = await this.getPrivateLessonFunc(matches[0]);
+        this.privateLesson = await this.getPrivateLessonFunc(matches[0]);
     }
 
     setUserMessage() {

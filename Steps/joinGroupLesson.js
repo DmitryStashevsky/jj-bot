@@ -1,4 +1,5 @@
 const Step = require('./step.js');
+const { Status } = require('../enums.js');
 
 class JoinGroupLesson extends Step {
     constructor(message, command, getClassesFunc, getClassesParticipantsFunc, participateClassFunc) {
@@ -29,7 +30,7 @@ class JoinGroupLesson extends Step {
 
     async finish() {
         const rowNumber = this.participants.filter(x => !x.classId)[0].id
-        await this.participateClassFunc(rowNumber, this.class.id, this.class.name, this.context.from.username);
+        await this.participateClassFunc(rowNumber, this.class.id, this.class.name, this.context.from.username, this.context.chatId, Status.Pending);
     }
 
     async getClass(text) {

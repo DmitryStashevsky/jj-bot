@@ -1,1 +1,4 @@
-admin functionality - add whitelist users
+participation on group and events like on private lessons - with approving and sending message to user
+more details for events - time and etc
+make participations with additional step with full info
+increase count of private lessons slots

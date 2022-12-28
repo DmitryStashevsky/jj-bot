@@ -1,5 +1,5 @@
 const Step = require('./step.js');
-const { PrivateLessonStatus } = require('../enums.js');
+const { Status: PrivateLessonStatus } = require('../enums.js');
 const i18n = require('../i18n.config.js');
 
 class AdminPrivateLesson extends Step {

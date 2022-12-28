@@ -1,4 +1,5 @@
 const Step = require('./step.js');
+const { Status } = require('../enums.js');
 
 class JoinEvent extends Step {
     constructor(message, command, getMetaFunc, getEventsFunc, getEventsParticipantsFunc, participateEventFunc) {
@@ -19,7 +20,7 @@ class JoinEvent extends Step {
 
     async setMessage() {
         if(this.event) {
-            this.message =  this.message + `- ${this.event.name}`;
+            this.message =  this.message + `- ${this.event.name} - ${this.event.time} - ${this.event.place}`;
         }
         else {
             return false;
@@ -27,12 +28,12 @@ class JoinEvent extends Step {
     }
 
     async setPrivateMessage() {
-        this.privateMessage =  `Dancer ${this.context.from.username} wants to attend you event - ${this.meta}- ${this.event.name}`;
+        this.privateMessage = `Dancer ${this.context.from.username} wants to attend you event - ${this.meta}- ${this.event.name}`;
     }
 
     async finish() {
         const rowNumber = this.participants.filter(x => !x.eventId)[0].id
-        await this.participateEventFunc(this.meta, rowNumber, this.event.id, this.event.name, this.context.from.username);
+        await this.participateEventFunc(this.meta, rowNumber, this.event.id, this.event.name, this.context.from.username, this.context.chatId, Status.Pending);
     }
     
     async getEvent(text) {

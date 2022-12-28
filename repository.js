@@ -65,28 +65,28 @@ class Repository {
         return extractFreeSlotsClassesParticipants(values);
     }
 
-    async participateClass(lessonType, rowNumber, classId, className, username) {
+    async participateClass(lessonType, rowNumber, classId, className, username, chatId, status) {
         const apiClient = await this.getApiClient();
         const cell = new Number(rowNumber) + countOfHeaders;
-        await this.setValuesData(apiClient, `${lessonType}!G${cell}:J${cell}`, [classId, className, username, new Date(Date.now()).toUTCString()]);
+        await this.setValuesData(apiClient, `${lessonType}!G${cell}:L${cell}`, [classId, className, username, new Date(Date.now()).toUTCString(), chatId, status]);
     }
 
     async getEvents(eventType) {
         const apiClient = await this.getApiClient();
-        const values = await this.getValuesData(apiClient, eventType + '!A2:B11');
+        const values = await this.getValuesData(apiClient, eventType + '!A2:D11');
         return extractEvents(values);
     }
 
     async getEventsParticipants(eventType) {
         const apiClient = await this.getApiClient();
-        const values = await this.getValuesData(apiClient, eventType + '!D2:H41');
+        const values = await this.getValuesData(apiClient, eventType + '!F2:L41');
         return extractEventsParticipantsList(values);
     }
 
-    async participateEvent(eventType, rowNumber, eventId, eventName, username) {
+    async participateEvent(eventType, rowNumber, eventId, eventName, username, chatId, status) {
         const apiClient = await this.getApiClient();
         const cell = new Number(rowNumber) + countOfHeaders;
-        await this.setValuesData(apiClient, `${eventType}!E${cell}:H${cell}`, [eventId, eventName, username, new Date(Date.now()).toUTCString()]);
+        await this.setValuesData(apiClient, `${eventType}!G${cell}:L${cell}`, [eventId, eventName, username, new Date(Date.now()).toUTCString(), chatId, status]);
     }
 
     async getPrivateLessons() {

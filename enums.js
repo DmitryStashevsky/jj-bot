@@ -1,9 +1,9 @@
-const PrivateLessonStatus = {
+const Status = {
     Pending: 'Pending',
     Approved: 'Approved',
     Declined: 'Declined'
 }
 
 module.exports = {
-    PrivateLessonStatus
+    Status: Status
 }
