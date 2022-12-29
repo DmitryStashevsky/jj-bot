@@ -92,6 +92,8 @@ extractEventsParticipantsList = (participants) => {
 module.exports = {
     extractClasses,
     extractFreeSlotsClassesParticipants,
+    extractOwnerPrivateLessons,
+    extractOwnerPrivateLesson,
     extractSpreedsheetData,
     extractFreeSlotsForPrivateLessons,
     extractEvents,

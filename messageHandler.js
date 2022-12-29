@@ -3,11 +3,10 @@ const{ metaData }  = require('./cache.config.js');
 
 const MessagesTree = require('./Steps/messagesTree.js');
 const notificationService = require('./notificationService.js');
-const Repository = require('./repository.js');
+const Repository = require('./repositories/repository.js');
 
 class MessageHandler {
     constructor(bot) {
-        this.repository = new Repository();
     }
 
     async onMessage(bot, chatId, language, text, from, msg) {
@@ -16,7 +15,7 @@ class MessageHandler {
             notificationService.init(bot);
             await notificationService.log(msg);
 
-            const messagesTree = new MessagesTree(this.repository, metaData);
+            const messagesTree = new MessagesTree(metaData);
             const currentStep = messagesTree.findCurrentStep(text, from.username);
 
             if (currentStep) {

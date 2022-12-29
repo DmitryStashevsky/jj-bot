@@ -1,23 +1,23 @@
 const { Meta } = require('../cache.config.js');
 const notificationService = require('../notificationService.js');
+const classRep = require('../repositories/classRepository.js');
+const eventRep = require('../repositories/eventRepository.js');
+const plRep = require('../repositories/privateLessonRepository.js');
 
 const config = require('config');
 const adminWhiteList = config.get('AdminWhiteList');
 const { Status } = require('../enums.js');
 
+const Dances = require('./dances.js');
+const Dance = require('./dance.js');
+const Topic = require('./topic.js');
 const GroupLessons = require('./groupLessons.js');
 const PrivateLessons = require('./privateLessons.js');
 const JoinGroupLesson = require('./joinGroupLesson.js');
 const JoinPrivateLesson = require('./joinPrivateLesson.js');
-
 const Events = require('./events.js');
 const Event = require('./event.js');
 const JoinEvent = require('./joinEvent.js');
-
-const Dances = require('./dances.js');
-const Dance = require('./dance.js');
-
-const Topic = require('./topic.js');
 
 const Admin = require('./admin.js');
 const AdminPrivateLessons = require('./adminPrivateLessons.js');
@@ -29,17 +29,17 @@ const AdminEventAction = require('./adminEventAction.js');
 
 class MessagesTree {
 
-    constructor(repository, metaData) {
+    constructor(metaData) {
         const events = new Events('eventsDesc', 'eventsCommand');
 
-        const masterClasses = new Event('masterClassesDesc', 'masterClassesCommand', Meta.MasterClass, async () => await repository.getEvents(Meta.MasterClass));
-        const festivalsClasses = new Event('festivalsDesc', 'festivalsCommand', Meta.Festival, async () => await repository.getEvents(Meta.Festival));
-        const showsClasses = new Event('showsDesc', 'showsCommand', Meta.Show, async () => await repository.getEvents(Meta.Show));
+        const masterClasses = new Event('masterClassesDesc', 'masterClassesCommand', Meta.MasterClass, async () => await eventRep.getEvents(Meta.MasterClass));
+        const festivalsClasses = new Event('festivalsDesc', 'festivalsCommand', Meta.Festival, async () => await eventRep.getEvents(Meta.Festival));
+        const showsClasses = new Event('showsDesc', 'showsCommand', Meta.Show, async () => await eventRep.getEvents(Meta.Show));
 
         const joinEvent = new JoinEvent('joinEventDesc', 'joinEventCommand', (username, field) => metaData.getMetadata(username, field), 
-            async (eventType) => await repository.getEvents(eventType), 
-            async (eventType) => await repository.getEventsParticipants(eventType), 
-            async (eventType, rowNumber, eventId, eventName, username, chatId, status, type) => await repository.participateEvent(eventType, rowNumber, eventId, eventName, username, chatId, status, type));
+            async (eventType) => await eventRep.getEvents(eventType), 
+            async (eventType) => await eventRep.getEventsParticipants(eventType), 
+            async (eventType, rowNumber, eventId, eventName, username, chatId, status, type) => await eventRep.participateEvent(eventType, rowNumber, eventId, eventName, username, chatId, status, type));
 
         const dances = new Dances('dancesDesc', 'dancesCommand');
         const salsaDance = new Dance('salsaDesc', 'salsaCommand');
@@ -51,100 +51,100 @@ class MessagesTree {
         const salsaPartnerTopic = new Topic('salsaPartnerTopicDesc', 'salsaPartnerTopicCommand');
         const salsaMixTopic = new Topic('salsaMixTopicDesc', 'salsaMixTopicCommand');
 
-        const salsaSoloClasses = new GroupLessons('salsaSoloClassesDesc', 'salsaSoloClassesCommand', async () => await repository.getClasses(Meta.SalsaSolo));
-        const salsaPartnerClasses = new GroupLessons('salsaPartnerClassesDesc', 'salsaPartnerClassesCommand', async () => await repository.getClasses(Meta.SalsaPartner));
-        const salsaMixClasses = new GroupLessons('salsaMixClassesDesc', 'salsaMixClassesCommand', async () => await repository.getClasses(Meta.SalsaMix));
+        const salsaSoloClasses = new GroupLessons('salsaSoloClassesDesc', 'salsaSoloClassesCommand', async () => await classRep.getClasses(Meta.SalsaSolo));
+        const salsaPartnerClasses = new GroupLessons('salsaPartnerClassesDesc', 'salsaPartnerClassesCommand', async () => await classRep.getClasses(Meta.SalsaPartner));
+        const salsaMixClasses = new GroupLessons('salsaMixClassesDesc', 'salsaMixClassesCommand', async () => await classRep.getClasses(Meta.SalsaMix));
 
-        const joinSalsaSoloClasses = new JoinGroupLesson('joinSalsaSoloClassesDesc', 'joinSalsaSoloClassesCommand', async () => await repository.getClasses(Meta.SalsaSolo),
-            async () => await repository.getClassesParticipants(Meta.SalsaSolo), 
-            async (rowNumber, classId, className, username, chatId, status) => await repository.participateClass(Meta.SalsaSolo, rowNumber, classId, className, username, chatId, status));
+        const joinSalsaSoloClasses = new JoinGroupLesson('joinSalsaSoloClassesDesc', 'joinSalsaSoloClassesCommand', async () => await classRep.getClasses(Meta.SalsaSolo),
+            async () => await classRep.getClassesParticipants(Meta.SalsaSolo), 
+            async (rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(Meta.SalsaSolo, rowNumber, classId, className, username, chatId, status));
 
-        const joinSalsaPartnerClasses = new JoinGroupLesson('joinSalsaPartnerClassesDesc', 'joinSalsaPartnerClassesCommand', async () => await repository.getClasses(Meta.SalsaPartner),
-            async () => await repository.getClassesParticipants(Meta.SalsaPartner), 
-            async (rowNumber, classId, className, username, chatId, status) => await repository.participateClass(Meta.SalsaPartner, rowNumber, classId, className, username, chatId, status));
+        const joinSalsaPartnerClasses = new JoinGroupLesson('joinSalsaPartnerClassesDesc', 'joinSalsaPartnerClassesCommand', async () => await classRep.getClasses(Meta.SalsaPartner),
+            async () => await classRep.getClassesParticipants(Meta.SalsaPartner), 
+            async (rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(Meta.SalsaPartner, rowNumber, classId, className, username, chatId, status));
         
-        const joinSalsaMixClasses = new JoinGroupLesson('joinSalsaMixClassesDesc', 'joinSalsaMixClassesCommand', async () => await repository.getClasses(Meta.SalsaMix),
-            async () => await repository.getClassesParticipants(Meta.SalsaMix), 
-            async (rowNumber, classId, className, username, chatId, status) => await repository.participateClass(Meta.SalsaMix, rowNumber, classId, className, username, chatId, status));
+        const joinSalsaMixClasses = new JoinGroupLesson('joinSalsaMixClassesDesc', 'joinSalsaMixClassesCommand', async () => await classRep.getClasses(Meta.SalsaMix),
+            async () => await classRep.getClassesParticipants(Meta.SalsaMix), 
+            async (rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(Meta.SalsaMix, rowNumber, classId, className, username, chatId, status));
 
-        const joinPrivateSalsaSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.SalsaSolo, async () => await repository.getPrivateLessons());
-        const joinPrivateSalsaPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.SalsaPartner, async () => await repository.getPrivateLessons());
-        const joinPrivateSalsaMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.SalsaMix, async () => await repository.getPrivateLessons());
+        const joinPrivateSalsaSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.SalsaSolo, async () => await plRep.getPrivateLessons());
+        const joinPrivateSalsaPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.SalsaPartner, async () => await plRep.getPrivateLessons());
+        const joinPrivateSalsaMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.SalsaMix, async () => await plRep.getPrivateLessons());
 
         const bachataSoloTopic = new Topic('bachataSoloTopicDesc', 'bachataSoloTopicCommand');
         const bachataPartnerTopic = new Topic('bachataPartnerTopicDesc', 'bachataPartnerTopicCommand');
         const bachataMixTopic = new Topic('bachataMixTopicDesc', 'bachataMixTopicCommand');
 
-        const bachataSoloClasses = new GroupLessons('bachataSoloClassesDesc', 'bachataSoloClassesCommand', async () => await repository.getClasses(Meta.BachataSolo));
-        const bachataPartnerClasses = new GroupLessons('bachataPartnerClassesDesc', 'bachataPartnerClassesCommand',  async () => await repository.getClasses(Meta.BachataPartner));
-        const bachataMixClasses = new GroupLessons('bachataMixClassesDesc', 'bachataMixClassesCommand', async () => await repository.getClasses(Meta.BachataMix));
+        const bachataSoloClasses = new GroupLessons('bachataSoloClassesDesc', 'bachataSoloClassesCommand', async () => await classRep.getClasses(Meta.BachataSolo));
+        const bachataPartnerClasses = new GroupLessons('bachataPartnerClassesDesc', 'bachataPartnerClassesCommand',  async () => await classRep.getClasses(Meta.BachataPartner));
+        const bachataMixClasses = new GroupLessons('bachataMixClassesDesc', 'bachataMixClassesCommand', async () => await classRep.getClasses(Meta.BachataMix));
 
-        const joinBachataSoloClasses = new JoinGroupLesson('joinBachataSoloClassesDesc', 'joinBachataSoloClassesCommand', async () => await repository.getClasses(Meta.BachataSolo),
-            async () => await repository.getClassesParticipants(Meta.BachataSolo), 
-            async (rowNumber, classId, className, username, chatId, status) => await repository.participateClass(Meta.BachataSolo, rowNumber, classId, className, username, chatId, status));
+        const joinBachataSoloClasses = new JoinGroupLesson('joinBachataSoloClassesDesc', 'joinBachataSoloClassesCommand', async () => await classRep.getClasses(Meta.BachataSolo),
+            async () => await classRep.getClassesParticipants(Meta.BachataSolo), 
+            async (rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(Meta.BachataSolo, rowNumber, classId, className, username, chatId, status));
         
-        const joinBachataPartnerClasses = new JoinGroupLesson('joinBachataPartnerClassesDesc', 'joinBachataPartnerClassesCommand', async () => await repository.getClasses(Meta.BachataPartner),
-            async () => await repository.getClassesParticipants(Meta.BachataPartner), 
-            async (rowNumber, classId, className, username, chatId, status) => await repository.participateClass(Meta.BachataPartner, rowNumber, classId, className, username, chatId, status));
+        const joinBachataPartnerClasses = new JoinGroupLesson('joinBachataPartnerClassesDesc', 'joinBachataPartnerClassesCommand', async () => await classRep.getClasses(Meta.BachataPartner),
+            async () => await classRep.getClassesParticipants(Meta.BachataPartner), 
+            async (rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(Meta.BachataPartner, rowNumber, classId, className, username, chatId, status));
 
-        const joinBachataMixClasses = new JoinGroupLesson('joinBachataMixClassesDesc', 'joinBachataMixClassesCommand', async () => await repository.getClasses(Meta.BachataMix),
-            async () => await repository.getClassesParticipants(Meta.BachataMix), 
-            async (rowNumber, classId, className, username, chatId, status) => await repository.participateClass(Meta.BachataMix, rowNumber, classId, className, username, chatId, status));
+        const joinBachataMixClasses = new JoinGroupLesson('joinBachataMixClassesDesc', 'joinBachataMixClassesCommand', async () => await classRep.getClasses(Meta.BachataMix),
+            async () => await classRep.getClassesParticipants(Meta.BachataMix), 
+            async (rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(Meta.BachataMix, rowNumber, classId, className, username, chatId, status));
         
-        const joinPrivateBachataSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataSolo, async () => await repository.getPrivateLessons());
-        const joinPrivateBachataPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataPartner, async () => await repository.getPrivateLessons());
-        const joinPrivateBachataMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataMix, async () => await repository.getPrivateLessons());
+        const joinPrivateBachataSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataSolo, async () => await plRep.getPrivateLessons());
+        const joinPrivateBachataPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataPartner, async () => await plRep.getPrivateLessons());
+        const joinPrivateBachataMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataMix, async () => await plRep.getPrivateLessons());
     
         const afroHouseSoloTopic = new Topic('afroHouseSoloTopicDesc', 'afroHouseSoloTopicCommand');
         const afroHousePartnerTopic = new Topic('afroHousePartnerTopicDesc', 'afroHousePartnerTopicCommand');
         const afroHouseMixTopic = new Topic('afroHouseMixTopicDesc', 'afroHouseMixTopicCommand');
 
-        const afroHouseSoloClasses = new GroupLessons('afroHouseSoloClassesDesc', 'afroHouseSoloClassesCommand', async () => await repository.getClasses(Meta.AfroHouseSolo));
-        const afroHousePartnerClasses = new GroupLessons('afroHousePartnerClassesDesc', 'afroHousePartnerClassesCommand',  async () => await repository.getClasses(Meta.AfroHousePartner));
-        const afroHouseMixClasses = new GroupLessons('afroHouseMixClassesDesc', 'afroHouseMixClassesCommand', async () => await repository.getClasses(Meta.AfroHouseMix));
+        const afroHouseSoloClasses = new GroupLessons('afroHouseSoloClassesDesc', 'afroHouseSoloClassesCommand', async () => await classRep.getClasses(Meta.AfroHouseSolo));
+        const afroHousePartnerClasses = new GroupLessons('afroHousePartnerClassesDesc', 'afroHousePartnerClassesCommand',  async () => await classRep.getClasses(Meta.AfroHousePartner));
+        const afroHouseMixClasses = new GroupLessons('afroHouseMixClassesDesc', 'afroHouseMixClassesCommand', async () => await classRep.getClasses(Meta.AfroHouseMix));
 
-        const joinAfroHouseSoloClasses = new JoinGroupLesson('joinAfroHouseSoloClassesDesc', 'joinAfroHouseSoloClassesCommand', async () => await repository.getClasses(Meta.AfroHouseSolo),
-            async () => await repository.getClassesParticipants(Meta.AfroHouseSolo), 
-            async (rowNumber, classId, className, username, chatId, status) => await repository.participateClass(Meta.AfroHouseSolo, rowNumber, classId, className, username, chatId, status));
+        const joinAfroHouseSoloClasses = new JoinGroupLesson('joinAfroHouseSoloClassesDesc', 'joinAfroHouseSoloClassesCommand', async () => await classRep.getClasses(Meta.AfroHouseSolo),
+            async () => await classRep.getClassesParticipants(Meta.AfroHouseSolo), 
+            async (rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(Meta.AfroHouseSolo, rowNumber, classId, className, username, chatId, status));
         
-        const joinAfroHousePartnerClasses = new JoinGroupLesson('joinAfroHousePartnerClassesDesc', 'joinAfroHousePartnerClassesCommand', async () => await repository.getClasses(Meta.AfroHousePartner),
-            async () => await repository.getClassesParticipants(Meta.AfroHousePartner), 
-            async (rowNumber, classId, className, username, chatId, status) => await repository.participateClass(Meta.AfroHousePartner, rowNumber, classId, className, username, chatId, status));
+        const joinAfroHousePartnerClasses = new JoinGroupLesson('joinAfroHousePartnerClassesDesc', 'joinAfroHousePartnerClassesCommand', async () => await classRep.getClasses(Meta.AfroHousePartner),
+            async () => await classRep.getClassesParticipants(Meta.AfroHousePartner), 
+            async (rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(Meta.AfroHousePartner, rowNumber, classId, className, username, chatId, status));
 
-        const joinAfroHouseMixClasses = new JoinGroupLesson('joinAfroHouseMixClassesDesc', 'joinAfroHouseMixClassesCommand', async () => await repository.getClasses(Meta.AfroHouseMix),
-            async () => await repository.getClassesParticipants(Meta.AfroHouseMix), 
-            async (rowNumber, classId, className, username, chatId, status) => await repository.participateClass(Meta.AfroHouseMix, rowNumber, classId, className, username, chatId, status));
+        const joinAfroHouseMixClasses = new JoinGroupLesson('joinAfroHouseMixClassesDesc', 'joinAfroHouseMixClassesCommand', async () => await classRep.getClasses(Meta.AfroHouseMix),
+            async () => await classRep.getClassesParticipants(Meta.AfroHouseMix), 
+            async (rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(Meta.AfroHouseMix, rowNumber, classId, className, username, chatId, status));
         
-        const joinPrivateAfroHouseSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.AfroHouseSolo, async () => await repository.getPrivateLessons());
-        const joinPrivateAfroHousePartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.AfroHousePartner, async () => await repository.getPrivateLessons());
-        const joinPrivateAfroHouseMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.AfroHouseMix, async () => await repository.getPrivateLessons());
+        const joinPrivateAfroHouseSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.AfroHouseSolo, async () => await plRep.getPrivateLessons());
+        const joinPrivateAfroHousePartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.AfroHousePartner, async () => await plRep.getPrivateLessons());
+        const joinPrivateAfroHouseMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.AfroHouseMix, async () => await plRep.getPrivateLessons());
 
         const latinoGrooveSoloTopic = new Topic('latinoGrooveSoloTopicDesc', 'latinoGrooveSoloTopicCommand');
         const latinoGroovePartnerTopic = new Topic('latinoGroovePartnerTopicDesc', 'latinoGroovePartnerTopicCommand');
         const latinoGrooveMixTopic = new Topic('latinoGrooveMixTopicDesc', 'latinoGrooveMixTopicCommand');
 
-        const latinoGrooveSoloClasses = new GroupLessons('latinoGrooveSoloClassesDesc', 'latinoGrooveSoloClassesCommand', async () => await repository.getClasses(Meta.LatinoGrooveSolo));
-        const latinoGroovePartnerClasses = new GroupLessons('latinoGroovePartnerClassesDesc', 'latinoGroovePartnerClassesCommand',  async () => await repository.getClasses(Meta.LatinoGroovePartner));
-        const latinoGrooveMixClasses = new GroupLessons('latinoGrooveMixClassesDesc', 'latinoGrooveMixClassesCommand', async () => await repository.getClasses(Meta.LatinoGrooveMix));
+        const latinoGrooveSoloClasses = new GroupLessons('latinoGrooveSoloClassesDesc', 'latinoGrooveSoloClassesCommand', async () => await classRep.getClasses(Meta.LatinoGrooveSolo));
+        const latinoGroovePartnerClasses = new GroupLessons('latinoGroovePartnerClassesDesc', 'latinoGroovePartnerClassesCommand',  async () => await classRep.getClasses(Meta.LatinoGroovePartner));
+        const latinoGrooveMixClasses = new GroupLessons('latinoGrooveMixClassesDesc', 'latinoGrooveMixClassesCommand', async () => await classRep.getClasses(Meta.LatinoGrooveMix));
 
-        const joinLatinoGrooveSoloClasses = new JoinGroupLesson('joinLatinoGrooveSoloClassesDesc', 'joinLatinoGrooveSoloClassesCommand', async () => await repository.getClasses(Meta.LatinoGrooveSolo),
-            async () => await repository.getClassesParticipants(Meta.LatinoGrooveSolo), 
-            async (rowNumber, classId, className, username, chatId, status) => await repository.participateClass(Meta.LatinoGrooveSolo, rowNumber, classId, className, username, chatId, status));
+        const joinLatinoGrooveSoloClasses = new JoinGroupLesson('joinLatinoGrooveSoloClassesDesc', 'joinLatinoGrooveSoloClassesCommand', async () => await classRep.getClasses(Meta.LatinoGrooveSolo),
+            async () => await classRep.getClassesParticipants(Meta.LatinoGrooveSolo), 
+            async (rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(Meta.LatinoGrooveSolo, rowNumber, classId, className, username, chatId, status));
         
-        const joinLatinoGroovePartnerClasses = new JoinGroupLesson('joinLatinoGroovePartnerClassesDesc', 'joinLatinoGroovePartnerClassesCommand', async () => await repository.getClasses(Meta.LatinoGroovePartner),
-            async () => await repository.getClassesParticipants(Meta.LatinoGroovePartner), 
-            async (rowNumber, classId, className, username, chatId, status) => await repository.participateClass(Meta.LatinoGroovePartner, rowNumber, classId, className, username, chatId, status));
+        const joinLatinoGroovePartnerClasses = new JoinGroupLesson('joinLatinoGroovePartnerClassesDesc', 'joinLatinoGroovePartnerClassesCommand', async () => await classRep.getClasses(Meta.LatinoGroovePartner),
+            async () => await classRep.getClassesParticipants(Meta.LatinoGroovePartner), 
+            async (rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(Meta.LatinoGroovePartner, rowNumber, classId, className, username, chatId, status));
 
-        const joinLatinoGrooveMixClasses = new JoinGroupLesson('joinLatinoGrooveMixClassesDesc', 'joinLatinoGrooveMixClassesCommand', async () => await repository.getClasses(Meta.LatinoGrooveMix),
-            async () => await repository.getClassesParticipants(Meta.LatinoGrooveMix), 
-            async (rowNumber, classId, className, username, chatId, status) => await repository.participateClass(Meta.LatinoGrooveMix, rowNumber, classId, className, username, chatId, status));
+        const joinLatinoGrooveMixClasses = new JoinGroupLesson('joinLatinoGrooveMixClassesDesc', 'joinLatinoGrooveMixClassesCommand', async () => await classRep.getClasses(Meta.LatinoGrooveMix),
+            async () => await classRep.getClassesParticipants(Meta.LatinoGrooveMix), 
+            async (rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(Meta.LatinoGrooveMix, rowNumber, classId, className, username, chatId, status));
         
-        const joinPrivateLatinoGrooveSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.LatinoGrooveSolo, async () => await repository.getPrivateLessons());
-        const joinPrivateLatinoGroovePartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.LatinoGroovePartner, async () => await repository.getPrivateLessons());
-        const joinPrivateLatinoGrooveMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.LatinoGrooveMix, async () => await repository.getPrivateLessons());
+        const joinPrivateLatinoGrooveSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.LatinoGrooveSolo, async () => await plRep.getPrivateLessons());
+        const joinPrivateLatinoGroovePartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.LatinoGroovePartner, async () => await plRep.getPrivateLessons());
+        const joinPrivateLatinoGrooveMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.LatinoGrooveMix, async () => await plRep.getPrivateLessons());
 
-        const joinPrivateClasses = new JoinPrivateLesson('joinPrivateLessonDesc', 'JPL', (username, field) => metaData.getMetadata(username, field), async () => await repository.getPrivateLessons(),
-         async (lessonId, dance, username, chatId, status) => await repository.participatePrivateLesson(lessonId, dance, username, chatId, status));
+        const joinPrivateClasses = new JoinPrivateLesson('joinPrivateLessonDesc', 'JPL', (username, field) => metaData.getMetadata(username, field), async () => await plRep.getPrivateLessons(),
+         async (lessonId, dance, username, chatId, status) => await plRep.participatePrivateLesson(lessonId, dance, username, chatId, status));
         
         events.nextSteps = [masterClasses, festivalsClasses, showsClasses];
 
@@ -207,22 +207,22 @@ class MessagesTree {
         joinPrivateLatinoGrooveMixClasses.nextSteps = [joinPrivateClasses];
 
         const admin = new Admin('adminDesc', 'adminCommand');
-        const adminPrivateLessons = new AdminPrivateLessons('adminPrivateLessonsDesc', 'adminPrivateLessonsCommand', async () => await repository.getOwnerPrivateLessons());
-        const adminPrivateLesson = new AdminPrivateLesson('adminPrivateLessonDesc', 'adminPrivateLessonCommand', async (id) => await repository.getPrivateLesson(id));
+        const adminPrivateLessons = new AdminPrivateLessons('adminPrivateLessonsDesc', 'adminPrivateLessonsCommand', async () => await plRep.getOwnerPrivateLessons());
+        const adminPrivateLesson = new AdminPrivateLesson('adminPrivateLessonDesc', 'adminPrivateLessonCommand', async (id) => await plRep.getPrivateLesson(id));
         const adminPrivateLessonApprove = new AdminPrivateLessonAction('adminPrivateLessonActionApproveDesc', 'adminPrivateLessonActionApproveCommand', 'adminPrivateLessonActionApproveUserDesc',
-            async (id) => await repository.getPrivateLesson(id), async (id) => await repository.updatePrivateLesson(id, Status.Approved),
+            async (id) => await plRep.getPrivateLesson(id), async (id) => await plRep.updatePrivateLesson(id, Status.Approved),
             async (chatId, message) => await notificationService.notifyUser(chatId, message));
         const adminPrivateLessonDecline = new AdminPrivateLessonAction('adminPrivateLessonActionDeclineDesc', 'adminPrivateLessonActionDeclineCommand', 'adminPrivateLessonActionDeclineUserDesc',
-            async (id) => await repository.getPrivateLesson(id), async (id) => await repository.updatePrivateLesson(id, Status.Declined), 
+            async (id) => await plRep.getPrivateLesson(id), async (id) => await plRep.updatePrivateLesson(id, Status.Declined), 
             async (chatId, message) => await notificationService.notifyUser(chatId, message));
 
-        const adminEvents = new AdminEvents('adminEventsDesc', 'adminEventsCommand', async () => await repository.getOwnerEventsParticipations());
-        const adminEvent = new AdminEvent('adminEventDesc', 'adminEventCommand', async (id, type) => await repository.getOwnerEventParticipation(id, type));
+        const adminEvents = new AdminEvents('adminEventsDesc', 'adminEventsCommand', async () => await eventRep.getOwnerEventsParticipations());
+        const adminEvent = new AdminEvent('adminEventDesc', 'adminEventCommand', async (id, type) => await eventRep.getOwnerEventParticipation(id, type));
         const adminEventApprove = new AdminEventAction('adminEventActionApproveDesc', 'adminEventActionApproveCommand', 'adminEventActionApproveUserDesc',
-            async (id, type) => await repository.getOwnerEventParticipation(id, type), async (id, type) => await repository.updateOwnerEventParticipation(id, type, Status.Approved),
+            async (id, type) => await eventRep.getOwnerEventParticipation(id, type), async (id, type) => await eventRep.updateOwnerEventParticipation(id, type, Status.Approved),
             async (chatId, message) => await notificationService.notifyUser(chatId, message));
         const adminEventDecline = new AdminEventAction('adminEventActionDeclineDesc', 'adminEventActionDeclineCommand', 'adminEventActionDeclineUserDesc',
-            async (id, type) => await repository.getOwnerEventParticipation(id, type), async (id, type) => await repository.updateOwnerEventParticipation(id, type, Status.Declined), 
+            async (id, type) => await eventRep.getOwnerEventParticipation(id, type), async (id, type) => await eventRep.updateOwnerEventParticipation(id, type, Status.Declined), 
             async (chatId, message) => await notificationService.notifyUser(chatId, message));
 
         admin.nextSteps = [adminPrivateLessons, adminEvents];
