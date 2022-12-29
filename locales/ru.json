@@ -115,5 +115,15 @@
 	"adminPrivateLessonActionApproveCommand": "aPLA",
 	"adminPrivateLessonActionDeclineDesc": "Вы отменили приватный урок",
 	"adminPrivateLessonActionDeclineUserDesc": "Ваш урок был отменен",
-	"adminPrivateLessonActionDeclineCommand": "aPLD"
+	"adminPrivateLessonActionDeclineCommand": "aPLD",
+	"adminEventsDesc": "У вас такие записи на ивенты:",
+	"adminEventsCommand": "Показать записи на ивенты",
+	"adminEventDesc": "Ивенты:",
+	"adminEventCommand": "aEView",
+	"adminEventActionApproveDesc": "Вы подвердили запись на ивент",
+	"adminEventActionApproveUserDesc": "Ваша запись на ивент была подверждена",
+	"adminEventActionApproveCommand": "aEA",
+	"adminEventActionDeclineDesc": "Вы отменили запись на ивент",
+	"adminEventActionDeclineUserDesc": "Ваша запись на ивент была подверждена",
+	"adminEventActionDeclineCommand": "aED"
 }

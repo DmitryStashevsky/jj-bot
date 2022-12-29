@@ -33,7 +33,7 @@ class JoinEvent extends Step {
 
     async finish() {
         const rowNumber = this.participants.filter(x => !x.eventId)[0].id
-        await this.participateEventFunc(this.meta, rowNumber, this.event.id, this.event.name, this.context.from.username, this.context.chatId, Status.Pending);
+        await this.participateEventFunc(this.meta, rowNumber, this.event.id, this.event.name, this.context.from.username, this.context.chatId, Status.Pending, this.meta);
     }
     
     async getEvent(text) {

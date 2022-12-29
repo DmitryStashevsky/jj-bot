@@ -115,5 +115,15 @@
 	"adminPrivateLessonActionApproveCommand": "aPLA",
 	"adminPrivateLessonActionDeclineDesc": "You decline private lesson",
 	"adminPrivateLessonActionDeclineUserDesc": "You lesson was declined",
-	"adminPrivateLessonActionDeclineCommand": "aPLD"
+	"adminPrivateLessonActionDeclineCommand": "aPLD",
+	"adminEventsDesc": "You have that events participations:",
+	"adminEventsCommand": "Show events participations",
+	"adminEventDesc": "Event:",
+	"adminEventCommand": "aEView",
+	"adminEventActionApproveDesc": "You approve event participation",
+	"adminEventActionApproveUserDesc": "You event participation was approved",
+	"adminEventActionApproveCommand": "aEA",
+	"adminEventActionDeclineDesc": "You decline event participation",
+	"adminEventActionDeclineUserDesc": "You event participation was declined",
+	"adminEventActionDeclineCommand": "aED"
 }

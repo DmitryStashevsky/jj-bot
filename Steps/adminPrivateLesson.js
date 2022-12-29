@@ -1,5 +1,5 @@
 const Step = require('./step.js');
-const { Status: PrivateLessonStatus } = require('../enums.js');
+const { Status } = require('../enums.js');
 const i18n = require('../i18n.config.js');
 
 class AdminPrivateLesson extends Step {
@@ -28,7 +28,7 @@ class AdminPrivateLesson extends Step {
             callback_data: `aPLD - ${this.privateLesson.id}`,
         }]];
 
-        if (this.privateLesson.status == PrivateLessonStatus.Pending) {
+        if (this.privateLesson.status == Status.Pending) {
             options.push([{
                 text: i18n.__('approve'),
                 callback_data: `aPLA - ${this.privateLesson.id}`,

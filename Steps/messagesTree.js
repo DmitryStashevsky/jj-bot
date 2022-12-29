@@ -23,6 +23,9 @@ const Admin = require('./admin.js');
 const AdminPrivateLessons = require('./adminPrivateLessons.js');
 const AdminPrivateLesson = require('./adminPrivateLesson.js');
 const AdminPrivateLessonAction = require('./adminPrivateLessonAction.js');
+const AdminEvents = require('./adminEvents.js');
+const AdminEvent = require('./adminEvent.js');
+const AdminEventAction = require('./adminEventAction.js');
 
 class MessagesTree {
 
@@ -36,7 +39,7 @@ class MessagesTree {
         const joinEvent = new JoinEvent('joinEventDesc', 'joinEventCommand', (username, field) => metaData.getMetadata(username, field), 
             async (eventType) => await repository.getEvents(eventType), 
             async (eventType) => await repository.getEventsParticipants(eventType), 
-            async (eventType, rowNumber, eventId, eventName, username, chatId, status) => await repository.participateEvent(eventType, rowNumber, eventId, eventName, username, chatId, status));
+            async (eventType, rowNumber, eventId, eventName, username, chatId, status, type) => await repository.participateEvent(eventType, rowNumber, eventId, eventName, username, chatId, status, type));
 
         const dances = new Dances('dancesDesc', 'dancesCommand');
         const salsaDance = new Dance('salsaDesc', 'salsaCommand');
@@ -213,9 +216,22 @@ class MessagesTree {
             async (id) => await repository.getPrivateLesson(id), async (id) => await repository.updatePrivateLesson(id, Status.Declined), 
             async (chatId, message) => await notificationService.notifyUser(chatId, message));
 
-        admin.nextSteps = [adminPrivateLessons];
+        const adminEvents = new AdminEvents('adminEventsDesc', 'adminEventsCommand', async () => await repository.getOwnerEventsParticipations());
+        const adminEvent = new AdminEvent('adminEventDesc', 'adminEventCommand', async (id, type) => await repository.getOwnerEventParticipation(id, type));
+        const adminEventApprove = new AdminEventAction('adminEventActionApproveDesc', 'adminEventActionApproveCommand', 'adminEventActionApproveUserDesc',
+            async (id, type) => await repository.getOwnerEventParticipation(id, type), async (id, type) => await repository.updateOwnerEventParticipation(id, type, Status.Approved),
+            async (chatId, message) => await notificationService.notifyUser(chatId, message));
+        const adminEventDecline = new AdminEventAction('adminEventActionDeclineDesc', 'adminEventActionDeclineCommand', 'adminEventActionDeclineUserDesc',
+            async (id, type) => await repository.getOwnerEventParticipation(id, type), async (id, type) => await repository.updateOwnerEventParticipation(id, type, Status.Declined), 
+            async (chatId, message) => await notificationService.notifyUser(chatId, message));
+
+        admin.nextSteps = [adminPrivateLessons, adminEvents];
+
         adminPrivateLessons.nextSteps = [adminPrivateLesson];
         adminPrivateLesson.nextSteps = [adminPrivateLessonApprove, adminPrivateLessonDecline];
+
+        adminEvents.nextSteps = [adminEvent];
+        adminEvent.nextSteps = [adminEventApprove, adminEventDecline];
 
         this.adminStep = admin;
         this.initialStep = dances;
