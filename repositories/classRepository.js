@@ -1,5 +1,6 @@
 const Repository = require('./repository.js');
-const {extractClasses, extractFreeSlotsClassesParticipants} = require('../helper.js');
+const {extractClasses, extractFreeSlotsClassesParticipants, extractOwnerClassesParticipants,
+    extractOwnerClassParticipant} = require('../helper.js');
 
 class ClassRepository extends Repository {
     
@@ -15,10 +16,33 @@ class ClassRepository extends Repository {
         return extractFreeSlotsClassesParticipants(values);
     }
 
+    async getOwnerClassesParticipants(lessonTypes) {
+        const apiClient = await this.getApiClient();
+        let result = [];
+        for (let lessonType of lessonTypes) {
+            const values = await this.getValuesData(apiClient, lessonType + '!F2:M41');
+            result = result.concat(extractOwnerClassesParticipants(values));
+        }
+        return result
+    }
+
+    async getOwnerClassParticipation(id, type) {
+        const apiClient = await this.getApiClient();
+        const cell = new Number(id) + this.countOfHeaders;
+        const values = await this.getValuesData(apiClient, `${type}!F${cell}:M${cell}`);
+        return extractOwnerClassParticipant(values);
+    }
+
+    async updateOwnerClassParticipation(id, type, status) {
+        const apiClient = await this.getApiClient();
+        const cell = new Number(id) + this.countOfHeaders;
+        await this.setValuesData(apiClient, `${type}!L${cell}:L${cell}`, [status]);
+    }
+
     async participateClass(lessonType, rowNumber, classId, className, username, chatId, status) {
         const apiClient = await this.getApiClient();
         const cell = new Number(rowNumber) + this.countOfHeaders;
-        await this.setValuesData(apiClient, `${lessonType}!G${cell}:L${cell}`, [classId, className, username, new Date(Date.now()).toUTCString(), chatId, status]);
+        await this.setValuesData(apiClient, `${lessonType}!G${cell}:M${cell}`, [classId, className, username, new Date(Date.now()).toUTCString(), chatId, status, lessonType]);
     }
 }
 

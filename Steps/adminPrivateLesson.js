@@ -6,6 +6,7 @@ class AdminPrivateLesson extends Step {
     constructor(message, command, getPrivateLessonFunc) {
         super(message, command);
         this.getPrivateLessonFunc = getPrivateLessonFunc;
+        this.isDynamicStep = true;
     }
 
     async init () {

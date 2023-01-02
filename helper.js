@@ -31,6 +31,24 @@ extractFreeSlotsClassesParticipants = (classes) => {
     }));
 }
 
+extractOwnerClassesParticipants = (classes) => {
+    return classes.filter(x => x[1] && x[6] == Status.Pending)
+    .map(x => ({
+        id: x[0],
+        classId: x[1],
+        className: x[2],
+        username: x[3],
+        date: x[4],
+        chatId: x[5],
+        status: x[6],
+        type: x[7]
+    }));
+}
+
+extractOwnerClassParticipant =(classes) => {
+    return extractOwnerClassesParticipants(classes)[0];
+}
+
 extractFreeSlotsForPrivateLessons = (slots) => {
     return slots.filter(x => !x[2] && x[0]).map(x => ({
         id: x[0],
@@ -92,6 +110,8 @@ extractEventsParticipantsList = (participants) => {
 module.exports = {
     extractClasses,
     extractFreeSlotsClassesParticipants,
+    extractOwnerClassesParticipants,
+    extractOwnerClassParticipant,
     extractOwnerPrivateLessons,
     extractOwnerPrivateLesson,
     extractSpreedsheetData,

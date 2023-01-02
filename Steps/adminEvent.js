@@ -6,6 +6,7 @@ class AdminEvent extends Step {
     constructor(message, command, getEventParticipationFunc) {
         super(message, command);
         this.getEventParticipationFunc = getEventParticipationFunc;
+        this.isDynamicStep = true;
     }
 
     async init () {

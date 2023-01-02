@@ -3,11 +3,8 @@ const{ metaData }  = require('./cache.config.js');
 
 const MessagesTree = require('./Steps/messagesTree.js');
 const notificationService = require('./notificationService.js');
-const Repository = require('./repositories/repository.js');
 
 class MessageHandler {
-    constructor(bot) {
-    }
 
     async onMessage(bot, chatId, language, text, from, msg) {
             i18n.init(language);

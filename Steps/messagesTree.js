@@ -1,4 +1,4 @@
-const { Meta } = require('../cache.config.js');
+const { Meta, metaData } = require('../cache.config.js');
 const notificationService = require('../notificationService.js');
 const classRep = require('../repositories/classRepository.js');
 const eventRep = require('../repositories/eventRepository.js');
@@ -20,6 +20,10 @@ const Event = require('./event.js');
 const JoinEvent = require('./joinEvent.js');
 
 const Admin = require('./admin.js');
+const AdminGroupLessonsType = require('./adminGroupLessonsType.js');
+const AdminGroupLessons = require('./adminGroupLessons.js');
+const AdminGroupLesson = require('./adminGroupLesson.js');
+const AdminGroupLessonAction = require('./adminGroupLessonAction.js');
 const AdminPrivateLessons = require('./adminPrivateLessons.js');
 const AdminPrivateLesson = require('./adminPrivateLesson.js');
 const AdminPrivateLessonAction = require('./adminPrivateLessonAction.js');
@@ -28,14 +32,15 @@ const AdminEvent = require('./adminEvent.js');
 const AdminEventAction = require('./adminEventAction.js');
 
 class MessagesTree {
+    constructor() {
 
-    constructor(metaData) {
+        // #region Main
         const events = new Events('eventsDesc', 'eventsCommand');
-
+        
         const masterClasses = new Event('masterClassesDesc', 'masterClassesCommand', Meta.MasterClass, async () => await eventRep.getEvents(Meta.MasterClass));
         const festivalsClasses = new Event('festivalsDesc', 'festivalsCommand', Meta.Festival, async () => await eventRep.getEvents(Meta.Festival));
         const showsClasses = new Event('showsDesc', 'showsCommand', Meta.Show, async () => await eventRep.getEvents(Meta.Show));
-
+        
         const joinEvent = new JoinEvent('joinEventDesc', 'joinEventCommand', (username, field) => metaData.getMetadata(username, field), 
             async (eventType) => await eventRep.getEvents(eventType), 
             async (eventType) => await eventRep.getEventsParticipants(eventType), 
@@ -55,7 +60,8 @@ class MessagesTree {
         const salsaPartnerClasses = new GroupLessons('salsaPartnerClassesDesc', 'salsaPartnerClassesCommand', async () => await classRep.getClasses(Meta.SalsaPartner));
         const salsaMixClasses = new GroupLessons('salsaMixClassesDesc', 'salsaMixClassesCommand', async () => await classRep.getClasses(Meta.SalsaMix));
 
-        const joinSalsaSoloClasses = new JoinGroupLesson('joinSalsaSoloClassesDesc', 'joinSalsaSoloClassesCommand', async () => await classRep.getClasses(Meta.SalsaSolo),
+        const joinSalsaSoloClasses = new JoinGroupLesson('joinSalsaSoloClassesDesc', 'joinSalsaSoloClassesCommand',
+            async () => await classRep.getClasses(Meta.SalsaSolo),
             async () => await classRep.getClassesParticipants(Meta.SalsaSolo), 
             async (rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(Meta.SalsaSolo, rowNumber, classId, className, username, chatId, status));
 
@@ -206,7 +212,21 @@ class MessagesTree {
         joinPrivateLatinoGroovePartnerClasses.nextSteps = [joinPrivateClasses];
         joinPrivateLatinoGrooveMixClasses.nextSteps = [joinPrivateClasses];
 
+        //#endregion
+
+        // #region Admin
         const admin = new Admin('adminDesc', 'adminCommand');
+
+        const adminGroupLessonsType = new AdminGroupLessonsType('adminGroupLessonsTypeDesc', 'adminGroupLessonsTypeCommand');
+        const adminGroupLessons = new AdminGroupLessons('adminGroupLessonsDesc', 'adminGroupLessonsCommand', async (lessonTypes) => await classRep.getOwnerClassesParticipants(lessonTypes));
+        const adminGroupLesson = new AdminGroupLesson('adminGroupLessonDesc', 'adminGroupLessonCommand', async (id, type) => await classRep.getOwnerClassParticipation(id, type));
+        const adminGroupLessonApprove = new AdminGroupLessonAction('adminGroupLessonActionApproveDesc', 'adminGroupLessonActionApproveCommand', 'adminGroupLessonActionApproveUserDesc',
+            async (id, type) => await classRep.getOwnerClassParticipation(id, type), async (id, type) => await classRep.updateOwnerClassParticipation(id, type, Status.Approved),
+            async (chatId, message) => await notificationService.notifyUser(chatId, message));
+        const adminGroupLessonDecline = new AdminGroupLessonAction('adminGroupLessonActionDeclineDesc', 'adminGroupLessonActionDeclineCommand', 'adminGroupLessonActionDeclineUserDesc',
+            async (id, type) => await classRep.getOwnerClassParticipation(id, type), async (id, type) => await classRep.updateOwnerClassParticipation(id, type, Status.Declined),
+            async (chatId, message) => await notificationService.notifyUser(chatId, message));
+
         const adminPrivateLessons = new AdminPrivateLessons('adminPrivateLessonsDesc', 'adminPrivateLessonsCommand', async () => await plRep.getOwnerPrivateLessons());
         const adminPrivateLesson = new AdminPrivateLesson('adminPrivateLessonDesc', 'adminPrivateLessonCommand', async (id) => await plRep.getPrivateLesson(id));
         const adminPrivateLessonApprove = new AdminPrivateLessonAction('adminPrivateLessonActionApproveDesc', 'adminPrivateLessonActionApproveCommand', 'adminPrivateLessonActionApproveUserDesc',
@@ -225,7 +245,11 @@ class MessagesTree {
             async (id, type) => await eventRep.getOwnerEventParticipation(id, type), async (id, type) => await eventRep.updateOwnerEventParticipation(id, type, Status.Declined), 
             async (chatId, message) => await notificationService.notifyUser(chatId, message));
 
-        admin.nextSteps = [adminPrivateLessons, adminEvents];
+        admin.nextSteps = [adminGroupLessonsType, adminEvents, adminPrivateLessons];
+
+        adminGroupLessonsType.nextSteps = [adminGroupLessons];
+        adminGroupLessons.nextSteps = [adminGroupLesson];
+        adminGroupLesson.nextSteps = [adminGroupLessonApprove, adminGroupLessonDecline];
 
         adminPrivateLessons.nextSteps = [adminPrivateLesson];
         adminPrivateLesson.nextSteps = [adminPrivateLessonApprove, adminPrivateLessonDecline];
@@ -233,15 +257,20 @@ class MessagesTree {
         adminEvents.nextSteps = [adminEvent];
         adminEvent.nextSteps = [adminEventApprove, adminEventDecline];
 
+        //#endregion
+
         this.adminStep = admin;
         this.initialStep = dances;
     }
 
     findCurrentStep(message, username) {
-        const matches = message.match(/(\d+)/);
-        let found = this.findStep(this.initialStep, message, !matches);
+    
+        const digitData = message.match(/(\d+)/);
+        const stringData = message.match(/\[([^)]+)\]/);
+        const notEquals = digitData || stringData;
+        let found = this.findStep(this.initialStep, message, !notEquals);
         if (!found && adminWhiteList.includes(username)) {
-            found = this.findStep(this.adminStep, message, !matches);
+            found = this.findStep(this.adminStep, message, !notEquals);
         } 
                  
         this.currentStep = found || this.initialStep;
@@ -253,18 +282,18 @@ class MessagesTree {
         queue.push(top);
         while(queue.length > 0) {
             let step = queue.shift();
-            if (equals) {
+            queue = queue.concat(step.nextSteps);
+            if (equals && !step.isDynamicStep) {
                 if (message.toLocaleLowerCase() === step.command.toLocaleLowerCase()) {
                     return step;
                 }
             }
-            else {
+            else if (!equals && step.isDynamicStep){
                 if (message.toLocaleLowerCase().includes(step.command.toLocaleLowerCase())) {
                     return step;
                 }
-            }
-            for(let nextStep of step.nextSteps) {
-                queue.push(nextStep);
+            } else {
+                continue;
             }
         } 
         return null;

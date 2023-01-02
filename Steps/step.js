@@ -11,6 +11,7 @@ class Step {
         this.metaDatMessage
         this.nextSteps = [];
         this.messageToJj;
+        this.isDynamicStep = false;
     }
 
     async handleStep(context) {

@@ -5,7 +5,7 @@ const config = require('config');
 const token = config.get('TelegramToken');
 
 const bot = new TelegramBot(token, {polling: true});
-const handler = new MessageHandler(bot);
+const handler = new MessageHandler();
 
 bot.on('message', (msg) => {
     handler.onMessage(bot, msg.chat.id, msg.from.language_code, msg.text, msg.from, msg);

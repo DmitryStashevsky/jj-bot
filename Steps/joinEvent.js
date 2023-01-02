@@ -9,6 +9,7 @@ class JoinEvent extends Step {
         this.getEventsParticipantsFunc = getEventsParticipantsFunc;
         this.participateEventFunc = participateEventFunc;
         this.readMetaField = 'event';
+        this.isDynamicStep = true;
     }
 
     async init() {

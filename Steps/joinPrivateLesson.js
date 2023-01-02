@@ -8,6 +8,7 @@ class JoinPrivateLesson extends Step {
         this.getFreeSlotsFunc = getFreeSlotsFunc;
         this.participatePrivateLessonFunc = participatePrivateLessonFunc;
         this.readMetaField = 'privateDance';
+        this.isDynamicStep = true;
     }
 
     async init() {

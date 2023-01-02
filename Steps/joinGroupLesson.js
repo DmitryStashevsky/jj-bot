@@ -7,6 +7,7 @@ class JoinGroupLesson extends Step {
         this.getClassesFunc = getClassesFunc;
         this.getClassesParticipantsFunc = getClassesParticipantsFunc;
         this.participateClassFunc = participateClassFunc;
+        this.isDynamicStep = true;
     }
 
     async init() {

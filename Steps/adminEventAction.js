@@ -8,6 +8,7 @@ class AdminEventAction extends Step {
         this.getEventParticipationFunc = getEventParticipationFunc;
         this.updateEventParticipationFunc = updateEventParticipationFunc;
         this.notifyUserFunc = notifyUserFunc;
+        this.isDynamicStep = true;
     }
 
     async init () {
