@@ -1,4 +1,5 @@
 const Step = require('./step.js');
+const {getTimeString} = require('../calendar.js');
 
 class PrivateLessons extends Step {
     constructor(message, command, metaData, getFreeSlotsFunc) {
@@ -24,7 +25,7 @@ class PrivateLessons extends Step {
             for (let i = 0; i < this.lessons.length; i++) {
                 const lesson = this.lessons[i];
                 options.push([{
-                    text: `${i+1} - ${lesson.time}`,
+                    text: `${i+1} - ${getTimeString(lesson.time, lesson.countOfHours)}`,
                     callback_data: `${this.nextSteps[0].command} ${lesson.id}`,
                 }]);
             }

@@ -1,5 +1,7 @@
 const i18n = require('./i18n.config.js');
+var {Buffer} = require('node:buffer');
 const{ metaData }  = require('./cache.config.js');
+const {getCalendarFile} = require('./calendar.js');
 
 const MessagesTree = require('./Steps/messagesTree.js');
 const notificationService = require('./notificationService.js');
@@ -24,6 +26,11 @@ class MessageHandler {
 
                     if (currentStep.additionalMessage) {
                         await bot.sendMessage(chatId, currentStep.additionalMessage);
+                    }
+
+                    if (currentStep.fileMessage) {
+                        const buff = Buffer.from(currentStep.fileMessage.file, 'utf-8');
+                        await bot.sendDocument(chatId, buff, {}, {filename: currentStep.fileMessage.filename, contentType: 'text/calendar'});
                     }
 
                     if (currentStep.metaField) {

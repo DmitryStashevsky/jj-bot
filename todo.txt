@@ -1,4 +1,3 @@
-participation on group and events like on private lessons - with approving and sending message to user
 make participations with additional step with full info
 increase count of private lessons slots
 no entities for admin - message
@@ -8,3 +7,5 @@ Split repositories and message tree
 Make steps for admin section optional loading
 make regex as helper
 split extract functions
+issue with readable stream for ics
+error - decline PL must have approve

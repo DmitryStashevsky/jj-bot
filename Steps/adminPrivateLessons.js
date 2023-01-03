@@ -1,4 +1,5 @@
 const Step = require('./step.js');
+const { getTimeString } = require('../calendar.js');
 
 class AdminPrivateLessons extends Step {
     constructor(message, command, getPrivateLessonsFunc) {
@@ -16,7 +17,7 @@ class AdminPrivateLessons extends Step {
             for (let i = 0; i < this.privateLessons.length; i++) {
                 const lesson = this.privateLessons[i];
                 options.push([{
-                    text: `${i+1} - ${lesson.username} - ${lesson.status} - ${lesson.time}`,
+                    text: `${i+1} - ${lesson.username} - ${lesson.status} - ${getTimeString(lesson.time, lesson.countOfHours)}`,
                     callback_data: `${this.nextSteps[0].command} ${lesson.id}`,
                 }]);
             }

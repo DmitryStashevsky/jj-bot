@@ -8,6 +8,7 @@ class Step {
         this.buttons = {};
         this.privateMessage;
         this.userMessage;
+        this.fileMessage;
         this.metaDatMessage
         this.nextSteps = [];
         this.messageToJj;
@@ -21,6 +22,7 @@ class Step {
         await this.setAdditionalMessage();
         await this.setButtons();
         await this.setMetaMessage();
+        await this.setFileMessage();
         await this.setPrivateMessage();
         await this.setUserMessage();
         await this.finish()
@@ -65,8 +67,11 @@ class Step {
     setUserMessage() {
     }
 
+    setFileMessage() {
+    }
+
     finish() {
-    };
+    }
 }
 
 module.exports = Step;

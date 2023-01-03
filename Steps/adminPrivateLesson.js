@@ -1,4 +1,5 @@
 const Step = require('./step.js');
+const { getTimeString } = require('../calendar.js');
 const { Status } = require('../enums.js');
 const i18n = require('../i18n.config.js');
 
@@ -11,12 +12,12 @@ class AdminPrivateLesson extends Step {
 
     async init () {
         const matches = this.context.text.match(/(\d+)/);
-        this.privateLesson  = await this.getPrivateLessonFunc(matches[0]);
+        this.privateLesson = await this.getPrivateLessonFunc(matches[0]);
     }
 
     async setMessage() {
         if(this.privateLesson) {
-            this.message =  this.message + ` ${this.privateLesson.time} - ${this.privateLesson.username} - ${this.privateLesson.status}`;
+            this.message =  this.message + ` ${getTimeString(this.privateLesson.time, this.privateLesson.countOfHours)} - ${this.privateLesson.username} - ${this.privateLesson.status}`;
         }
         else {
             return false;
@@ -24,11 +25,14 @@ class AdminPrivateLesson extends Step {
     }
 
     async setButtons() {
-        const options = [[{
-            text: i18n.__('decline'),
-            callback_data: `aPLD - ${this.privateLesson.id}`,
-        }]];
-
+        const options = [];
+        if (this.privateLesson.status == Status.Pending || this.privateLesson.status == Status.Approved) {
+            options.push([{
+                text: i18n.__('decline'),
+                callback_data: `aPLD - ${this.privateLesson.id}`,
+            }]);
+        }
+        
         if (this.privateLesson.status == Status.Pending) {
             options.push([{
                 text: i18n.__('approve'),

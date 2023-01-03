@@ -230,10 +230,10 @@ class MessagesTree {
         const adminPrivateLessons = new AdminPrivateLessons('adminPrivateLessonsDesc', 'adminPrivateLessonsCommand', async () => await plRep.getOwnerPrivateLessons());
         const adminPrivateLesson = new AdminPrivateLesson('adminPrivateLessonDesc', 'adminPrivateLessonCommand', async (id) => await plRep.getPrivateLesson(id));
         const adminPrivateLessonApprove = new AdminPrivateLessonAction('adminPrivateLessonActionApproveDesc', 'adminPrivateLessonActionApproveCommand', 'adminPrivateLessonActionApproveUserDesc',
-            async (id) => await plRep.getPrivateLesson(id), async (id) => await plRep.updatePrivateLesson(id, Status.Approved),
+            Status.Approved, async (id) => await plRep.getPrivateLesson(id), async (id, uid) => await plRep.updatePrivateLesson(id, Status.Approved, uid),
             async (chatId, message) => await notificationService.notifyUser(chatId, message));
         const adminPrivateLessonDecline = new AdminPrivateLessonAction('adminPrivateLessonActionDeclineDesc', 'adminPrivateLessonActionDeclineCommand', 'adminPrivateLessonActionDeclineUserDesc',
-            async (id) => await plRep.getPrivateLesson(id), async (id) => await plRep.updatePrivateLesson(id, Status.Declined), 
+            Status.Declined, async (id) => await plRep.getPrivateLesson(id), async (id, uid) => await plRep.updatePrivateLesson(id, Status.Declined, uid), 
             async (chatId, message) => await notificationService.notifyUser(chatId, message));
 
         const adminEvents = new AdminEvents('adminEventsDesc', 'adminEventsCommand', async () => await eventRep.getOwnerEventsParticipations());

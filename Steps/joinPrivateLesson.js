@@ -1,4 +1,5 @@
 const Step = require('./step.js');
+const { getTimeString } = require('../calendar.js');
 const { Status } = require('../enums.js');
 
 class JoinPrivateLesson extends Step {
@@ -17,7 +18,7 @@ class JoinPrivateLesson extends Step {
 
     async setMessage() {
         if(this.freeSlot) {
-            this.message =  this.message + `- ${this.freeSlot.time}`;
+            this.message =  this.message + `- ${getTimeString(this.freeSlot.time, this.freeSlot.countOfHours)}`;
         }
         else {
             return false;
@@ -26,7 +27,7 @@ class JoinPrivateLesson extends Step {
 
     async setPrivateMessage() {
         const meta = this.getMetaFunc(this.context.from.username, this.readMetaField);
-        this.privateMessage =  `Dancer ${this.context.from.username} wants to attend you private class ${meta}- ${this.freeSlot.time}`;
+        this.privateMessage = `Dancer ${this.context.from.username} wants to attend you private class ${meta}- ${getTimeString(this.freeSlot.time, this.freeSlot.countOfHours)}`;
     }
 
     async finish() {
