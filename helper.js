@@ -50,26 +50,41 @@ extractOwnerClassParticipant =(classes) => {
 }
 
 extractFreeSlotsForPrivateLessons = (slots) => {
-    return slots.filter(x => !x[3] && x[0]).map(x => ({
+    return slots.filter(x => !x[4] && x[0]).map(x => ({
         id: x[0],
         time: x[1],
-        countOfHours: x[2],
-        dance: x[3],
+        place: x[2],
+        countOfHours: x[3],
+        dance: x[4]
+    }));
+}
+
+extractPrivateLessons = (lessons) => {
+    return lessons.filter(x => !x[4]).map(x => ({
+        id: x[0],
+        time: x[1],
+        place: x[2],
+        countOfHours: x[3]
     }));
 }
 
 extractOwnerPrivateLessons = (lessons) => {
-    return lessons.filter(x => x[3] && x[0] && x[6] !== Status.Declined).map(x => ({
+    return lessons.filter(x => x[4] && x[0] && x[8] !== Status.Declined).map(x => ({
         id: x[0],
         time: x[1],
-        countOfHours: x[2],
-        dance: x[3],
-        username: x[4],
-        date: x[5],
-        chatId: x[6],
-        status: x[7],
-        uid: x[8]
+        place: x[2],
+        countOfHours: x[3],
+        dance: x[4],
+        username: x[5],
+        date: x[6],
+        chatId: x[7],
+        status: x[8],
+        uid: x[9]
     }));
+}
+
+extractPrivateLesson = (lessons) => {
+    return extractPrivateLessons(lessons)[0];
 }
 
 extractOwnerPrivateLesson = (lessons) => {
@@ -119,6 +134,8 @@ module.exports = {
     extractOwnerClassParticipant,
     extractOwnerPrivateLessons,
     extractOwnerPrivateLesson,
+    extractPrivateLessons,
+    extractPrivateLesson,
     extractSpreedsheetData,
     extractFreeSlotsForPrivateLessons,
     extractEvents,

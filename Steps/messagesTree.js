@@ -13,6 +13,7 @@ const Dance = require('./dance.js');
 const Topic = require('./topic.js');
 const GroupLessons = require('./groupLessons.js');
 const PrivateLessons = require('./privateLessons.js');
+const PrivateLesson = require('./privateLesson.js');
 const JoinGroupLesson = require('./joinGroupLesson.js');
 const JoinPrivateLesson = require('./joinPrivateLesson.js');
 const Events = require('./events.js');
@@ -149,6 +150,8 @@ class MessagesTree {
         const joinPrivateLatinoGroovePartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.LatinoGroovePartner, async () => await plRep.getPrivateLessons());
         const joinPrivateLatinoGrooveMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.LatinoGrooveMix, async () => await plRep.getPrivateLessons());
 
+        const privateClass = new PrivateLesson('privateLessonDesc', 'privateLessonCommand', async (id) => await plRep.getFreeSlot(id));
+
         const joinPrivateClasses = new JoinPrivateLesson('joinPrivateLessonDesc', 'JPL', (username, field) => metaData.getMetadata(username, field), async () => await plRep.getPrivateLessons(),
          async (lessonId, dance, username, chatId, status) => await plRep.participatePrivateLesson(lessonId, dance, username, chatId, status));
         
@@ -169,9 +172,9 @@ class MessagesTree {
         salsaPartnerClasses.nextSteps =[joinSalsaPartnerClasses];
         salsaMixClasses.nextSteps =[joinSalsaMixClasses];
 
-        joinPrivateSalsaSoloClasses.nextSteps = [joinPrivateClasses];
-        joinPrivateSalsaPartnerClasses.nextSteps = [joinPrivateClasses];
-        joinPrivateSalsaMixClasses.nextSteps = [joinPrivateClasses];
+        joinPrivateSalsaSoloClasses.nextSteps = [privateClass];
+        joinPrivateSalsaPartnerClasses.nextSteps = [privateClass];
+        joinPrivateSalsaMixClasses.nextSteps = [privateClass];
 
         bachataDance.nextSteps = [bachataSoloTopic, bachataPartnerTopic, bachataMixTopic];
         bachataSoloTopic.nextSteps = [bachataSoloClasses, joinPrivateBachataSoloClasses, events];
@@ -182,9 +185,9 @@ class MessagesTree {
         bachataPartnerClasses.nextSteps =[joinBachataPartnerClasses];
         bachataMixClasses.nextSteps =[joinBachataMixClasses];
 
-        joinPrivateBachataSoloClasses.nextSteps = [joinPrivateClasses];
-        joinPrivateBachataPartnerClasses.nextSteps = [joinPrivateClasses];
-        joinPrivateBachataMixClasses.nextSteps = [joinPrivateClasses];
+        joinPrivateBachataSoloClasses.nextSteps = [privateClass];
+        joinPrivateBachataPartnerClasses.nextSteps = [privateClass];
+        joinPrivateBachataMixClasses.nextSteps = [privateClass];
 
         afroHouseDance.nextSteps = [afroHouseSoloTopic, afroHousePartnerTopic, afroHouseMixTopic];
         afroHouseSoloTopic.nextSteps = [afroHouseSoloClasses, joinPrivateAfroHouseSoloClasses, events];
@@ -195,9 +198,9 @@ class MessagesTree {
         afroHousePartnerClasses.nextSteps =[joinAfroHousePartnerClasses];
         afroHouseMixClasses.nextSteps =[joinAfroHouseMixClasses];
 
-        joinPrivateAfroHouseSoloClasses.nextSteps = [joinPrivateClasses];
-        joinPrivateAfroHousePartnerClasses.nextSteps = [joinPrivateClasses];
-        joinPrivateAfroHouseMixClasses.nextSteps = [joinPrivateClasses];
+        joinPrivateAfroHouseSoloClasses.nextSteps = [privateClass];
+        joinPrivateAfroHousePartnerClasses.nextSteps = [privateClass];
+        joinPrivateAfroHouseMixClasses.nextSteps = [privateClass];
 
         latinoGrooveDance.nextSteps = [latinoGrooveSoloTopic, latinoGroovePartnerTopic, latinoGrooveMixTopic];
         latinoGrooveSoloTopic.nextSteps = [latinoGrooveSoloClasses, joinPrivateLatinoGrooveSoloClasses, events];
@@ -208,10 +211,11 @@ class MessagesTree {
         latinoGroovePartnerClasses.nextSteps =[joinLatinoGroovePartnerClasses];
         latinoGrooveMixClasses.nextSteps =[joinLatinoGrooveMixClasses];
 
-        joinPrivateLatinoGrooveSoloClasses.nextSteps = [joinPrivateClasses];
-        joinPrivateLatinoGroovePartnerClasses.nextSteps = [joinPrivateClasses];
-        joinPrivateLatinoGrooveMixClasses.nextSteps = [joinPrivateClasses];
+        joinPrivateLatinoGrooveSoloClasses.nextSteps = [privateClass];
+        joinPrivateLatinoGroovePartnerClasses.nextSteps = [privateClass];
+        joinPrivateLatinoGrooveMixClasses.nextSteps = [privateClass];
 
+        privateClass.nextSteps = [joinPrivateClasses];
         //#endregion
 
         // #region Admin

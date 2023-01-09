@@ -1,9 +1,12 @@
 {
 	"greeting": "Hello! I am JJ bot- you can ask me",
 	"start": "Start",
+	"join": "Join",
 	"wrongCommand": "Message error",
 	"privateLessonsDesc": "Private lessons",
 	"privateLessonsCommand": "Privates",
+	"privateLessonDesc": "Private lesson",
+	"privateLessonCommand": "uPLView",
 	"joinPrivateLessonDesc": "JJ received your message, he will contact you soon",
 	"joinPrivateLessonCommand": "Private",
 	"eventsDesc": "Events",
