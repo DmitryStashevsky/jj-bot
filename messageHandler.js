@@ -1,7 +1,7 @@
 const i18n = require('./i18n.config.js');
 var {Buffer} = require('node:buffer');
 const{ metaData }  = require('./cache.config.js');
-const {getCalendarFile} = require('./calendar.js');
+const {calendar} = require('./calendar.js');
 
 const MessagesTree = require('./Steps/messagesTree.js');
 const notificationService = require('./notificationService.js');
@@ -10,8 +10,9 @@ class MessageHandler {
 
     async onMessage(bot, chatId, language, text, from, msg) {
             i18n.init(language);
-
+            calendar.init(language);
             notificationService.init(bot);
+            
             await notificationService.log(msg);
 
             const messagesTree = new MessagesTree(metaData);

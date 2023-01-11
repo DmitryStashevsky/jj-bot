@@ -1,5 +1,12 @@
-var Readable = require('stream').Readable
+const Readable = require('stream').Readable
+const moment = require('moment');
+require('moment/locale/en-gb.js'); 
+require('moment/locale/ru.js');
 const { ICalendar } = require('datebook');
+
+const calendar = {
+    init: (locale) => moment.locale(locale)
+}
 
 getCalendarEvent = (title, location, startDate, endDate, uid) => {
 
@@ -37,23 +44,24 @@ getCalendarFile = (content) => {
     return readable;   
 }
 
-getTimeString = (startDate, countOfHours) => {
-    const startTime = new Date(startDate);
-    const endTime = new Date(startDate);
-    endTime.setHours(endTime.getHours() + parseInt(countOfHours));
-    return `${startTime.toLocaleString()} - ${endTime.toLocaleString()}`;
+getTimeString = (time, countOfHours) => {
+    const startDate = moment.parseZone(time);
+    const endDate = moment.parseZone(time);
+    endDate.add(countOfHours, 'hours');
+    return `${startDate.format('LLL')} - ${endDate.format('LLL')}`;
 }
 
 getTime = (time, countOfHours) => {
-    const startDate = new Date(time);
-    const endDate = new Date(time);
-    endDate.setHours(endDate.getHours() + parseInt(countOfHours));
-    return {startDate, endDate};
+    const startDate = moment.parseZone(time);
+    const endDate = moment.parseZone(time);
+    endDate.add(countOfHours, 'hours');
+    return {startDate: startDate.toDate(), endDate: endDate.toDate()};
 }
 
 module.exports = {
     getCalendarEvent,
     getCalendarFile,
     getTimeString,
-    getTime
+    getTime,
+    calendar
 }
