@@ -12,7 +12,6 @@ class MessageHandler {
             i18n.init(language);
             calendar.init(language);
             notificationService.init(bot);
-            
             await notificationService.log(msg);
 
             const messagesTree = new MessagesTree(metaData);
@@ -22,8 +21,16 @@ class MessageHandler {
                 try {
                     const context = { chatId: chatId, from: from, message: msg, text: text };
                     await currentStep.handleStep(context);
-                
-                    await bot.sendMessage(chatId, currentStep.message, currentStep.buttons);
+
+                    if (msg.from.is_bot) {
+                        await bot.editMessageText(currentStep.message, {
+                            chat_id: chatId,
+                            message_id: msg.message_id,
+                            reply_markup:  {inline_keyboard: currentStep.buttons},
+                        });
+                    } else {
+                        await bot.sendMessage(chatId, currentStep.message, {reply_markup: {inline_keyboard: currentStep.buttons}});
+                    }
 
                     if (currentStep.additionalMessage) {
                         await bot.sendMessage(chatId, currentStep.additionalMessage);

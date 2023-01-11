@@ -24,16 +24,10 @@ class PrivateLesson extends Step {
     }
 
     async setButtons() {
-        const options = [[{
+        this.buttons = [[{
             text: i18n.__('join'),
             callback_data: `JPL - ${this.privateLesson.id}`,
         }]];
-
-        this.buttons =  {
-            "reply_markup": {
-                "inline_keyboard": options
-            }
-        }
     }
 }
 module.exports = PrivateLesson;

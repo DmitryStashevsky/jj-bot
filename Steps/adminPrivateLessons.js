@@ -13,18 +13,12 @@ class AdminPrivateLessons extends Step {
 
     async setButtons() {
         if (this.privateLessons.length) {
-            const options = [];
             for (let i = 0; i < this.privateLessons.length; i++) {
                 const lesson = this.privateLessons[i];
-                options.push([{
+                this.buttons.push([{
                     text: `${i+1} - ${lesson.username} - ${lesson.status} - ${getTimeString(lesson.time, lesson.countOfHours)}`,
                     callback_data: `${this.nextSteps[0].command} ${lesson.id}`,
                 }]);
-            }
-            this.buttons =  {
-                "reply_markup": {
-                    "inline_keyboard": options
-                }
             }
         }
     }

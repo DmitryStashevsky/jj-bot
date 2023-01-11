@@ -25,24 +25,18 @@ class AdminPrivateLesson extends Step {
     }
 
     async setButtons() {
-        const options = [];
         if (this.privateLesson.status == Status.Pending || this.privateLesson.status == Status.Approved) {
-            options.push([{
+            this.buttons.push([{
                 text: i18n.__('decline'),
                 callback_data: `aPLD - ${this.privateLesson.id}`,
             }]);
         }
         
         if (this.privateLesson.status == Status.Pending) {
-            options.push([{
+            this.buttons.push([{
                 text: i18n.__('approve'),
                 callback_data: `aPLA - ${this.privateLesson.id}`,
             }])
-        }
-        this.buttons =  {
-            "reply_markup": {
-                "inline_keyboard": options
-            }
         }
     }
 }

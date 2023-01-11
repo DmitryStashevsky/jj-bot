@@ -25,21 +25,16 @@ class AdminEvent extends Step {
     }
 
     async setButtons() {
-        const options = [[{
+        this,this.buttons.push([{
             text: i18n.__('decline'),
             callback_data: `aED - ${this.eventParticipation.id} [${this.eventParticipation.type}]`,
-        }]];
+        }]);
 
         if (this.eventParticipation.status == Status.Pending) {
-            options.push([{
+            this.buttons.push([{
                 text: i18n.__('approve'),
                 callback_data: `aEA - ${this.eventParticipation.id} [${this.eventParticipation.type}]`,
             }])
-        }
-        this.buttons =  {
-            "reply_markup": {
-                "inline_keyboard": options
-            }
         }
     }
 }

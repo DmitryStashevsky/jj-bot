@@ -20,17 +20,11 @@ class Event extends Step {
 
     async setButtons() {
         if (this.events.length) {
-            const options = [];
             for (let i = 0; i < this.events.length; i++) {
-                options.push([{
+                this.buttons.push([{
                     text: `${i+1} - ${this.events[i].name}`,
                     callback_data: `${this.nextSteps[0].command} ${this.events[i].id}`,
                 }]);
-            }
-            this.buttons = {
-                "reply_markup": {
-                    "inline_keyboard": options
-                }
             }
         }
     }

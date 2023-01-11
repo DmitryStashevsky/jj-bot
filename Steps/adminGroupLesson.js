@@ -25,21 +25,16 @@ class AdminGroupsLesson extends Step {
     }
 
     async setButtons() {
-        const options = [[{
+        this.buttons.push([{
             text: i18n.__('decline'),
             callback_data: `aED - ${this.groupParticipation.id} [${this.groupParticipation.type}]`,
-        }]];
+        }]);
 
         if (this.groupParticipation.status == Status.Pending) {
-            options.push([{
+            this.buttons.push([{
                 text: i18n.__('approve'),
                 callback_data: `aEA - ${this.groupParticipation.id} [${this.groupParticipation.type}]`,
             }])
-        }
-        this.buttons =  {
-            "reply_markup": {
-                "inline_keyboard": options
-            }
         }
     }
 }

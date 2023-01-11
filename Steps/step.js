@@ -5,7 +5,7 @@ class Step {
         this.message = i18n.__(message);
         this.command = i18n.__(command);
         this.additionalMessage = '';
-        this.buttons = {};
+        this.buttons = [];
         this.privateMessage;
         this.userMessage;
         this.fileMessage;
@@ -39,22 +39,14 @@ class Step {
 
     setButtons() {
         if (this.nextSteps.length) {
-            const options = [];
             for (let step of this.nextSteps) {
-                options.push([{
+                this.buttons.push([{
                     text: step.command,
                     callback_data: step.command,
                     }]
                 );
             }
-            this.buttons = {
-                reply_markup: {
-                    inline_keyboard: options
-                }
-            }
         }
-
-        return null;
     }
 
     setMetaMessage() {

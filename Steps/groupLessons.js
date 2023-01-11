@@ -19,18 +19,12 @@ class GroupLessons extends Step {
 
     async setButtons() {
         if (this.nextSteps.length) {
-            const options = [];
             for (let i = 0; i < this.lessons.length; i++) {
                 const lesson = this.lessons[i];
-                options.push([{
+                this.buttons.push([{
                     text: `${i+1} - ${lesson.name} - ${lesson.time} -${lesson.place}`,
                     callback_data: `${this.nextSteps[0].command} ${lesson.id}`,
                 }]);
-            }
-            this.buttons = {
-                "reply_markup": {
-                    "inline_keyboard": options
-                }
             }
         }
     }

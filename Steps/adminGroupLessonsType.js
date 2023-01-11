@@ -8,7 +8,7 @@ class AdminGroupLessonsType extends Step {
     }
 
     async setButtons() {
-        const options = [[{
+        this.buttons = [[{
             text: i18n.__('salsaDesc'),
             callback_data: `AGList 1 [${Meta.SalsaSolo},${Meta.SalsaPartner},${Meta.SalsaMix}]`,
         }],
@@ -25,12 +25,6 @@ class AdminGroupLessonsType extends Step {
             callback_data: `AGList 4 [${Meta.AfroHouseSolo},${Meta.AfroHousePartner},${Meta.AfroHouseMix}]`,
         }]
         ];
-        
-        this.buttons =  {
-            "reply_markup": {
-                "inline_keyboard": options
-            }
-        }
     }
 }
 

@@ -12,19 +12,14 @@ class AdminEvents extends Step {
 
     async setButtons() {
         if (this.events.length) {
-            const options = [];
             for (let i = 0; i < this.events.length; i++) {
                 const event = this.events[i];
-                options.push([{
+                this,this.buttons.push([{
                     text: `${i+1} - ${event.username} - ${event.status} - ${event.name}`,
                     callback_data: `${this.nextSteps[0].command} ${event.id} [${event.type}]`,
                 }]);
             }
-            this.buttons =  {
-                "reply_markup": {
-                    "inline_keyboard": options
-                }
-            }
+            this
         }
     }
 }

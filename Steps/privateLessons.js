@@ -22,18 +22,12 @@ class PrivateLessons extends Step {
 
     async setButtons() {
         if (this.nextSteps.length) {
-            const options = [];
             for (let i = 0; i < this.lessons.length; i++) {
                 const lesson = this.lessons[i];
-                options.push([{
+                this.buttons.push([{
                     text: `${i+1} - ${getTimeString(lesson.time, lesson.countOfHours)}`,
                     callback_data: `${this.nextSteps[0].command} ${lesson.id}`,
                 }]);
-            }
-            this.buttons =  {
-                "reply_markup": {
-                    "inline_keyboard": options
-                }
             }
         }
     }
