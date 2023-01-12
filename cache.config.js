@@ -25,7 +25,11 @@ class MetaData {
    
     getMetadata(id, field) {
         const data = this.cache.get(id);
-        return field ? data[field] : data;
+        if (data) {
+            return field ? data[field] : data;
+        }
+
+        return null;
     }
 
     setMetadata(id, data, field, value) {

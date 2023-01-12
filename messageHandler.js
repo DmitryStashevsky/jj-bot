@@ -2,6 +2,7 @@ const i18n = require('./i18n.config.js');
 var {Buffer} = require('node:buffer');
 const{ metaData }  = require('./cache.config.js');
 const {calendar} = require('./calendar.js');
+const {handleBackButton} = require('./back-button.handler.js');
 
 const MessagesTree = require('./Steps/messagesTree.js');
 const notificationService = require('./notificationService.js');
@@ -21,6 +22,11 @@ class MessageHandler {
                 try {
                     const context = { chatId: chatId, from: from, message: msg, text: text };
                     await currentStep.handleStep(context);
+
+                    currentStep.buttons.push([{
+                        text: 'Back',
+                        callback_data: handleBackButton(from.username, currentStep.constructor.name, text)
+                    }]);
 
                     if (msg.from.is_bot) {
                         await bot.editMessageText(currentStep.message, {
