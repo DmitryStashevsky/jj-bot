@@ -17,8 +17,13 @@ extractClasses = (classes) => {
         id: x[0],
         name: x[1],
         time: x[2],
-        place: x[3],
+        hours: x[3],
+        place: x[4],
     }));
+}
+
+extractClass = (lessons) => {
+    return extractClasses(lessons)[0];
 }
 
 extractFreeSlotsClassesParticipants = (classes) => {
@@ -129,6 +134,7 @@ extractEventsParticipantsList = (participants) => {
 
 module.exports = {
     extractClasses,
+    extractClass,
     extractFreeSlotsClassesParticipants,
     extractOwnerClassesParticipants,
     extractOwnerClassParticipant,

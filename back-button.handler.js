@@ -12,7 +12,7 @@ handleBackButton = (username, stepName, stepCommand) => {
         previosMessages = previosMessages.slice(0, indexOfCircleStep);
     }
 
-    let previosMessage = previosMessages.length !==0 ? previosMessages[previosMessages.length - 1] : null;
+    let previosMessage = previosMessages.length !== 0 ? previosMessages[previosMessages.length - 1] : null;
 
     previosMessages.push({stepName, stepCommand});
     metaData.setMetadata(username, null, previosMessagesKey, previosMessages);

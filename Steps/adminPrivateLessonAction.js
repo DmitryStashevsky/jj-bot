@@ -12,6 +12,7 @@ class AdminPrivateLessonAction extends Step {
         this.updatePrivateLessonFunc = updatePrivateLessonFunc;
         this.notifyUserFunc = notifyUserFunc;
         this.isDynamicStep = true;
+        this.isBackAvailable = false;
     }
 
     async init () {

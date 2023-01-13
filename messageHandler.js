@@ -22,11 +22,13 @@ class MessageHandler {
                 try {
                     const context = { chatId: chatId, from: from, message: msg, text: text };
                     await currentStep.handleStep(context);
-
-                    currentStep.buttons.push([{
-                        text: 'Back',
-                        callback_data: handleBackButton(from.username, currentStep.constructor.name, text)
-                    }]);
+                    
+                    if(currentStep.isBackAvailable) {
+                        currentStep.buttons.push([{
+                            text: i18n.__('back'),
+                            callback_data: handleBackButton(from.username, currentStep.constructor.name, text)
+                        }]);
+                    }
 
                     if (msg.from.is_bot) {
                         await bot.editMessageText(currentStep.message, {

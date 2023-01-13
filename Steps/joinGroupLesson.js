@@ -2,18 +2,21 @@ const Step = require('./step.js');
 const { Status } = require('../enums.js');
 
 class JoinGroupLesson extends Step {
-    constructor(message, command, getClassesFunc, getClassesParticipantsFunc, participateClassFunc) {
+    constructor(message, command, getClassFunc, getClassesParticipantsFunc, participateClassFunc) {
         super(message, command);
-        this.getClassesFunc = getClassesFunc;
+        this.getClassFunc = getClassFunc;
         this.getClassesParticipantsFunc = getClassesParticipantsFunc;
         this.participateClassFunc = participateClassFunc;
         this.isDynamicStep = true;
+        this.isBackAvailable = false;
     }
 
     async init() {
-        this.classes = await this.getClassesFunc();
-        this.class = await this.getClass(this.context.text);
-        this.participants = await this.getClassesParticipantsFunc();
+        const id = this.context.text.match(/(\d+)/)[0];
+        const type = this.context.text.match(/\[([^)]+)\]/)[1];
+        this.type = type;
+        this.class = await this.getClassFunc(id, type);
+        this.participants = await this.getClassesParticipantsFunc(type);
     }
 
     async setMessage() {
@@ -31,21 +34,7 @@ class JoinGroupLesson extends Step {
 
     async finish() {
         const rowNumber = this.participants.filter(x => !x.classId)[0].id
-        await this.participateClassFunc(rowNumber, this.class.id, this.class.name, this.context.from.username, this.context.chatId, Status.Pending);
-    }
-
-    async getClass(text) {
-        const classId = this.getClassId(text);
-        const lesson = this.classes.filter(x => x.id === classId)[0];
-        return lesson;
-    }
-
-    getClassId(text) {
-        const matches = text.match(/(\d+)/);
-        if (!matches) {
-            return null;
-        }
-        return matches[0];
+        await this.participateClassFunc(this.type, rowNumber, this.class.id, this.class.name, this.context.from.username, this.context.chatId, Status.Pending);
     }
 }
 module.exports = JoinGroupLesson;

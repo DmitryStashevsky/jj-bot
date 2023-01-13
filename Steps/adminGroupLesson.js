@@ -27,13 +27,13 @@ class AdminGroupsLesson extends Step {
     async setButtons() {
         this.buttons.push([{
             text: i18n.__('decline'),
-            callback_data: `aED - ${this.groupParticipation.id} [${this.groupParticipation.type}]`,
+            callback_data: `aGLD - ${this.groupParticipation.id} [${this.groupParticipation.type}]`,
         }]);
 
         if (this.groupParticipation.status == Status.Pending) {
             this.buttons.push([{
                 text: i18n.__('approve'),
-                callback_data: `aEA - ${this.groupParticipation.id} [${this.groupParticipation.type}]`,
+                callback_data: `aGLA - ${this.groupParticipation.id} [${this.groupParticipation.type}]`,
             }])
         }
     }

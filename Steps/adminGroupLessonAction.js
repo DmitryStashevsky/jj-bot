@@ -9,6 +9,7 @@ class AdminGroupLessonAction extends Step {
         this.updateClassParticipationFunc = updateClassParticipationFunc;
         this.notifyUserFunc = notifyUserFunc;
         this.isDynamicStep = true;
+        this.isBackAvailable = false;
     }
 
     async init () {
@@ -22,7 +23,7 @@ class AdminGroupLessonAction extends Step {
     }
 
     async finish() {
-        await this.updateClassParticipationFunc(this.eventParticipation.id, this.classParticipation.type);
+        await this.updateClassParticipationFunc(this.classParticipation.id, this.classParticipation.type);
         await this.notifyUserFunc(this.classParticipation.chatId, this.userMessage)
     }
 }

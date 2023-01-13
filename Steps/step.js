@@ -13,6 +13,7 @@ class Step {
         this.nextSteps = [];
         this.messageToJj;
         this.isDynamicStep = false;
+        this.isBackAvailable = true;
     }
 
     async handleStep(context) {
