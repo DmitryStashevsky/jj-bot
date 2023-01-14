@@ -2,7 +2,7 @@ const Step = require('./step.js');
 const { Status } = require('../enums.js');
 const {extractNumber, extractString} = require('../regex.handler.js');
 
-class JoinGroupLesson extends Step {
+class GroupLessonAction extends Step {
     constructor(message, command, getClassFunc, getClassesParticipantsFunc, participateClassFunc) {
         super(message, command);
         this.getClassFunc = getClassFunc;
@@ -38,4 +38,4 @@ class JoinGroupLesson extends Step {
         await this.participateClassFunc(this.type, rowNumber, this.class.id, this.class.name, this.context.from.username, this.context.chatId, Status.Pending);
     }
 }
-module.exports = JoinGroupLesson;
+module.exports = GroupLessonAction;

@@ -2,7 +2,7 @@ const Step = require('./step.js');
 const { Status } = require('../enums.js');
 const { extractNumber } = require('../regex.handler.js');
 
-class JoinEvent extends Step {
+class EventAction extends Step {
     constructor(message, command, getMetaFunc, getEventsFunc, getEventsParticipantsFunc, participateEventFunc) {
         super(message, command);
         this.getMetaFunc = getMetaFunc;
@@ -54,4 +54,4 @@ class JoinEvent extends Step {
         return matches[0];
     }
 }
-module.exports = JoinEvent;
+module.exports = EventAction;

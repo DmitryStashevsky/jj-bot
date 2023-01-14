@@ -13,13 +13,13 @@ const Dance = require('./dance.js');
 const Topic = require('./topic.js');
 const GroupLessons = require('./groupLessons.js');
 const GroupLesson = require('./groupLesson.js');
-const JoinGroupLesson = require('./joinGroupLesson.js');
+const GroupLessonAction = require('./groupLessonAction.js');
 const PrivateLessons = require('./privateLessons.js');
 const PrivateLesson = require('./privateLesson.js');
-const JoinPrivateLesson = require('./joinPrivateLesson.js');
+const PrivateLessonAction = require('./privateLessonAction.js');
 const Events = require('./events.js');
 const Event = require('./event.js');
-const JoinEvent = require('./joinEvent.js');
+const EventAction = require('./eventAction.js');
 
 const Admin = require('./admin.js');
 const AdminGroupLessonsType = require('./adminGroupLessonsType.js');
@@ -43,7 +43,7 @@ class MessagesTree {
         const festivalsClasses = new Event('festivalsDesc', 'festivalsCommand', Meta.Festival, async () => await eventRep.getEvents(Meta.Festival));
         const showsClasses = new Event('showsDesc', 'showsCommand', Meta.Show, async () => await eventRep.getEvents(Meta.Show));
         
-        const joinEvent = new JoinEvent('joinEventDesc', 'joinEventCommand', (username, field) => metaData.getMetadata(username, field), 
+        const joinEvent = new EventAction('joinEventDesc', 'joinEventCommand', (username, field) => metaData.getMetadata(username, field), 
             async (eventType) => await eventRep.getEvents(eventType), 
             async (eventType) => await eventRep.getEventsParticipants(eventType), 
             async (eventType, rowNumber, eventId, eventName, username, chatId, status, type) => await eventRep.participateEvent(eventType, rowNumber, eventId, eventName, username, chatId, status, type));
@@ -105,14 +105,14 @@ class MessagesTree {
         const groupClass = new GroupLesson('groupLessonDesc', 'groupLessonommand',
             async (id, type) => await classRep.getClass(id ,type));
 
-        const joinGroupClass = new JoinGroupLesson('joinGroupLessonDesc', 'joinGroupLessonCommand',
+        const joinGroupClass = new GroupLessonAction('joinGroupLessonDesc', 'joinGroupLessonCommand',
             async (id, type) => await classRep.getClass(id ,type),
             async (type) => await classRep.getClassesParticipants(type), 
             async (type, rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(type, rowNumber, classId, className, username, chatId, status));
 
         const privateClass = new PrivateLesson('privateLessonDesc', 'privateLessonCommand', async (id) => await plRep.getFreeSlot(id));
 
-        const joinPrivateClasses = new JoinPrivateLesson('joinPrivateLessonDesc', 'JPL', (username, field) => metaData.getMetadata(username, field),  async (id) => await plRep.getFreeSlot(id),
+        const joinPrivateClasses = new PrivateLessonAction('joinPrivateLessonDesc', 'JPL', (username, field) => metaData.getMetadata(username, field),  async (id) => await plRep.getFreeSlot(id),
             async (lessonId, dance, username, chatId, status) => await plRep.participatePrivateLesson(lessonId, dance, username, chatId, status));
         
         events.nextSteps = [masterClasses, festivalsClasses, showsClasses];

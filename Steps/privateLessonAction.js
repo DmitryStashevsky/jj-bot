@@ -3,7 +3,7 @@ const { getTimeString } = require('../calendar.js');
 const { Status } = require('../enums.js');
 const {extractNumber} = require('../regex.handler.js');
 
-class JoinPrivateLesson extends Step {
+class PrivateLessonAction extends Step {
     constructor(message, command, getMetaFunc, getPrivateLessonFunc, participatePrivateLessonFunc) {
         super(message, command);
         this.getMetaFunc = getMetaFunc;
@@ -38,4 +38,4 @@ class JoinPrivateLesson extends Step {
         await this.participatePrivateLessonFunc(this.freeSlot.id, meta, this.context.from.username, this.context.chatId, Status.Pending);
     }
 }
-module.exports = JoinPrivateLesson;
+module.exports = PrivateLessonAction;
