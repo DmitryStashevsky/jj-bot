@@ -1,6 +1,7 @@
 const Step = require('./step.js');
 const { Status } = require('../enums.js');
 const i18n = require('../i18n.config.js');
+const {extractNumber, extractString} = require('../regex.handler.js');
 
 class AdminEvent extends Step {
     constructor(message, command, getEventParticipationFunc) {
@@ -10,8 +11,8 @@ class AdminEvent extends Step {
     }
 
     async init () {
-        const id = this.context.text.match(/(\d+)/)[0];
-        const type = this.context.text.match(/\[([^)]+)\]/)[1]
+        const id = extractNumber(this.context.text);
+        const type = extractString(this.context.text);
         this.eventParticipation = await this.getEventParticipationFunc(id, type);
     }
 

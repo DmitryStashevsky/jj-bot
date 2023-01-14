@@ -1,5 +1,6 @@
 const Step = require('./step.js');
 const { Status } = require('../enums.js');
+const {extractNumber, extractString} = require('../regex.handler.js');
 
 class JoinGroupLesson extends Step {
     constructor(message, command, getClassFunc, getClassesParticipantsFunc, participateClassFunc) {
@@ -12,8 +13,8 @@ class JoinGroupLesson extends Step {
     }
 
     async init() {
-        const id = this.context.text.match(/(\d+)/)[0];
-        const type = this.context.text.match(/\[([^)]+)\]/)[1];
+        const id = extractNumber(this.context.text);
+        const type = extractString(this.context.text);
         this.type = type;
         this.class = await this.getClassFunc(id, type);
         this.participants = await this.getClassesParticipantsFunc(type);

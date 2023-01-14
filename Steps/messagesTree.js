@@ -112,8 +112,8 @@ class MessagesTree {
 
         const privateClass = new PrivateLesson('privateLessonDesc', 'privateLessonCommand', async (id) => await plRep.getFreeSlot(id));
 
-        const joinPrivateClasses = new JoinPrivateLesson('joinPrivateLessonDesc', 'JPL', (username, field) => metaData.getMetadata(username, field), async () => await plRep.getPrivateLessons(),
-         async (lessonId, dance, username, chatId, status) => await plRep.participatePrivateLesson(lessonId, dance, username, chatId, status));
+        const joinPrivateClasses = new JoinPrivateLesson('joinPrivateLessonDesc', 'JPL', (username, field) => metaData.getMetadata(username, field),  async (id) => await plRep.getFreeSlot(id),
+            async (lessonId, dance, username, chatId, status) => await plRep.participatePrivateLesson(lessonId, dance, username, chatId, status));
         
         events.nextSteps = [masterClasses, festivalsClasses, showsClasses];
 

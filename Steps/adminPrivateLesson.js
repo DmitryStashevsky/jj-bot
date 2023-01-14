@@ -2,6 +2,7 @@ const Step = require('./step.js');
 const { getTimeString } = require('../calendar.js');
 const { Status } = require('../enums.js');
 const i18n = require('../i18n.config.js');
+const {extractNumber} = require('../regex.handler.js');
 
 class AdminPrivateLesson extends Step {
     constructor(message, command, getPrivateLessonFunc) {
@@ -11,8 +12,8 @@ class AdminPrivateLesson extends Step {
     }
 
     async init () {
-        const matches = this.context.text.match(/(\d+)/);
-        this.privateLesson = await this.getPrivateLessonFunc(matches[0]);
+        const id = extractNumber(this.context.text);
+        this.privateLesson = await this.getPrivateLessonFunc(id);
     }
 
     async setMessage() {

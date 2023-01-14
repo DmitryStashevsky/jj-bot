@@ -1,5 +1,6 @@
 const Step = require('./step.js');
 const { Status } = require('../enums.js');
+const { extractNumber } = require('../regex.handler.js');
 
 class JoinEvent extends Step {
     constructor(message, command, getMetaFunc, getEventsFunc, getEventsParticipantsFunc, participateEventFunc) {
@@ -15,8 +16,9 @@ class JoinEvent extends Step {
 
     async init() {
         this.meta = this.getMetaFunc(this.context.from.username, this.readMetaField);
+        const id = extractNumber(this.context.text);
         this.events  = await this.getEventsFunc(this.meta);
-        this.event = await this.getEvent(this.context.text);
+        this.event = await this.getEvent(id);
         this.participants = await this.getEventsParticipantsFunc(this.meta);
     }
 

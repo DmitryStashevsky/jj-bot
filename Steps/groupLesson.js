@@ -1,6 +1,7 @@
 const Step = require('./step.js');
 const { getTimeString } = require('../calendar.js');
 const i18n = require('../i18n.config.js');
+const {extractNumber, extractString} = require('../regex.handler.js');
 
 class GroupLesson extends Step {
     constructor(message, command, getGroupLessonFunc) {
@@ -10,8 +11,8 @@ class GroupLesson extends Step {
     }
 
     async init() {
-        const id = this.context.text.match(/(\d+)/)[0];
-        const type = this.context.text.match(/\[([^)]+)\]/)[1]
+        const id = extractNumber(this.context.text);
+        const type = extractString(this.context.text);
         this.type = type;
         this.groupLesson = await this.getGroupLessonFunc(id, type);
     }

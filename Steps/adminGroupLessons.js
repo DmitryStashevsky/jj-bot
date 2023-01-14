@@ -1,4 +1,5 @@
 const Step = require('./step.js');
+const {extractStrings} = require('../regex.handler.js');
 
 class AdminGroupLessons extends Step {
     constructor(message, command, getGroupsLessonsParticipationsFunc) {
@@ -8,8 +9,7 @@ class AdminGroupLessons extends Step {
     }
 
     async init () {
-        const data = this.context.text.match(/(?<=\[).+?(?=\])/g)[0];
-        const lessonTypes = data.split(',');
+        const lessonTypes = extractStrings(this.context.text);
         this.groups = await this.getGroupsLessonsParticipationsFunc(lessonTypes);
     } 
 
