@@ -4,8 +4,7 @@ const classRep = require('../repositories/classRepository.js');
 const eventRep = require('../repositories/eventRepository.js');
 const plRep = require('../repositories/privateLessonRepository.js');
 
-const config = require('config');
-const adminWhiteList = config.get('AdminWhiteList');
+const {hasAccessToAdmin} = require('../access.handler.js');
 const { Status } = require('../enums.js');
 
 const Dances = require('./dances.js');
@@ -235,7 +234,7 @@ class MessagesTree {
         const stringData = message.match(/\[([^)]+)\]/);
         const notEquals = digitData || stringData;
         let found = this.findStep(this.initialStep, message, !notEquals);
-        if (!found && adminWhiteList.includes(username)) {
+        if (!found && hasAccessToAdmin(username)) {
             found = this.findStep(this.adminStep, message, !notEquals);
         } 
                  

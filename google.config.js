@@ -11,7 +11,7 @@ const connectionFileName = config.get('GoogleConnectionFile');
 const CREDENTIALS_PATH = path.join( __dirname, connectionFileName);
 
 const getAuthClient = async () => {
-   const content = await readFile( CREDENTIALS_PATH )
+   const content = await readFile(CREDENTIALS_PATH)
        .catch( error => console.log('Error loading client secret file:', error));
 
    const { client_email, private_key } = JSON.parse( content );

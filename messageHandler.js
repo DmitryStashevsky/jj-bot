@@ -3,13 +3,14 @@ var {Buffer} = require('node:buffer');
 const{ metaData }  = require('./cache.config.js');
 const {calendar} = require('./calendar.js');
 const {handleBackButton} = require('./back-button.handler.js');
-
+const {hasAccessToBot} = require('./access.handler.js');
 const MessagesTree = require('./Steps/messagesTree.js');
 const notificationService = require('./notificationService.js');
 
 class MessageHandler {
 
     async onMessage(bot, chatId, language, text, from, msg) {
+        if (hasAccessToBot(from.username)) {
             i18n.init(language);
             calendar.init(language);
             notificationService.init(bot);
@@ -62,6 +63,7 @@ class MessageHandler {
             } else {
                 await bot.sendMessage(chatId, i18n.__('wrongCommand'));
             }
+        }
     }
 }
 
