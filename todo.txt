@@ -3,10 +3,11 @@ no entities for admin - message
 ASK JJ - if there are no classes or events?
 User notification in message handler
 Make steps for admin section optional loading
-make regex as helper
 split extract functions
 issue with readable stream for ics
 error - decline PL must have approve
 set buttons like function
 fix back buttons behavioral
 put no entity message to main entity
+make command not constant in buttons, add conditional showing
+move info from cache to command

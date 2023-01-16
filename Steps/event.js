@@ -1,33 +1,36 @@
 const Step = require('./step.js');
+const { getTimeString } = require('../calendar.js');
+const i18n = require('../i18n.config.js');
+const {extractNumber, extractString} = require('../regex.handler.js');
 
 class Event extends Step {
-    constructor(message, command, metaData, getEventsFunc) {
+    constructor(message, command, getEventFunc) {
         super(message, command);
-        this.metaData = metaData;
-        this.getEventsFunc = getEventsFunc;
-        this.metaField = 'event';
+        this.getEventFunc = getEventFunc;
+        this.isDynamicStep = true;
     }
 
-    async init () {
-        this.events = await this.getEventsFunc();
+    async init() {
+        const id = extractNumber(this.context.text);
+        const type = extractString(this.context.text);
+        this.type = type;
+        this.event = await this.getEventFunc(id, type);
     }
 
-    setAdditionalMessage()  {
-        if (this.events.length == 0) {
-            this.additionalMessage = i18n.__('noEventsDesc');
+    async setMessage() {
+        if(this.event) {
+            this.message =  this.message + ` - ${getTimeString(this.event.time, this.event.hours)} - ${this.event.place}`;
+        }
+        else {
+            return false;
         }
     }
 
     async setButtons() {
-        if (this.events.length) {
-            for (let i = 0; i < this.events.length; i++) {
-                this.buttons.push([{
-                    text: `${i+1} - ${this.events[i].name}`,
-                    callback_data: `${this.nextSteps[0].command} ${this.events[i].id}`,
-                }]);
-            }
-        }
+        this.buttons = [[{
+            text: i18n.__('join'),
+            callback_data: `${this.nextSteps[0].command} - ${this.event.id} [${this.type}]`,
+        }]];
     }
 }
-
 module.exports = Event;

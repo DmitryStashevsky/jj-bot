@@ -1,25 +1,23 @@
 const Step = require('./step.js');
 const { Status } = require('../enums.js');
-const { extractNumber } = require('../regex.handler.js');
+const { extractNumber, extractString } = require('../regex.handler.js');
 
 class EventAction extends Step {
-    constructor(message, command, getMetaFunc, getEventsFunc, getEventsParticipantsFunc, participateEventFunc) {
+    constructor(message, command, getEventFunc, getEventsParticipantsFunc, participateEventFunc) {
         super(message, command);
-        this.getMetaFunc = getMetaFunc;
-        this.getEventsFunc = getEventsFunc;
+        this.getEventFunc = getEventFunc;
         this.getEventsParticipantsFunc = getEventsParticipantsFunc;
         this.participateEventFunc = participateEventFunc;
-        this.readMetaField = 'event';
         this.isDynamicStep = true;
         this.isBackAvailable = false;
     }
 
     async init() {
-        this.meta = this.getMetaFunc(this.context.from.username, this.readMetaField);
         const id = extractNumber(this.context.text);
-        this.events  = await this.getEventsFunc(this.meta);
-        this.event = await this.getEvent(id);
-        this.participants = await this.getEventsParticipantsFunc(this.meta);
+        const type = extractString(this.context.text);
+        this.type = type;
+        this.event = await this.getEventFunc(id, type);
+        this.participants = await this.getEventsParticipantsFunc(type);
     }
 
     async setMessage() {
@@ -36,22 +34,7 @@ class EventAction extends Step {
     }
 
     async finish() {
-        const rowNumber = this.participants.filter(x => !x.eventId)[0].id
-        await this.participateEventFunc(this.meta, rowNumber, this.event.id, this.event.name, this.context.from.username, this.context.chatId, Status.Pending, this.meta);
-    }
-    
-    async getEvent(text) {
-        const eventId = this.getEventId(text);
-        const event = this.events.filter(x => x.id === eventId)[0];
-        return event;
-    }
-
-    getEventId(text) {
-        const matches = text.match(/(\d+)/);
-        if (!matches) {
-            return null;
-        }
-        return matches[0];
+        await this.participateEventFunc(this.type, this.event.id, this.event.id, this.event.name, this.context.from.username, this.context.chatId, Status.Pending, this.type);
     }
 }
 module.exports = EventAction;

@@ -101,8 +101,13 @@ extractEvents = (events) => {
         id: x[0],
         name: x[1],
         time: x[2],
-        place: x[3],
+        hours: x[3],
+        place: x[4],
     }));
+}
+
+extractEvent =(events) => {
+    return extractEvents(events)[0];
 }
 
 extractEventsParticipants = (participants) => {
@@ -145,6 +150,7 @@ module.exports = {
     extractSpreedsheetData,
     extractFreeSlotsForPrivateLessons,
     extractEvents,
+    extractEvent,
     extractEventsParticipants,
     extractEventParticipant
 }

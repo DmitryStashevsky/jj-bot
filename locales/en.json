@@ -22,6 +22,8 @@
 	"festivalsCommand": "Festivals",
 	"showsDesc": "Shows",
 	"showsCommand": "Shows",
+	"eventDesc": "Event",
+	"eventCommand": "EventView",
 	"joinEventDesc": "JJ received your message, he will contact you soon",
 	"joinEventCommand": "JoinEvent",
 	"dancesDesc": "Choose dance",

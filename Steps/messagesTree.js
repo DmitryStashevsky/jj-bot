@@ -16,6 +16,7 @@ const GroupLessonAction = require('./groupLessonAction.js');
 const PrivateLessons = require('./privateLessons.js');
 const PrivateLesson = require('./privateLesson.js');
 const PrivateLessonAction = require('./privateLessonAction.js');
+
 const Events = require('./events.js');
 const Event = require('./event.js');
 const EventAction = require('./eventAction.js');
@@ -36,14 +37,16 @@ class MessagesTree {
     constructor() {
 
         // #region Main
-        const events = new Events('eventsDesc', 'eventsCommand');
+        const events = new Topic('eventsDesc', 'eventsCommand');
         
-        const masterClasses = new Event('masterClassesDesc', 'masterClassesCommand', Meta.MasterClass, async () => await eventRep.getEvents(Meta.MasterClass));
-        const festivalsClasses = new Event('festivalsDesc', 'festivalsCommand', Meta.Festival, async () => await eventRep.getEvents(Meta.Festival));
-        const showsClasses = new Event('showsDesc', 'showsCommand', Meta.Show, async () => await eventRep.getEvents(Meta.Show));
+        const masterClasses = new Events('masterClassesDesc', 'masterClassesCommand', Meta.MasterClass, async () => await eventRep.getEvents(Meta.MasterClass));
+        const festivalsClasses = new Events('festivalsDesc', 'festivalsCommand', Meta.Festival, async () => await eventRep.getEvents(Meta.Festival));
+        const showsClasses = new Events('showsDesc', 'showsCommand', Meta.Show, async () => await eventRep.getEvents(Meta.Show));
         
-        const joinEvent = new EventAction('joinEventDesc', 'joinEventCommand', (username, field) => metaData.getMetadata(username, field), 
-            async (eventType) => await eventRep.getEvents(eventType), 
+        const event = new Event('eventDesc', 'eventCommand', async (id, type) => await eventRep.getEvent(id, type));
+
+        const joinEvent = new EventAction('joinEventDesc', 'joinEventCommand',
+            async (id, eventType) => await eventRep.getEvent(id, eventType), 
             async (eventType) => await eventRep.getEventsParticipants(eventType), 
             async (eventType, rowNumber, eventId, eventName, username, chatId, status, type) => await eventRep.participateEvent(eventType, rowNumber, eventId, eventName, username, chatId, status, type));
 
@@ -116,9 +119,11 @@ class MessagesTree {
         
         events.nextSteps = [masterClasses, festivalsClasses, showsClasses];
 
-        masterClasses.nextSteps = [joinEvent];
-        festivalsClasses.nextSteps = [joinEvent];
-        showsClasses.nextSteps = [joinEvent];
+        masterClasses.nextSteps = [event];
+        festivalsClasses.nextSteps = [event];
+        showsClasses.nextSteps = [event];
+
+        event.nextSteps = [joinEvent];
 
         dances.nextSteps = [salsaDance, bachataDance, afroHouseDance, latinoGrooveDance];
 

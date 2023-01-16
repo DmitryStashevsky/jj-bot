@@ -22,6 +22,8 @@
 	"festivalsCommand": "Фестивали",
 	"showsDesc": "Шоу",
 	"showsCommand": "Шоу",
+	"eventDesc": "Событие",
+	"eventCommand": "EventView",
 	"joinEventDesc": "Вы записались на ивент",
 	"joinEventCommand": "ЗаписатьсяНаИвент",
 	"dancesDesc": " Выбери танец",
