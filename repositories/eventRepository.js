@@ -20,8 +20,8 @@ class EventRepository extends Repository {
     async getOwnerEventsParticipations() {
         const apiClient = await this.getApiClient();
         const masterClasses = this.getValuesData(apiClient, 'Master Class!G2:N41');
-        const shows = this.getValuesData(apiClient, 'Show!M2:N41');
-        const festivals = this.getValuesData(apiClient, 'Festival!M2:N41');
+        const shows = this.getValuesData(apiClient, 'Show!G2:N41');
+        const festivals = this.getValuesData(apiClient, 'Festival!G2:N41');
         const result = extractEventsParticipants(await masterClasses).concat(extractEventsParticipants(await shows)).concat(extractEventsParticipants(await festivals));
         result.sort((a) => a.status == Status.Pending ? -1 : 1);
         return result;

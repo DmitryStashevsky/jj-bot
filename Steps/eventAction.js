@@ -30,11 +30,12 @@ class EventAction extends Step {
     }
 
     async setPrivateMessage() {
-        this.privateMessage = `Dancer ${this.context.from.username} wants to attend you event - ${this.meta}- ${this.event.name}`;
+        this.privateMessage = `Dancer ${this.context.from.username} wants to attend you event - ${this.type}- ${this.event.name}`;
     }
 
     async finish() {
-        await this.participateEventFunc(this.type, this.event.id, this.event.id, this.event.name, this.context.from.username, this.context.chatId, Status.Pending, this.type);
+        const idOfFreePlace = this.participants.filter(x => !x.eventId)[0].id
+        await this.participateEventFunc(this.type, idOfFreePlace, this.event.id, this.event.name, this.context.from.username, this.context.chatId, Status.Pending, this.type);
     }
 }
 module.exports = EventAction;
