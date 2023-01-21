@@ -1,6 +1,5 @@
 const ActionStep = require('./baseSteps/actionStep.js');
 const i18n = require('../i18n.config.js');
-const { getCallBackData } = require('../callback-data.handler.js');
 
 class AdminGroupLessonAction extends ActionStep {
     constructor(message, command, actionName, condition, userMessage, getClassParticipationFunc, updateClassParticipationFunc, notifyUserFunc) {
@@ -14,8 +13,7 @@ class AdminGroupLessonAction extends ActionStep {
     }
 
     async init () {
-        const {number: id, string: type} = getCallBackData(this.context.text);
-        this.classParticipation = await this.getClassParticipationFunc(id, type);
+        this.classParticipation = await this.getClassParticipationFunc(this.context.id, this.context.type);
     }
 
     setUserMessage() {

@@ -1,6 +1,6 @@
 const Step = require('./baseSteps/step.js');
 const { getTimeString } = require('../calendar.js');
-const { createCallBackData } = require('../callback-data.handler.js');
+const { addMessageContext } = require('../handlers/context.handler.js');
 
 class AdminPrivateLessons extends Step {
     constructor(message, command, getPrivateLessonsFunc) {
@@ -18,7 +18,7 @@ class AdminPrivateLessons extends Step {
                 const lesson = this.privateLessons[i];
                 this.buttons.push([{
                     text: `${i+1} - ${lesson.username} - ${lesson.status} - ${getTimeString(lesson.time, lesson.countOfHours)}`,
-                    callback_data: createCallBackData(this.nextSteps[0].command, {number: lesson.id}),
+                    callback_data: addMessageContext(this.nextSteps[0].command, {number: lesson.id}),
                 }]);
             }
         }

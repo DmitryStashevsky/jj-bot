@@ -1,6 +1,5 @@
 const ActionStep = require('./baseSteps/actionStep.js');
 const i18n = require('../i18n.config.js');
-const { getCallBackData } = require('../callback-data.handler.js');
 
 class AdminEventAction extends ActionStep {
     constructor(message, command, actionName, condition, userMessage, getEventParticipationFunc, updateEventParticipationFunc, notifyUserFunc) {
@@ -14,8 +13,7 @@ class AdminEventAction extends ActionStep {
     }
 
     async init () {
-        const {number: id, string: type} = getCallBackData(this.context.text);
-        this.eventParticipation = await this.getEventParticipationFunc(id, type);
+        this.eventParticipation = await this.getEventParticipationFunc(this.context.id, this.context.type);
     }
 
     setUserMessage() {

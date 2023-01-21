@@ -1,5 +1,4 @@
 const ViewStep = require('./baseSteps/viewStep.js');
-const { getCallBackData } = require('../callback-data.handler.js');
 
 class AdminGroupsLesson extends ViewStep {
     constructor(message, command, getGroupParticipationFunc) {
@@ -9,8 +8,7 @@ class AdminGroupsLesson extends ViewStep {
     }
 
     async init () {
-        const {number: id, string: type} = getCallBackData(this.context.text);
-        this.entity = await this.getGroupParticipationFunc(id, type);
+        this.entity = await this.getGroupParticipationFunc(this.context.id, this.context.type);
     }
 
     async setMessage() {

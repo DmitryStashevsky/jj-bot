@@ -1,4 +1,4 @@
-const{ metaData }  = require('./cache.config.js');
+const{ metaData }  = require('../cache.config.js');
 const previosMessagesKey = 'previosMessages';
 
 handleBackButton = (username, stepName, stepCommand) => {

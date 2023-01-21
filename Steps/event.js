@@ -1,6 +1,5 @@
 const ViewStep = require('./baseSteps/viewStep.js');
 const { getTimeString } = require('../calendar.js');
-const { getCallBackData } = require('../callback-data.handler.js');
 
 class Event extends ViewStep {
     constructor(message, command, getEventFunc) {
@@ -10,9 +9,7 @@ class Event extends ViewStep {
     }
 
     async init() {
-        const {number: id, string: type} = getCallBackData(this.context.text);
-        this.type = type;
-        this.entity = await this.getEventFunc(id, type);
+        this.entity = await this.getEventFunc(this.context.id, this.context.type);
     }
 
     async setMessage() {

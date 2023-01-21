@@ -1,5 +1,5 @@
 const Step = require('./baseSteps/step.js');
-const { createCallBackData } = require('../callback-data.handler.js');
+const { addMessageContext } = require('../handlers/context.handler.js');
 
 class AdminEvents extends Step {
     constructor(message, command, getEventsParticipationsFunc) {
@@ -17,7 +17,7 @@ class AdminEvents extends Step {
                 const event = this.events[i];
                 this,this.buttons.push([{
                     text: `${i+1} - ${event.username} - ${event.status} - ${event.name}`,
-                    callback_data: createCallBackData(this.nextSteps[0].command, {number: event.id, string: event.type})
+                    callback_data: addMessageContext(this.nextSteps[0].command, {number: event.id, string: event.type})
                 }]);
             }
             this

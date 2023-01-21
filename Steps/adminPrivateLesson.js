@@ -1,6 +1,5 @@
 const ViewStep = require('./baseSteps/viewStep.js');
 const { getTimeString } = require('../calendar.js');
-const { getCallBackData } = require('../callback-data.handler.js');
 
 class AdminPrivateLesson extends ViewStep {
     constructor(message, command, getPrivateLessonFunc) {
@@ -10,8 +9,7 @@ class AdminPrivateLesson extends ViewStep {
     }
 
     async init () {
-        const {number: id} = getCallBackData(this.context.text);
-        this.entity = await this.getPrivateLessonFunc(id);
+        this.entity = await this.getPrivateLessonFunc(this.context.id);
     }
 
     async setMessage() {

@@ -2,7 +2,6 @@ const ActionStep = require('./baseSteps/actionStep.js');
 const i18n = require('../i18n.config.js');
 const {getCalendarEvent, getTime, getTimeString} = require('../calendar.js');
 const { Status } = require('../enums.js');
-const { getCallBackData } = require('../callback-data.handler.js');
 
 class AdminPrivateLessonAction extends ActionStep {
     constructor(message, command, actionName, condition, userMessage, newStatus, getPrivateLessonFunc, updatePrivateLessonFunc, notifyUserFunc) {
@@ -17,8 +16,7 @@ class AdminPrivateLessonAction extends ActionStep {
     }
 
     async init () {
-        const {number: id} = getCallBackData(this.context.text);
-        this.privateLesson = await this.getPrivateLessonFunc(id);
+        this.privateLesson = await this.getPrivateLessonFunc(this.context.id);
     }
 
     setUserMessage() {

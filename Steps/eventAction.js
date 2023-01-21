@@ -1,6 +1,5 @@
 const ActionStep = require('./baseSteps/actionStep.js');
 const { Status } = require('../enums.js');
-const { getCallBackData } = require('../callback-data.handler.js');
 
 class EventAction extends ActionStep {
     constructor(message, command, actionName, condition, getEventFunc, getEventsParticipantsFunc, participateEventFunc) {
@@ -13,19 +12,12 @@ class EventAction extends ActionStep {
     }
 
     async init() {
-        const {number: id, string: type} = getCallBackData(this.context.text);
-        this.type = type;
-        this.event = await this.getEventFunc(id, type);
-        this.participants = await this.getEventsParticipantsFunc(type);
+        this.event = await this.getEventFunc(this.context.id, this.context.type);
+        this.participants = await this.getEventsParticipantsFunc(this.context.type);
     }
 
     async setMessage() {
-        if(this.event) {
-            this.message =  this.message + `- ${this.event.name} - ${this.event.time} - ${this.event.place}`;
-        }
-        else {
-            return false;
-        }
+        this.message +=  ` - ${this.event.name} - ${this.event.time} - ${this.event.place}`;
     }
 
     async setPrivateMessage() {
@@ -34,7 +26,7 @@ class EventAction extends ActionStep {
 
     async finish() {
         const idOfFreePlace = this.participants.filter(x => !x.eventId)[0].id
-        await this.participateEventFunc(this.type, idOfFreePlace, this.event.id, this.event.name, this.context.from.username, this.context.chatId, Status.Pending, this.type);
+        await this.participateEventFunc(this.context.type, idOfFreePlace, this.event.id, this.event.name, this.context.from.username, this.context.chatId, Status.Pending, this.type);
     }
 }
 module.exports = EventAction;

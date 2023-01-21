@@ -1,4 +1,4 @@
-const { extractString, extractStrings } = require('./regex.handler.js');
+const { extractString, extractStrings } = require('../regex.handler.js');
 
 const numberSeparator = '%';
 const stringSeparator = '$';
@@ -8,7 +8,7 @@ hasData = (command) => {
     return command.includes(numberSeparator) || command.includes(stringSeparator) || command.includes(arraySeparator);
 }
 
-createCallBackData = (command, params) => {
+addMessageContext = (command, params) => {
     let numberRepresentation = '';
     let stringRepresentation = '';
     let arrayOfStringsRepresentation = '';
@@ -27,16 +27,19 @@ createCallBackData = (command, params) => {
         .concat(arrayOfStringsRepresentation);
 }
 
-getCallBackData = (callback) => {
+getMessageContext = (chatId, from, message, text) => {
     return {
-        number: extractString(callback, numberSeparator),
-        string: extractString(callback, stringSeparator),
-        array: extractStrings(callback, arraySeparator)
+        id: extractString(text, numberSeparator),
+        type: extractString(text, stringSeparator),
+        types: extractStrings(text, arraySeparator),
+        chatId: chatId,
+        from: from,
+        message: message
     }
 }
 
 module.exports = {
     hasData,
-    createCallBackData,
-    getCallBackData
+    addMessageContext,
+    getMessageContext
 }

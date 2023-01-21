@@ -1,5 +1,5 @@
 const Step = require('./baseSteps/step.js');
-const { getCallBackData, createCallBackData } = require('../callback-data.handler.js');
+const { addMessageContext } = require('../handlers/context.handler.js');
 
 class AdminGroupLessons extends Step {
     constructor(message, command, getGroupsLessonsParticipationsFunc) {
@@ -9,8 +9,7 @@ class AdminGroupLessons extends Step {
     }
 
     async init () {
-        const {array: lessonTypes} = getCallBackData(this.context.text);
-        this.groups = await this.getGroupsLessonsParticipationsFunc(lessonTypes);
+        this.groups = await this.getGroupsLessonsParticipationsFunc(this.context.types);
     } 
 
     async setButtons() {
@@ -19,7 +18,7 @@ class AdminGroupLessons extends Step {
                 const groupLesson = this.groups[i];
                 this.buttons.push([{
                     text: `${i+1} - ${groupLesson.username} - ${groupLesson.status} - ${groupLesson.className}`,
-                    callback_data: createCallBackData(this.nextSteps[0].command, {number: groupLesson.id, string: groupLesson.type})
+                    callback_data: addMessageContext(this.nextSteps[0].command, {number: groupLesson.id, string: groupLesson.type})
                 }]);
             }
         }

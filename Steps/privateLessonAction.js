@@ -1,7 +1,6 @@
 const ActionStep = require('./baseSteps/actionStep.js');
 const { getTimeString } = require('../calendar.js');
 const { Status } = require('../enums.js');
-const { getCallBackData } = require('../callback-data.handler.js');
 
 class PrivateLessonAction extends ActionStep {
     constructor(message, command, actionName, condition, getMetaFunc, getPrivateLessonFunc, participatePrivateLessonFunc) {
@@ -15,17 +14,11 @@ class PrivateLessonAction extends ActionStep {
     }
 
     async init() {
-        const {number: id} = getCallBackData(this.context.text);
-        this.freeSlot = await this.getPrivateLessonFunc(id);
+        this.freeSlot = await this.getPrivateLessonFunc(this.context.id);
     }
 
     async setMessage() {
-        if(this.freeSlot) {
-            this.message =  this.message + `- ${getTimeString(this.freeSlot.time, this.freeSlot.countOfHours)}`;
-        }
-        else {
-            return false;
-        }
+        this.message =  this.message + `- ${getTimeString(this.freeSlot.time, this.freeSlot.countOfHours)}`;
     }
 
     async setPrivateMessage() {

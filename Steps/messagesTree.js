@@ -1,11 +1,11 @@
 const { Meta, metaData } = require('../cache.config.js');
 const notificationService = require('../notificationService.js');
-const { hasData } = require('../callback-data.handler.js');
+const { hasData } = require('../handlers/context.handler.js');
 const classRep = require('../repositories/classRepository.js');
 const eventRep = require('../repositories/eventRepository.js');
 const plRep = require('../repositories/privateLessonRepository.js');
 
-const {hasAccessToAdmin} = require('../access.handler.js');
+const {hasAccessToAdmin} = require('../handlers/access.handler.js');
 const { Status } = require('../enums.js');
 
 const Dances = require('./dances.js');
