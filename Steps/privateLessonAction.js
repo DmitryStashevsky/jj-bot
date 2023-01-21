@@ -2,6 +2,7 @@ const Step = require('./step.js');
 const { getTimeString } = require('../calendar.js');
 const { Status } = require('../enums.js');
 const {extractNumber} = require('../regex.handler.js');
+const { getCallBackData } = require('../callback-data.handler.js');
 
 class PrivateLessonAction extends Step {
     constructor(message, command, getMetaFunc, getPrivateLessonFunc, participatePrivateLessonFunc) {
@@ -15,7 +16,7 @@ class PrivateLessonAction extends Step {
     }
 
     async init() {
-        const id = extractNumber(this.context.text);
+        const {number: id} = getCallBackData(this.context.text);
         this.freeSlot = await this.getPrivateLessonFunc(id);
     }
 

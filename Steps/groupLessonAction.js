@@ -1,6 +1,6 @@
 const Step = require('./step.js');
 const { Status } = require('../enums.js');
-const {extractNumber, extractString} = require('../regex.handler.js');
+const { getCallBackData } = require('../callback-data.handler.js');
 
 class GroupLessonAction extends Step {
     constructor(message, command, getClassFunc, getClassesParticipantsFunc, participateClassFunc) {
@@ -13,8 +13,7 @@ class GroupLessonAction extends Step {
     }
 
     async init() {
-        const id = extractNumber(this.context.text);
-        const type = extractString(this.context.text);
+        const {number: id, string: type} = getCallBackData(this.context.text);
         this.type = type;
         this.class = await this.getClassFunc(id, type);
         this.participants = await this.getClassesParticipantsFunc(type);
@@ -22,7 +21,7 @@ class GroupLessonAction extends Step {
 
     async setMessage() {
         if(this.class) {
-            this.message = this.message + `- ${this.class.name}`;
+            this.message += `- ${this.class.name}`;
         }
         else {
             this.message = null;

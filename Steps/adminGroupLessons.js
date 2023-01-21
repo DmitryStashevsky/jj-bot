@@ -1,5 +1,5 @@
 const Step = require('./step.js');
-const {extractStrings} = require('../regex.handler.js');
+const { getCallBackData, createCallBackData } = require('../callback-data.handler.js');
 
 class AdminGroupLessons extends Step {
     constructor(message, command, getGroupsLessonsParticipationsFunc) {
@@ -9,7 +9,7 @@ class AdminGroupLessons extends Step {
     }
 
     async init () {
-        const lessonTypes = extractStrings(this.context.text);
+        const {array: lessonTypes} = getCallBackData(this.context.text);
         this.groups = await this.getGroupsLessonsParticipationsFunc(lessonTypes);
     } 
 
@@ -19,7 +19,7 @@ class AdminGroupLessons extends Step {
                 const groupLesson = this.groups[i];
                 this.buttons.push([{
                     text: `${i+1} - ${groupLesson.username} - ${groupLesson.status} - ${groupLesson.className}`,
-                    callback_data: `${this.nextSteps[0].command} ${groupLesson.id} [${groupLesson.type}]`,
+                    callback_data: createCallBackData(this.nextSteps[0].command, {number: groupLesson.id, string: groupLesson.type})
                 }]);
             }
         }

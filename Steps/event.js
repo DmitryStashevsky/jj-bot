@@ -1,7 +1,7 @@
 const Step = require('./step.js');
 const { getTimeString } = require('../calendar.js');
 const i18n = require('../i18n.config.js');
-const {extractNumber, extractString} = require('../regex.handler.js');
+const { getCallBackData, createCallBackData } = require('../callback-data.handler.js');
 
 class Event extends Step {
     constructor(message, command, getEventFunc) {
@@ -11,8 +11,7 @@ class Event extends Step {
     }
 
     async init() {
-        const id = extractNumber(this.context.text);
-        const type = extractString(this.context.text);
+        const {number: id, string: type} = getCallBackData(this.context.text);
         this.type = type;
         this.event = await this.getEventFunc(id, type);
     }
@@ -29,7 +28,7 @@ class Event extends Step {
     async setButtons() {
         this.buttons = [[{
             text: i18n.__('join'),
-            callback_data: `${this.nextSteps[0].command} - ${this.event.id} [${this.type}]`,
+            callback_data: createCallBackData(this.nextSteps[0].command, {number: this.event.id, string: this.type})
         }]];
     }
 }

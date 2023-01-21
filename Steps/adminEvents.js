@@ -1,4 +1,5 @@
 const Step = require('./step.js');
+const { createCallBackData } = require('../callback-data.handler.js');
 
 class AdminEvents extends Step {
     constructor(message, command, getEventsParticipationsFunc) {
@@ -16,7 +17,7 @@ class AdminEvents extends Step {
                 const event = this.events[i];
                 this,this.buttons.push([{
                     text: `${i+1} - ${event.username} - ${event.status} - ${event.name}`,
-                    callback_data: `${this.nextSteps[0].command} ${event.id} [${event.type}]`,
+                    callback_data: createCallBackData(this.nextSteps[0].command, {number: event.id, string: event.type})
                 }]);
             }
             this

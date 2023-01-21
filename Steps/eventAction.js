@@ -1,6 +1,6 @@
 const Step = require('./step.js');
 const { Status } = require('../enums.js');
-const { extractNumber, extractString } = require('../regex.handler.js');
+const { getCallBackData } = require('../callback-data.handler.js');
 
 class EventAction extends Step {
     constructor(message, command, getEventFunc, getEventsParticipantsFunc, participateEventFunc) {
@@ -13,8 +13,7 @@ class EventAction extends Step {
     }
 
     async init() {
-        const id = extractNumber(this.context.text);
-        const type = extractString(this.context.text);
+        const {number: id, string: type} = getCallBackData(this.context.text);
         this.type = type;
         this.event = await this.getEventFunc(id, type);
         this.participants = await this.getEventsParticipantsFunc(type);

@@ -2,7 +2,7 @@ const Step = require('./step.js');
 const { getTimeString } = require('../calendar.js');
 const { Status } = require('../enums.js');
 const i18n = require('../i18n.config.js');
-const {extractNumber} = require('../regex.handler.js');
+const { getCallBackData, createCallBackData } = require('../callback-data.handler.js');
 
 class AdminPrivateLesson extends Step {
     constructor(message, command, getPrivateLessonFunc) {
@@ -12,7 +12,7 @@ class AdminPrivateLesson extends Step {
     }
 
     async init () {
-        const id = extractNumber(this.context.text);
+        const {number: id} = getCallBackData(this.context.text);
         this.privateLesson = await this.getPrivateLessonFunc(id);
     }
 
@@ -29,14 +29,14 @@ class AdminPrivateLesson extends Step {
         if (this.privateLesson.status == Status.Pending || this.privateLesson.status == Status.Approved) {
             this.buttons.push([{
                 text: i18n.__('decline'),
-                callback_data: `aPLD - ${this.privateLesson.id}`,
+                callback_data: createCallBackData('aPLD', {number: this.privateLesson.id})
             }]);
         }
         
         if (this.privateLesson.status == Status.Pending) {
             this.buttons.push([{
                 text: i18n.__('approve'),
-                callback_data: `aPLA - ${this.privateLesson.id}`,
+                callback_data: createCallBackData('aPLA', {number: this.privateLesson.id})
             }])
         }
     }

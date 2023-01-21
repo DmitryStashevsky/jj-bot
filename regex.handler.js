@@ -1,18 +1,15 @@
-extractNumber = (command) => {
-    return command.match(/(\d+)/)[0];
+extractString = (text, symbol) => {
+    const regexp = new RegExp(`(?<=\\${symbol}).+?(?=\\${symbol})`);
+    const result = regexp.exec(text);
+    return result ? result.pop() : '';
 }
 
-extractString = (command) => {
-    return command.match(/(?<=\[).+?(?=\])/g)[0];
-}
-
-extractStrings = (command) => {
-    const data = extractString(command);
+extractStrings = (text, symbol) => {
+    const data = extractString(text, symbol);
     return data.split(',');
 }
 
 module.exports = {
-    extractNumber,
     extractString,
     extractStrings
 }

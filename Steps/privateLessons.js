@@ -1,6 +1,7 @@
 const Step = require('./step.js');
 const {getTimeString} = require('../calendar.js');
 const i18n = require('../i18n.config.js');
+const { createCallBackData } = require('../callback-data.handler.js');
 
 class PrivateLessons extends Step {
     constructor(message, command, metaData, getFreeSlotsFunc) {
@@ -26,7 +27,7 @@ class PrivateLessons extends Step {
                 const lesson = this.lessons[i];
                 this.buttons.push([{
                     text: `${i+1} - ${getTimeString(lesson.time, lesson.countOfHours)}`,
-                    callback_data: `${this.nextSteps[0].command} ${lesson.id}`,
+                    callback_data: createCallBackData(this.nextSteps[0].command, {number: lesson.id}),
                 }]);
             }
         }

@@ -1,7 +1,7 @@
 const Step = require('./step.js');
 const { getTimeString } = require('../calendar.js');
 const i18n = require('../i18n.config.js');
-const {extractNumber} = require('../regex.handler.js');
+const { getCallBackData, createCallBackData } = require('../callback-data.handler.js');
 
 class PrivateLesson extends Step {
     constructor(message, command, getPrivateLessonFunc) {
@@ -11,7 +11,7 @@ class PrivateLesson extends Step {
     }
 
     async init() {
-        const id = extractNumber(this.context.text);
+        const {number: id} = getCallBackData(this.context.text);
         this.privateLesson = await this.getPrivateLessonFunc(id);
     }
 
@@ -27,7 +27,7 @@ class PrivateLesson extends Step {
     async setButtons() {
         this.buttons = [[{
             text: i18n.__('join'),
-            callback_data: `JPL - ${this.privateLesson.id}`,
+            callback_data: createCallBackData('JPL', {number: this.privateLesson.id})
         }]];
     }
 }

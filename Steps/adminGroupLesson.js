@@ -1,7 +1,7 @@
 const Step = require('./step.js');
 const { Status } = require('../enums.js');
 const i18n = require('../i18n.config.js');
-const {extractNumber, extractString} = require('../regex.handler.js');
+const { getCallBackData, createCallBackData } = require('../callback-data.handler.js');
 
 class AdminGroupsLesson extends Step {
     constructor(message, command, getGroupParticipationFunc) {
@@ -11,14 +11,13 @@ class AdminGroupsLesson extends Step {
     }
 
     async init () {
-        const id = extractNumber(this.context.text);
-        const type = extractString(this.context.text);
+        const {number: id, string: type} = getCallBackData(this.context.text);
         this.groupParticipation = await this.getGroupParticipationFunc(id, type);
     }
 
     async setMessage() {
         if(this.groupParticipation) {
-            this.message = this.message + ` ${this.groupParticipation.className} - ${this.groupParticipation.type} - ${this.groupParticipation.username} - ${this.groupParticipation.status}`;
+            this.message += ` ${this.groupParticipation.className} - ${this.groupParticipation.type} - ${this.groupParticipation.username} - ${this.groupParticipation.status}`;
         }
         else {
             return false;
@@ -28,13 +27,13 @@ class AdminGroupsLesson extends Step {
     async setButtons() {
         this.buttons.push([{
             text: i18n.__('decline'),
-            callback_data: `aGLD - ${this.groupParticipation.id} [${this.groupParticipation.type}]`,
+            callback_data: createCallBackData('aGLD', {number: this.groupParticipation.id, string: this.groupParticipation.type})
         }]);
 
         if (this.groupParticipation.status == Status.Pending) {
             this.buttons.push([{
                 text: i18n.__('approve'),
-                callback_data: `aGLA - ${this.groupParticipation.id} [${this.groupParticipation.type}]`,
+                callback_data: createCallBackData('aGLA', {number: this.groupParticipation.id, string: this.groupParticipation.type})
             }])
         }
     }

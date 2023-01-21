@@ -1,5 +1,6 @@
 const { Meta, metaData } = require('../cache.config.js');
 const notificationService = require('../notificationService.js');
+const { hasData } = require('../callback-data.handler.js');
 const classRep = require('../repositories/classRepository.js');
 const eventRep = require('../repositories/eventRepository.js');
 const plRep = require('../repositories/privateLessonRepository.js');
@@ -234,13 +235,10 @@ class MessagesTree {
     }
 
     findCurrentStep(message, username) {
-    
-        const digitData = message.match(/(\d+)/);
-        const stringData = message.match(/\[([^)]+)\]/);
-        const notEquals = digitData || stringData;
-        let found = this.findStep(this.initialStep, message, !notEquals);
+        const proccessLikeEqualsCommand = hasData(message);
+        let found = this.findStep(this.initialStep, message, !proccessLikeEqualsCommand);
         if (!found && hasAccessToAdmin(username)) {
-            found = this.findStep(this.adminStep, message, !notEquals);
+            found = this.findStep(this.adminStep, message, !proccessLikeEqualsCommand);
         } 
                  
         this.currentStep = found || this.initialStep;
