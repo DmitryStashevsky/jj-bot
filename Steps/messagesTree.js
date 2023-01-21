@@ -46,7 +46,7 @@ class MessagesTree {
         
         const event = new Event('eventDesc', 'eventCommand', async (id, type) => await eventRep.getEvent(id, type));
 
-        const joinEvent = new EventAction('joinEventDesc', 'joinEventCommand',
+        const joinEvent = new EventAction('joinEventDesc', 'joinEventCommand', 'join', null,
             async (id, eventType) => await eventRep.getEvent(id, eventType), 
             async (eventType) => await eventRep.getEventsParticipants(eventType), 
             async (eventType, rowNumber, eventId, eventName, username, chatId, status, type) => await eventRep.participateEvent(eventType, rowNumber, eventId, eventName, username, chatId, status, type));
@@ -108,14 +108,15 @@ class MessagesTree {
         const groupClass = new GroupLesson('groupLessonDesc', 'groupLessonommand',
             async (id, type) => await classRep.getClass(id ,type));
 
-        const joinGroupClass = new GroupLessonAction('joinGroupLessonDesc', 'joinGroupLessonCommand',
+        const joinGroupClass = new GroupLessonAction('joinGroupLessonDesc', 'joinGroupLessonCommand', 'join', null,
             async (id, type) => await classRep.getClass(id ,type),
             async (type) => await classRep.getClassesParticipants(type), 
             async (type, rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(type, rowNumber, classId, className, username, chatId, status));
 
         const privateClass = new PrivateLesson('privateLessonDesc', 'privateLessonCommand', async (id) => await plRep.getFreeSlot(id));
 
-        const joinPrivateClasses = new PrivateLessonAction('joinPrivateLessonDesc', 'JPL', (username, field) => metaData.getMetadata(username, field),  async (id) => await plRep.getFreeSlot(id),
+        const joinPrivateClasses = new PrivateLessonAction('joinPrivateLessonDesc', 'JPL', 'join', null,
+            (username, field) => metaData.getMetadata(username, field),  async (id) => await plRep.getFreeSlot(id),
             async (lessonId, dance, username, chatId, status) => await plRep.participatePrivateLesson(lessonId, dance, username, chatId, status));
         
         events.nextSteps = [masterClasses, festivalsClasses, showsClasses];
@@ -191,28 +192,34 @@ class MessagesTree {
         const adminGroupLessonsType = new AdminGroupLessonsType('adminGroupLessonsTypeDesc', 'adminGroupLessonsTypeCommand');
         const adminGroupLessons = new AdminGroupLessons('adminGroupLessonsDesc', 'adminGroupLessonsCommand', async (lessonTypes) => await classRep.getOwnerClassesParticipants(lessonTypes));
         const adminGroupLesson = new AdminGroupLesson('adminGroupLessonDesc', 'adminGroupLessonCommand', async (id, type) => await classRep.getOwnerClassParticipation(id, type));
-        const adminGroupLessonApprove = new AdminGroupLessonAction('adminGroupLessonActionApproveDesc', 'adminGroupLessonActionApproveCommand', 'adminGroupLessonActionApproveUserDesc',
+        const adminGroupLessonApprove = new AdminGroupLessonAction('adminGroupLessonActionApproveDesc', 'adminGroupLessonActionApproveCommand', 
+            'approve', (entity) => entity.status == Status.Pending, 'adminGroupLessonActionApproveUserDesc',
             async (id, type) => await classRep.getOwnerClassParticipation(id, type), async (id, type) => await classRep.updateOwnerClassParticipation(id, type, Status.Approved),
             async (chatId, message) => await notificationService.notifyUser(chatId, message));
-        const adminGroupLessonDecline = new AdminGroupLessonAction('adminGroupLessonActionDeclineDesc', 'adminGroupLessonActionDeclineCommand', 'adminGroupLessonActionDeclineUserDesc',
+        const adminGroupLessonDecline = new AdminGroupLessonAction('adminGroupLessonActionDeclineDesc', 'adminGroupLessonActionDeclineCommand', 
+            'decline', null, 'adminGroupLessonActionDeclineUserDesc',
             async (id, type) => await classRep.getOwnerClassParticipation(id, type), async (id, type) => await classRep.updateOwnerClassParticipation(id, type, Status.Declined),
             async (chatId, message) => await notificationService.notifyUser(chatId, message));
 
         const adminPrivateLessons = new AdminPrivateLessons('adminPrivateLessonsDesc', 'adminPrivateLessonsCommand', async () => await plRep.getOwnerPrivateLessons());
         const adminPrivateLesson = new AdminPrivateLesson('adminPrivateLessonDesc', 'adminPrivateLessonCommand', async (id) => await plRep.getPrivateLesson(id));
-        const adminPrivateLessonApprove = new AdminPrivateLessonAction('adminPrivateLessonActionApproveDesc', 'adminPrivateLessonActionApproveCommand', 'adminPrivateLessonActionApproveUserDesc',
+        const adminPrivateLessonApprove = new AdminPrivateLessonAction('adminPrivateLessonActionApproveDesc', 'adminPrivateLessonActionApproveCommand', 
+            'approve', (entity) => entity.status == Status.Pending, 'adminPrivateLessonActionApproveUserDesc',
             Status.Approved, async (id) => await plRep.getPrivateLesson(id), async (id, uid) => await plRep.updatePrivateLesson(id, Status.Approved, uid),
             async (chatId, message) => await notificationService.notifyUser(chatId, message));
-        const adminPrivateLessonDecline = new AdminPrivateLessonAction('adminPrivateLessonActionDeclineDesc', 'adminPrivateLessonActionDeclineCommand', 'adminPrivateLessonActionDeclineUserDesc',
+        const adminPrivateLessonDecline = new AdminPrivateLessonAction('adminPrivateLessonActionDeclineDesc', 'adminPrivateLessonActionDeclineCommand',
+            'decline', (entity) => entity.status == Status.Pending || entity.status == Status.Approved,  'adminPrivateLessonActionDeclineUserDesc',
             Status.Declined, async (id) => await plRep.getPrivateLesson(id), async (id, uid) => await plRep.updatePrivateLesson(id, Status.Declined, uid), 
             async (chatId, message) => await notificationService.notifyUser(chatId, message));
 
         const adminEvents = new AdminEvents('adminEventsDesc', 'adminEventsCommand', async () => await eventRep.getOwnerEventsParticipations());
         const adminEvent = new AdminEvent('adminEventDesc', 'adminEventCommand', async (id, type) => await eventRep.getOwnerEventParticipation(id, type));
-        const adminEventApprove = new AdminEventAction('adminEventActionApproveDesc', 'adminEventActionApproveCommand', 'adminEventActionApproveUserDesc',
+        const adminEventApprove = new AdminEventAction('adminEventActionApproveDesc', 'adminEventActionApproveCommand', 
+            'approve', (entity) => entity.status == Status.Pending, 'adminEventActionApproveUserDesc',
             async (id, type) => await eventRep.getOwnerEventParticipation(id, type), async (id, type) => await eventRep.updateOwnerEventParticipation(id, type, Status.Approved),
-            async (chatId, message) => await notificationService.notifyUser(chatId, message));
-        const adminEventDecline = new AdminEventAction('adminEventActionDeclineDesc', 'adminEventActionDeclineCommand', 'adminEventActionDeclineUserDesc',
+            async (chatId, message) => await notificationService.notifyUser(chatId, message)); 
+        const adminEventDecline = new AdminEventAction('adminEventActionDeclineDesc', 'adminEventActionDeclineCommand', 
+            'decline', null, 'adminEventActionDeclineUserDesc',
             async (id, type) => await eventRep.getOwnerEventParticipation(id, type), async (id, type) => await eventRep.updateOwnerEventParticipation(id, type, Status.Declined), 
             async (chatId, message) => await notificationService.notifyUser(chatId, message));
 

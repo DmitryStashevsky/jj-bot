@@ -1,12 +1,11 @@
-const Step = require('./step.js');
+const ActionStep = require('./baseSteps/actionStep.js');
 const { getTimeString } = require('../calendar.js');
 const { Status } = require('../enums.js');
-const {extractNumber} = require('../regex.handler.js');
 const { getCallBackData } = require('../callback-data.handler.js');
 
-class PrivateLessonAction extends Step {
-    constructor(message, command, getMetaFunc, getPrivateLessonFunc, participatePrivateLessonFunc) {
-        super(message, command);
+class PrivateLessonAction extends ActionStep {
+    constructor(message, command, actionName, condition, getMetaFunc, getPrivateLessonFunc, participatePrivateLessonFunc) {
+        super(message, command, actionName, condition);
         this.getMetaFunc = getMetaFunc;
         this.getPrivateLessonFunc = getPrivateLessonFunc;
         this.participatePrivateLessonFunc = participatePrivateLessonFunc;

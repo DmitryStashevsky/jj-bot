@@ -1,4 +1,4 @@
-const i18n = require('../i18n.config.js');
+const i18n = require('../../i18n.config.js');
 
 class Step {
     constructor(message, command) {

@@ -1,12 +1,12 @@
-const Step = require('./step.js');
+const ActionStep = require('./baseSteps/actionStep.js');
 const i18n = require('../i18n.config.js');
 const {getCalendarEvent, getTime, getTimeString} = require('../calendar.js');
 const { Status } = require('../enums.js');
 const { getCallBackData } = require('../callback-data.handler.js');
 
-class AdminPrivateLessonAction extends Step {
-    constructor(message, command, userMessage, newStatus, getPrivateLessonFunc, updatePrivateLessonFunc, notifyUserFunc) {
-        super(message, command);
+class AdminPrivateLessonAction extends ActionStep {
+    constructor(message, command, actionName, condition, userMessage, newStatus, getPrivateLessonFunc, updatePrivateLessonFunc, notifyUserFunc) {
+        super(message, command, actionName, condition);
         this.userMessage = i18n.__(userMessage);
         this.newStatus = newStatus;
         this.getPrivateLessonFunc = getPrivateLessonFunc;

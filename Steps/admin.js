@@ -1,4 +1,4 @@
-const Step = require('./step.js');
+const Step = require('./baseSteps/step.js');
 
 class Admin extends Step {
     constructor(message, command) {

@@ -1,4 +1,4 @@
-const Step = require('./step.js');
+const Step = require('./baseSteps/step.js');
 const { createCallBackData } = require('../callback-data.handler.js');
 
 class AdminEvents extends Step {

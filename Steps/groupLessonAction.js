@@ -1,10 +1,10 @@
-const Step = require('./step.js');
+const ActionStep = require('./baseSteps/actionStep.js');
 const { Status } = require('../enums.js');
 const { getCallBackData } = require('../callback-data.handler.js');
 
-class GroupLessonAction extends Step {
-    constructor(message, command, getClassFunc, getClassesParticipantsFunc, participateClassFunc) {
-        super(message, command);
+class GroupLessonAction extends ActionStep {
+    constructor(message, command, actionName, condition, getClassFunc, getClassesParticipantsFunc, participateClassFunc) {
+        super(message, command, actionName, condition);
         this.getClassFunc = getClassFunc;
         this.getClassesParticipantsFunc = getClassesParticipantsFunc;
         this.participateClassFunc = participateClassFunc;

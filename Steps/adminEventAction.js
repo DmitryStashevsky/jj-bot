@@ -1,10 +1,10 @@
-const Step = require('./step.js');
+const ActionStep = require('./baseSteps/actionStep.js');
 const i18n = require('../i18n.config.js');
 const { getCallBackData } = require('../callback-data.handler.js');
 
-class AdminEventAction extends Step {
-    constructor(message, command, userMessage, getEventParticipationFunc, updateEventParticipationFunc, notifyUserFunc) {
-        super(message, command);
+class AdminEventAction extends ActionStep {
+    constructor(message, command, actionName, condition, userMessage, getEventParticipationFunc, updateEventParticipationFunc, notifyUserFunc) {
+        super(message, command, actionName, condition);
         this.userMessage = i18n.__(userMessage);
         this.getEventParticipationFunc = getEventParticipationFunc;
         this.updateEventParticipationFunc = updateEventParticipationFunc;

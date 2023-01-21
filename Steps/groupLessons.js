@@ -1,4 +1,4 @@
-const Step = require('./step.js');
+const Step = require('./baseSteps/step.js');
 const i18n = require('../i18n.config.js');
 const { createCallBackData } = require('../callback-data.handler.js');
 
