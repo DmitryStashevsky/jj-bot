@@ -1,10 +1,9 @@
-const Step = require('./step.js');
+const ActionStep = require('./baseSteps/actionStep.js');
 const { Status } = require('../enums.js');
-const { extractNumber, extractString } = require('../regex.handler.js');
 
-class EventAction extends Step {
-    constructor(message, command, getEventFunc, getEventsParticipantsFunc, participateEventFunc) {
-        super(message, command);
+class EventAction extends ActionStep {
+    constructor(message, command, actionName, condition, getEventFunc, getEventsParticipantsFunc, participateEventFunc) {
+        super(message, command, actionName, condition);
         this.getEventFunc = getEventFunc;
         this.getEventsParticipantsFunc = getEventsParticipantsFunc;
         this.participateEventFunc = participateEventFunc;
@@ -13,29 +12,21 @@ class EventAction extends Step {
     }
 
     async init() {
-        const id = extractNumber(this.context.text);
-        const type = extractString(this.context.text);
-        this.type = type;
-        this.event = await this.getEventFunc(id, type);
-        this.participants = await this.getEventsParticipantsFunc(type);
+        this.event = await this.getEventFunc(this.context.id, this.context.type);
+        this.participants = await this.getEventsParticipantsFunc(this.context.type);
     }
 
     async setMessage() {
-        if(this.event) {
-            this.message =  this.message + `- ${this.event.name} - ${this.event.time} - ${this.event.place}`;
-        }
-        else {
-            return false;
-        }
+        this.message += ` - ${this.event.name} - ${getTimeString(this.event.time, this.event.hours)}  - ${this.event.place}`;
     }
 
     async setPrivateMessage() {
-        this.privateMessage = `Dancer ${this.context.from.username} wants to attend you event - ${this.type}- ${this.event.name}`;
+        this.privateMessage = `Dancer ${this.context.from.username} wants to attend you event - ${this.context.type}- ${this.event.name}`;
     }
 
     async finish() {
         const idOfFreePlace = this.participants.filter(x => !x.eventId)[0].id
-        await this.participateEventFunc(this.type, idOfFreePlace, this.event.id, this.event.name, this.context.from.username, this.context.chatId, Status.Pending, this.type);
+        await this.participateEventFunc(this.context.type, idOfFreePlace, this.event.id, this.event.name, this.context.from.username, this.context.chatId, Status.Pending, this.type);
     }
 }
 module.exports = EventAction;

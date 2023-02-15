@@ -1,10 +1,9 @@
-const Step = require('./step.js');
+const ActionStep = require('./baseSteps/actionStep.js');
 const i18n = require('../i18n.config.js');
-const {extractNumber, extractString} = require('../regex.handler.js');
 
-class AdminEventAction extends Step {
-    constructor(message, command, userMessage, getEventParticipationFunc, updateEventParticipationFunc, notifyUserFunc) {
-        super(message, command);
+class AdminEventAction extends ActionStep {
+    constructor(message, command, actionName, condition, userMessage, getEventParticipationFunc, updateEventParticipationFunc, notifyUserFunc) {
+        super(message, command, actionName, condition);
         this.userMessage = i18n.__(userMessage);
         this.getEventParticipationFunc = getEventParticipationFunc;
         this.updateEventParticipationFunc = updateEventParticipationFunc;
@@ -14,9 +13,7 @@ class AdminEventAction extends Step {
     }
 
     async init () {
-        const id = extractNumber(this.context.text);
-        const type = extractString(this.context.text);
-        this.eventParticipation = await this.getEventParticipationFunc(id, type);
+        this.eventParticipation = await this.getEventParticipationFunc(this.context.id, this.context.type);
     }
 
     setUserMessage() {

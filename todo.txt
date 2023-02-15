@@ -11,3 +11,5 @@ fix back buttons behavioral
 put no entity message to main entity
 make command not constant in buttons, add conditional showing
 move info from cache to command
+separate work with message and callback from steps!!!
+Join private classes in generic way

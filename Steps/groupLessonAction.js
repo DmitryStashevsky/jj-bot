@@ -1,10 +1,9 @@
-const Step = require('./step.js');
+const ActionStep = require('./baseSteps/actionStep.js');
 const { Status } = require('../enums.js');
-const {extractNumber, extractString} = require('../regex.handler.js');
 
-class GroupLessonAction extends Step {
-    constructor(message, command, getClassFunc, getClassesParticipantsFunc, participateClassFunc) {
-        super(message, command);
+class GroupLessonAction extends ActionStep {
+    constructor(message, command, actionName, condition, getClassFunc, getClassesParticipantsFunc, participateClassFunc) {
+        super(message, command, actionName, condition);
         this.getClassFunc = getClassFunc;
         this.getClassesParticipantsFunc = getClassesParticipantsFunc;
         this.participateClassFunc = participateClassFunc;
@@ -13,20 +12,12 @@ class GroupLessonAction extends Step {
     }
 
     async init() {
-        const id = extractNumber(this.context.text);
-        const type = extractString(this.context.text);
-        this.type = type;
-        this.class = await this.getClassFunc(id, type);
-        this.participants = await this.getClassesParticipantsFunc(type);
+        this.class = await this.getClassFunc(this.context.id,this.context.type);
+        this.participants = await this.getClassesParticipantsFunc(this.context.type);
     }
 
     async setMessage() {
-        if(this.class) {
-            this.message = this.message + `- ${this.class.name}`;
-        }
-        else {
-            this.message = null;
-        }
+        this.message += `- ${this.class.name}`;
     }
 
     async setPrivateMessage() {
@@ -35,7 +26,7 @@ class GroupLessonAction extends Step {
 
     async finish() {
         const rowNumber = this.participants.filter(x => !x.classId)[0].id
-        await this.participateClassFunc(this.type, rowNumber, this.class.id, this.class.name, this.context.from.username, this.context.chatId, Status.Pending);
+        await this.participateClassFunc(this.context.type, rowNumber, this.class.id, this.class.name, this.context.from.username, this.context.chatId, Status.Pending);
     }
 }
 module.exports = GroupLessonAction;

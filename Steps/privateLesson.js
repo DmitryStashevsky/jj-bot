@@ -1,9 +1,7 @@
-const Step = require('./step.js');
+const ViewStep = require('./baseSteps/viewStep.js');
 const { getTimeString } = require('../calendar.js');
-const i18n = require('../i18n.config.js');
-const {extractNumber} = require('../regex.handler.js');
 
-class PrivateLesson extends Step {
+class PrivateLesson extends ViewStep {
     constructor(message, command, getPrivateLessonFunc) {
         super(message, command);
         this.getPrivateLessonFunc = getPrivateLessonFunc;
@@ -11,24 +9,11 @@ class PrivateLesson extends Step {
     }
 
     async init() {
-        const id = extractNumber(this.context.text);
-        this.privateLesson = await this.getPrivateLessonFunc(id);
+        this.entity = await this.getPrivateLessonFunc(this.context.id);
     }
 
     async setMessage() {
-        if(this.privateLesson) {
-            this.message =  this.message + `- ${getTimeString(this.privateLesson.time, this.privateLesson.countOfHours)} - ${this.privateLesson.place}`;
-        }
-        else {
-            return false;
-        }
-    }
-
-    async setButtons() {
-        this.buttons = [[{
-            text: i18n.__('join'),
-            callback_data: `JPL - ${this.privateLesson.id}`,
-        }]];
+        this.message += ` - ${getTimeString(this.entity.time, this.entity.countOfHours)} - ${this.entity.place}`;
     }
 }
 module.exports = PrivateLesson;

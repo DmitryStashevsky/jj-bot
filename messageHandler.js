@@ -2,8 +2,9 @@ const i18n = require('./i18n.config.js');
 var {Buffer} = require('node:buffer');
 const{ metaData }  = require('./cache.config.js');
 const {calendar} = require('./calendar.js');
-const {handleBackButton} = require('./back-button.handler.js');
-const {hasAccessToBot} = require('./access.handler.js');
+const {handleBackButton} = require('./handlers/back-button.handler.js');
+const {hasAccessToBot} = require('./handlers/access.handler.js');
+const {getMessageContext} = require('./handlers/context.handler.js');
 const MessagesTree = require('./Steps/messagesTree.js');
 const notificationService = require('./notificationService.js');
 
@@ -21,7 +22,7 @@ class MessageHandler {
 
             if (currentStep) {
                 try {
-                    const context = { chatId: chatId, from: from, message: msg, text: text };
+                    const context = getMessageContext(chatId, from, msg, text);
                     await currentStep.handleStep(context);
                     
                     if(currentStep.isBackAvailable) {

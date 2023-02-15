@@ -1,4 +1,5 @@
-const Step = require('./step.js');
+const Step = require('./baseSteps/step.js');
+const { addMessageContext } = require('../handlers/context.handler.js');
 
 class Events extends Step {
     constructor(message, command, type, getEventsFunc) {
@@ -22,7 +23,7 @@ class Events extends Step {
             for (let i = 0; i < this.events.length; i++) {
                 this.buttons.push([{
                     text: `${i+1} - ${this.events[i].name}`,
-                    callback_data: `${this.nextSteps[0].command} ${this.events[i].id} [${this.type}]`,
+                    callback_data: addMessageContext(this.nextSteps[0].command, {number: this.events[i].id, string: this.type}),
                 }]);
             }
         }

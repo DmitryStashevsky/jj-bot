@@ -1,11 +1,10 @@
-const Step = require('./step.js');
+const ActionStep = require('./baseSteps/actionStep.js');
 const { getTimeString } = require('../calendar.js');
 const { Status } = require('../enums.js');
-const {extractNumber} = require('../regex.handler.js');
 
-class PrivateLessonAction extends Step {
-    constructor(message, command, getMetaFunc, getPrivateLessonFunc, participatePrivateLessonFunc) {
-        super(message, command);
+class PrivateLessonAction extends ActionStep {
+    constructor(message, command, actionName, condition, getMetaFunc, getPrivateLessonFunc, participatePrivateLessonFunc) {
+        super(message, command, actionName, condition);
         this.getMetaFunc = getMetaFunc;
         this.getPrivateLessonFunc = getPrivateLessonFunc;
         this.participatePrivateLessonFunc = participatePrivateLessonFunc;
@@ -15,17 +14,11 @@ class PrivateLessonAction extends Step {
     }
 
     async init() {
-        const id = extractNumber(this.context.text);
-        this.freeSlot = await this.getPrivateLessonFunc(id);
+        this.freeSlot = await this.getPrivateLessonFunc(this.context.id);
     }
 
     async setMessage() {
-        if(this.freeSlot) {
-            this.message =  this.message + `- ${getTimeString(this.freeSlot.time, this.freeSlot.countOfHours)}`;
-        }
-        else {
-            return false;
-        }
+        this.message =  this.message + `- ${getTimeString(this.freeSlot.time, this.freeSlot.countOfHours)}`;
     }
 
     async setPrivateMessage() {
