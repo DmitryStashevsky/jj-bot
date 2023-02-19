@@ -110,7 +110,7 @@
 	"adminEventActionApproveUserDesc": "Ваша запись на ивент была подверждена",
 	"adminEventActionApproveCommand": "aEA",
 	"adminEventActionDeclineDesc": "Вы отменили запись на ивент",
-	"adminEventActionDeclineUserDesc": "Ваша запись на ивент была подверждена",
+	"adminEventActionDeclineUserDesc": "Ваша запись на ивент была отменена",
 	"adminEventActionDeclineCommand": "aED",
 	"adminGroupLessonsTypeDesc": "Админ Танцы",
 	"adminGroupLessonsTypeCommand": "Админ групповые занятия",
@@ -122,6 +122,6 @@
 	"adminGroupLessonActionApproveUserDesc": "Ваша запись на класс была подверждена",
 	"adminGroupLessonActionApproveCommand": "aGLA",
 	"adminGroupLessonActionDeclineDesc": "Вы отменили запись на класс",
-	"adminGroupLessonActionDeclineUserDesc": "Ваша запись на класс была подверждена",
+	"adminGroupLessonActionDeclineUserDesc": "Ваша запись на класс была отменена",
 	"adminGroupLessonActionDeclineCommand": "aGLD"
 }
