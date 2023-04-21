@@ -26,7 +26,7 @@ class EventAction extends ActionStep {
 
     async finish() {
         const idOfFreePlace = this.participants.filter(x => !x.eventId)[0].id
-        await this.participateEventFunc(this.context.type, idOfFreePlace, this.event.id, this.event.name, this.context.from.username, this.context.chatId, Status.Pending, this.type);
+        await this.participateEventFunc(this.context.type, idOfFreePlace, this.event.id, this.event.name, this.context.from.username, this.context.chatId, Status.Pending, this.context.type);
     }
 }
 module.exports = EventAction;
