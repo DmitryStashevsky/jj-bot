@@ -98,7 +98,7 @@ class MessagesTree {
         const latinoGrooveMixTopic = new Topic('latinoGrooveMixTopicDesc', 'latinoGrooveMixTopicCommand');
 
         const latinoGrooveSoloClasses = new GroupLessons('latinoGrooveSoloClassesDesc', 'latinoGrooveSoloClassesCommand', Meta.LatinoGrooveSolo, async (type) => await classRep.getClasses(type));
-        const latinoGroovePartnerClasses = new GroupLessons('latinoGroovePartnerClassesDesc', 'latinoGroovePartnerClassesCommand', Meta.LatinoGroovePartner, async () => await classRep.getClasses(type));
+        const latinoGroovePartnerClasses = new GroupLessons('latinoGroovePartnerClassesDesc', 'latinoGroovePartnerClassesCommand', Meta.LatinoGroovePartner, async (type) => await classRep.getClasses(type));
         const latinoGrooveMixClasses = new GroupLessons('latinoGrooveMixClassesDesc', 'latinoGrooveMixClassesCommand', Meta.LatinoGrooveMix, async (type) => await classRep.getClasses(type));
 
         const joinPrivateLatinoGrooveSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.LatinoGrooveSolo, async () => await plRep.getPrivateLessons());

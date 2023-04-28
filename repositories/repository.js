@@ -10,21 +10,21 @@ class Repository {
 
     getApiClient = async () => {
         const authClient = await getAuthClient();
-        const { spreadsheets: apiClient } = google.sheets( {
+        const { spreadsheets: apiClient } = google.sheets({
             version : 'v4',
             auth    : authClient,
-        } );
+        });
      
         return apiClient;
      };
 
     getValuesData = async (apiClient, range) => {
-        const { data } = await apiClient.get( {
+        const { data } = await apiClient.get({
             spreadsheetId : spreadsheetId,
             ranges: range,
             fields: 'sheets',
             includeGridData : true,
-        } );
+        });
      
         return extractSpreedsheetData(data);
      };
