@@ -33,6 +33,7 @@ const AdminPrivateLessonAction = require('./adminPrivateLessonAction.js');
 const AdminEvents = require('./adminEvents.js');
 const AdminEvent = require('./adminEvent.js');
 const AdminEventAction = require('./adminEventAction.js');
+const Step = require('./baseSteps/step.js');
 
 class MessagesTree {
     constructor() {
@@ -57,55 +58,25 @@ class MessagesTree {
         const afroHouseDance = new Dance('afroHouseDesc', 'afroHouseCommand');
         const latinoGrooveDance = new Dance('latinoGrooveDesc', 'latinoGrooveCommand');
 
-        const salsaSoloTopic = new Topic('salsaSoloTopicDesc', 'salsaSoloTopicCommand');
-        const salsaPartnerTopic = new Topic('salsaPartnerTopicDesc', 'salsaPartnerTopicCommand');
-        const salsaMixTopic = new Topic('salsaMixTopicDesc', 'salsaMixTopicCommand');
-
         const salsaSoloClasses = new GroupLessons('salsaSoloClassesDesc', 'salsaSoloClassesCommand', Meta.SalsaSolo, async (type) => await classRep.getClasses(type));
         const salsaPartnerClasses = new GroupLessons('salsaPartnerClassesDesc', 'salsaPartnerClassesCommand', Meta.SalsaPartner, async (type) => await classRep.getClasses(type));
         const salsaMixClasses = new GroupLessons('salsaMixClassesDesc', 'salsaMixClassesCommand', Meta.SalsaMix, async (type) => await classRep.getClasses(type));
-
-        const joinPrivateSalsaSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.SalsaSolo, async () => await plRep.getPrivateLessons());
-        const joinPrivateSalsaPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.SalsaPartner, async () => await plRep.getPrivateLessons());
-        const joinPrivateSalsaMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.SalsaMix, async () => await plRep.getPrivateLessons());
-
-        const bachataSoloTopic = new Topic('bachataSoloTopicDesc', 'bachataSoloTopicCommand');
-        const bachataPartnerTopic = new Topic('bachataPartnerTopicDesc', 'bachataPartnerTopicCommand');
-        const bachataMixTopic = new Topic('bachataMixTopicDesc', 'bachataMixTopicCommand');
 
         const bachataSoloClasses = new GroupLessons('bachataSoloClassesDesc', 'bachataSoloClassesCommand', Meta.BachataSolo, async (type) => await classRep.getClasses(type));
         const bachataPartnerClasses = new GroupLessons('bachataPartnerClassesDesc', 'bachataPartnerClassesCommand', Meta.BachataPartner, async (type) => await classRep.getClasses(type));
         const bachataMixClasses = new GroupLessons('bachataMixClassesDesc', 'bachataMixClassesCommand', Meta.BachataMix, async (type) => await classRep.getClasses(type));
 
-        const joinPrivateBachataSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataSolo, async () => await plRep.getPrivateLessons());
-        const joinPrivateBachataPartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataPartner, async () => await plRep.getPrivateLessons());
-        const joinPrivateBachataMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.BachataMix, async () => await plRep.getPrivateLessons());
-    
-        const afroHouseSoloTopic = new Topic('afroHouseSoloTopicDesc', 'afroHouseSoloTopicCommand');
-        const afroHousePartnerTopic = new Topic('afroHousePartnerTopicDesc', 'afroHousePartnerTopicCommand');
-        const afroHouseMixTopic = new Topic('afroHouseMixTopicDesc', 'afroHouseMixTopicCommand');
-
         const afroHouseSoloClasses = new GroupLessons('afroHouseSoloClassesDesc', 'afroHouseSoloClassesCommand', Meta.AfroHouseSolo, async (type) => await classRep.getClasses(type));
         const afroHousePartnerClasses = new GroupLessons('afroHousePartnerClassesDesc', 'afroHousePartnerClassesCommand', Meta.AfroHousePartner,  async (type) => await classRep.getClasses(type));
         const afroHouseMixClasses = new GroupLessons('afroHouseMixClassesDesc', 'afroHouseMixClassesCommand', Meta.AfroHouseMix, async (type) => await classRep.getClasses(type));
-
-        const joinPrivateAfroHouseSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.AfroHouseSolo, async () => await plRep.getPrivateLessons());
-        const joinPrivateAfroHousePartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.AfroHousePartner, async () => await plRep.getPrivateLessons());
-        const joinPrivateAfroHouseMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.AfroHouseMix, async () => await plRep.getPrivateLessons());
-
-        const latinoGrooveSoloTopic = new Topic('latinoGrooveSoloTopicDesc', 'latinoGrooveSoloTopicCommand');
-        const latinoGroovePartnerTopic = new Topic('latinoGroovePartnerTopicDesc', 'latinoGroovePartnerTopicCommand');
-        const latinoGrooveMixTopic = new Topic('latinoGrooveMixTopicDesc', 'latinoGrooveMixTopicCommand');
 
         const latinoGrooveSoloClasses = new GroupLessons('latinoGrooveSoloClassesDesc', 'latinoGrooveSoloClassesCommand', Meta.LatinoGrooveSolo, async (type) => await classRep.getClasses(type));
         const latinoGroovePartnerClasses = new GroupLessons('latinoGroovePartnerClassesDesc', 'latinoGroovePartnerClassesCommand', Meta.LatinoGroovePartner, async (type) => await classRep.getClasses(type));
         const latinoGrooveMixClasses = new GroupLessons('latinoGrooveMixClassesDesc', 'latinoGrooveMixClassesCommand', Meta.LatinoGrooveMix, async (type) => await classRep.getClasses(type));
 
-        const joinPrivateLatinoGrooveSoloClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.LatinoGrooveSolo, async () => await plRep.getPrivateLessons());
-        const joinPrivateLatinoGroovePartnerClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.LatinoGroovePartner, async () => await plRep.getPrivateLessons());
-        const joinPrivateLatinoGrooveMixClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', Meta.LatinoGrooveMix, async () => await plRep.getPrivateLessons());
+        const groupClasses = new Step('groupLessonsDesc', 'groupLessonsCommand');
 
-        const groupClass = new GroupLesson('groupLessonDesc', 'groupLessonommand',
+        const groupClass = new GroupLesson('groupLessonDesc', 'groupLessonCommand',
             async (id, type) => await classRep.getClass(id ,type));
 
         const joinGroupClass = new GroupLessonAction('joinGroupLessonDesc', 'joinGroupLessonCommand', 'join', null,
@@ -113,13 +84,16 @@ class MessagesTree {
             async (type) => await classRep.getClassesParticipants(type), 
             async (type, rowNumber, classId, className, username, chatId, status) => await classRep.participateClass(type, rowNumber, classId, className, username, chatId, status));
 
+
+        const privateClasses = new PrivateLessons('privateLessonsDesc', 'privateLessonsCommand', async () => await plRep.getPrivateLessons());
+
         const privateClass = new PrivateLesson('privateLessonDesc', 'privateLessonCommand', async (id) => await plRep.getFreeSlot(id));
 
         const joinPrivateClasses = new PrivateLessonAction('joinPrivateLessonDesc', 'JPL', 'join', null,
-            (username, field) => metaData.getMetadata(username, field),  async (id) => await plRep.getFreeSlot(id),
+            async (id) => await plRep.getFreeSlot(id),
             async (lessonId, dance, username, chatId, status) => await plRep.participatePrivateLesson(lessonId, dance, username, chatId, status));
         
-        events.nextSteps = [masterClasses, festivalsClasses, showsClasses];
+        events.nextSteps = [masterClasses, festivalsClasses];
 
         masterClasses.nextSteps = [event];
         festivalsClasses.nextSteps = [event];
@@ -127,51 +101,29 @@ class MessagesTree {
 
         event.nextSteps = [joinEvent];
 
-        dances.nextSteps = [salsaDance, bachataDance, afroHouseDance, latinoGrooveDance];
+        dances.nextSteps = [groupClasses, privateClasses, events];
 
-        salsaDance.nextSteps = [salsaSoloTopic, salsaPartnerTopic, salsaMixTopic];
-        salsaSoloTopic.nextSteps = [salsaSoloClasses, joinPrivateSalsaSoloClasses, events];
-        salsaPartnerTopic.nextSteps = [salsaPartnerClasses, joinPrivateSalsaPartnerClasses, events];
-        salsaMixTopic.nextSteps = [salsaMixClasses, joinPrivateSalsaMixClasses, events];
+        groupClasses.nextSteps = [salsaDance, afroHouseDance];
+
+        salsaDance.nextSteps = [salsaSoloClasses, salsaPartnerClasses];
         
         salsaSoloClasses.nextSteps =[groupClass];
         salsaPartnerClasses.nextSteps =[groupClass];
         salsaMixClasses.nextSteps =[groupClass];
 
-        joinPrivateSalsaSoloClasses.nextSteps = [privateClass];
-        joinPrivateSalsaPartnerClasses.nextSteps = [privateClass];
-        joinPrivateSalsaMixClasses.nextSteps = [privateClass];
-
-        bachataDance.nextSteps = [bachataSoloTopic, bachataPartnerTopic, bachataMixTopic];
-        bachataSoloTopic.nextSteps = [bachataSoloClasses, joinPrivateBachataSoloClasses, events];
-        bachataPartnerTopic.nextSteps = [bachataPartnerClasses, joinPrivateBachataPartnerClasses, events];
-        bachataMixTopic.nextSteps = [bachataMixClasses, joinPrivateBachataMixClasses, events];
+        bachataDance.nextSteps = [bachataSoloClasses, bachataPartnerClasses, bachataMixClasses];
 
         bachataSoloClasses.nextSteps =[groupClass];
         bachataPartnerClasses.nextSteps =[groupClass];
         bachataMixClasses.nextSteps =[groupClass];
 
-        joinPrivateBachataSoloClasses.nextSteps = [privateClass];
-        joinPrivateBachataPartnerClasses.nextSteps = [privateClass];
-        joinPrivateBachataMixClasses.nextSteps = [privateClass];
-
-        afroHouseDance.nextSteps = [afroHouseSoloTopic, afroHousePartnerTopic, afroHouseMixTopic];
-        afroHouseSoloTopic.nextSteps = [afroHouseSoloClasses, joinPrivateAfroHouseSoloClasses, events];
-        afroHousePartnerTopic.nextSteps = [afroHousePartnerClasses, joinPrivateAfroHousePartnerClasses, events];
-        afroHouseMixTopic.nextSteps = [afroHouseMixClasses, joinPrivateAfroHouseMixClasses, events];
+        afroHouseDance.nextSteps = [afroHouseSoloClasses, afroHousePartnerClasses, afroHouseMixClasses];
         
         afroHouseSoloClasses.nextSteps =[groupClass];
         afroHousePartnerClasses.nextSteps =[groupClass];
         afroHouseMixClasses.nextSteps =[groupClass];
 
-        joinPrivateAfroHouseSoloClasses.nextSteps = [privateClass];
-        joinPrivateAfroHousePartnerClasses.nextSteps = [privateClass];
-        joinPrivateAfroHouseMixClasses.nextSteps = [privateClass];
-
-        latinoGrooveDance.nextSteps = [latinoGrooveSoloTopic, latinoGroovePartnerTopic, latinoGrooveMixTopic];
-        latinoGrooveSoloTopic.nextSteps = [latinoGrooveSoloClasses, joinPrivateLatinoGrooveSoloClasses, events];
-        latinoGroovePartnerTopic.nextSteps = [latinoGroovePartnerClasses, joinPrivateLatinoGroovePartnerClasses, events];
-        latinoGrooveMixTopic.nextSteps = [latinoGrooveMixClasses, joinPrivateLatinoGrooveMixClasses, events];
+        latinoGrooveDance.nextSteps = [latinoGrooveSoloClasses, latinoGroovePartnerClasses, latinoGrooveMixClasses];
         
         latinoGrooveSoloClasses.nextSteps =[groupClass];
         latinoGroovePartnerClasses.nextSteps =[groupClass];
@@ -179,10 +131,7 @@ class MessagesTree {
 
         groupClass.nextSteps = [joinGroupClass];
 
-        joinPrivateLatinoGrooveSoloClasses.nextSteps = [privateClass];
-        joinPrivateLatinoGroovePartnerClasses.nextSteps = [privateClass];
-        joinPrivateLatinoGrooveMixClasses.nextSteps = [privateClass];
-
+        privateClasses.nextSteps = [privateClass];
         privateClass.nextSteps = [joinPrivateClasses];
         //#endregion
 

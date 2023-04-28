@@ -8,6 +8,8 @@
 	"privateLessonsCommand": "Privates",
 	"privateLessonDesc": "Private lesson",
 	"privateLessonCommand": "uPLView",
+	"groupLessonsDesc": "Classes",
+	"groupLessonsCommand": "Classes",
 	"groupLessonDesc": "Class",
 	"groupLessonCommand": "JGView",
 	"joinGroupLessonDesc": "JJ received your message, he will contact you soon",

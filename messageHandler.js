@@ -51,11 +51,9 @@ class MessageHandler {
                         await bot.sendDocument(chatId, buff, {}, {filename: currentStep.fileMessage.filename, contentType: 'text/calendar'});
                     }
 
-                    if (currentStep.metaField) {
-                        metaData.setMetadata(from.username, null, currentStep.metaField, currentStep.metaData);
+                    if (currentStep.privateMessage) {
+                        await notificationService.notifyOwner(currentStep.privateMessage);
                     }
-
-                    await notificationService.notifyOwner(currentStep.privateMessage);
 
                 } catch (e){
                     await notificationService.error(msg, e);

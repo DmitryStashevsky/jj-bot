@@ -4,11 +4,9 @@ const i18n = require('../i18n.config.js');
 const { addMessageContext } = require('../handlers/context.handler.js');
 
 class PrivateLessons extends Step {
-    constructor(message, command, metaData, getFreeSlotsFunc) {
+    constructor(message, command, getFreeSlotsFunc) {
         super(message, command);
-        this.metaData = metaData
         this.getFreeSlotsFunc = getFreeSlotsFunc;
-        this.metaField = 'privateDance';
     }
 
     async init() {

@@ -8,6 +8,8 @@
 	"privateLessonsCommand": "Индивидуальные",
 	"privateLessonDesc": "Приватный урок",
 	"privateLessonCommand": "uPLView",
+	"groupLessonsDesc": "Группы",
+	"groupLessonsCommand": "Группы",
 	"groupLessonDesc": "Класс",
 	"groupLessonCommand": "JGView",
 	"joinGroupLessonDesc": "JJ получил ваше сообщение, скоро с Вами свяжутся",

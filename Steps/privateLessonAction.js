@@ -3,12 +3,10 @@ const { getTimeString } = require('../calendar.js');
 const { Status } = require('../enums.js');
 
 class PrivateLessonAction extends ActionStep {
-    constructor(message, command, actionName, condition, getMetaFunc, getPrivateLessonFunc, participatePrivateLessonFunc) {
+    constructor(message, command, actionName, condition, getPrivateLessonFunc, participatePrivateLessonFunc) {
         super(message, command, actionName, condition);
-        this.getMetaFunc = getMetaFunc;
         this.getPrivateLessonFunc = getPrivateLessonFunc;
         this.participatePrivateLessonFunc = participatePrivateLessonFunc;
-        this.readMetaField = 'privateDance';
         this.isDynamicStep = true;
         this.isBackAvailable = false;
     }
@@ -22,13 +20,11 @@ class PrivateLessonAction extends ActionStep {
     }
 
     async setPrivateMessage() {
-        const meta = this.getMetaFunc(this.context.from.username, this.readMetaField);
-        this.privateMessage = `Dancer ${this.context.from.username} wants to attend you private class ${meta}- ${getTimeString(this.freeSlot.time, this.freeSlot.countOfHours)}`;
+        this.privateMessage = `Dancer ${this.context.from.username} wants to attend you private class - ${getTimeString(this.freeSlot.time, this.freeSlot.countOfHours)}`;
     }
 
     async finish() {
-        const meta = this.getMetaFunc(this.context.from.username, this.readMetaField);
-        await this.participatePrivateLessonFunc(this.freeSlot.id, meta, this.context.from.username, this.context.chatId, Status.Pending);
+        await this.participatePrivateLessonFunc(this.freeSlot.id, 'N/A', this.context.from.username, this.context.chatId, Status.Pending);
     }
 }
 module.exports = PrivateLessonAction;
